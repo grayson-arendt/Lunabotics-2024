@@ -15,13 +15,13 @@ def generate_launch_description():
             ComposableNode(
                 package="ros_phoenix",
                 plugin="ros_phoenix::TalonFX",
-                name="front_left",
+                name="left",
                 parameters=[{"id": 15, "invert": "true"}],
             ),
             ComposableNode(
                 package="ros_phoenix",
                 plugin="ros_phoenix::TalonFX",
-                name="front_right",
+                name="right",
                 parameters=[{"id": 18}]
             ),
         ],
@@ -30,7 +30,7 @@ def generate_launch_description():
 
     drive = Node(
     package='bot_pkg',
-    executable='4wd',
+    executable='2wd',
     name = "drive")
 
     joy = Node(
