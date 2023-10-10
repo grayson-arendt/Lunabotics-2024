@@ -25,6 +25,8 @@
 #include <thread>
 
 /*
+Author: Grayson Arendt
+
 This program acts as a subscriber to camera/depth/color/points (which is the depth camera's point cloud data), 
 uses PCL to apply various filters/algorithms, then streams the point cloud data to PCL visualizer. 
 This is currently a work in progress, but I will add some comments in the meantime.
@@ -244,7 +246,7 @@ class pointCloudPipeline : public rclcpp::Node {
                 int g = std::rand() % 256;
                 int b = std::rand() % 256;
              
-                // For each point inside the cluster, add it to a new point cloud (cluster_cloud) as a a certain color
+                // For each point inside the cluster, add it to a new point cloud (cluster_cloud) as a certain color
                 for (auto index : cluster.indices) {
                     auto& point = cloud->at(index);
 
@@ -307,7 +309,6 @@ class pointCloudPipeline : public rclcpp::Node {
             const Eigen::Quaternionf bboxQuaternion(eigenVectors);
             const Eigen::Vector3f bboxTransform = eigenVectors * meanDiagonal + centroid.head<3>();
 
-
             // Generate a new id
             std::string bbox_id = "bbox_" + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
 
@@ -355,13 +356,13 @@ class pointCloudPipeline : public rclcpp::Node {
 
 int main(int argc, char **argv) {
 
-    // Start node
+    // Start ROS2
     rclcpp::init(argc, argv);
  
     // Keep running node
     rclcpp::spin(std::make_shared<pointCloudPipeline>());
 
-    // Shutdown node
+    // Stop ROS2
     rclcpp::shutdown();
 
     return 0;
