@@ -1,16 +1,12 @@
-#include "rclcpp/rclcpp.hpp"
-#include "sensor_msgs/msg/point_cloud2.hpp"
-#include "visualization_msgs/msg/marker.hpp"
-#include "sensor_msgs/point_cloud2_iterator.hpp"
+#include <rclcpp/rclcpp.hpp>
+#include <sensor_msgs/msg/point_cloud2.hpp>
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/filters/voxel_grid.h>
-#include "pcl/filters/extract_indices.h"
-#include "pcl/segmentation/sac_segmentation.h"
-#include "pcl/segmentation/extract_clusters.h"
-#include "pcl/search/kdtree.h"
-#include "pcl/common/impl/centroid.hpp"
-#include "visualization_msgs/msg/marker.hpp"
-#include "pcl/common/transforms.h"
+#include <pcl/filters/extract_indices.h>
+#include <pcl/segmentation/sac_segmentation.h>
+#include <pcl/segmentation/extract_clusters.h>
+#include <pcl/search/kdtree.h>
+#include <pcl/common/transforms.h>
 #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/features/normal_3d.h>
 #include <pcl/segmentation/region_growing.h>
@@ -19,9 +15,7 @@
 #include "pcl/point_types.h"
 #include <pcl/common/common.h>
 #include <pcl/filters/radius_outlier_removal.h>
-#include <pcl/surface/mls.h>
 #include <string>
-#include <typeinfo>
 #include <thread>
 
 /*
