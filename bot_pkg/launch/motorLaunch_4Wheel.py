@@ -42,7 +42,7 @@ def generate_launch_description():
 
     drive = Node(
     package='bot_pkg',
-    executable='4wd',
+    executable='fourWheelDrive',
     name = "drive")
 
     joy = Node(

@@ -34,13 +34,13 @@ add_definitions(${PCL_DEFINITIONS})
 include_directories(include)
 
 # Create Cpp executable
-add_executable(4wd src/4wd.cpp)
-add_executable(2wd src/2wd.cpp)
+add_executable(fourWheelDrive src/fourWheelDrive.cpp)
+add_executable(twoWheelDrive src/twoWheelDrive.cpp)
 add_executable(motorTest src/motorTest.cpp)
 add_executable(laserSub src/laserSub.cpp)
 add_executable(pointCloudPipeline src/pointCloudPipeline.cpp)
-ament_target_dependencies(4wd rclcpp ros_phoenix sensor_msgs)
-ament_target_dependencies(2wd rclcpp ros_phoenix sensor_msgs)
+ament_target_dependencies(fourWheelDrive rclcpp ros_phoenix sensor_msgs)
+ament_target_dependencies(twoWheelDrive rclcpp ros_phoenix sensor_msgs)
 ament_target_dependencies(motorTest rclcpp ros_phoenix sensor_msgs)
 ament_target_dependencies(laserSub rclcpp ros_phoenix sensor_msgs)
 ament_target_dependencies(pointCloudPipeline rclcpp sensor_msgs pcl_conversions visualization_msgs)
@@ -48,8 +48,8 @@ ament_target_dependencies(pointCloudPipeline rclcpp sensor_msgs pcl_conversions 
 target_link_libraries(pointCloudPipeline ${PCL_LIBRARIES})
 
 install(TARGETS
-  2wd
-  4wd
+  twoWheelDrive
+  fourWheelDrive
   motorTest
   laserSub
   pointCloudPipeline
