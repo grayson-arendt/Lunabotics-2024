@@ -25,4 +25,16 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
+if (${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "arm-linux-gnueabihf") 
+    set(PHOENIX_LIBS_DIR ${CMAKE_SOURCE_DIR}/phoenix_lib/arm32)
+elseif (${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "aarch64-linux-gnu") 
+    set(PHOENIX_LIBS_DIR ${CMAKE_SOURCE_DIR}/phoenix_lib/arm64)
+else()
+    set(PHOENIX_LIBS_DIR ${CMAKE_SOURCE_DIR}/phoenix_lib/x86-64)
+endif()
+
+target_link_libraries(manual_control ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so)
+target_link_libraries(manual_control ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so)
+target_link_libraries(manual_control ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so)
+
 ament_package()
