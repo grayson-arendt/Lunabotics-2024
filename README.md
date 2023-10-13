@@ -1,8 +1,5 @@
-This repository will contain our Lunabotics 2023-2024 robot code. Currently, ros_phoenix and realsense-ros packages are being used.
+This repository will contain our Lunabotics 2023-2024 robot code. Currently, apriltag_ros, apriltag_msgs, and realsense-ros packages are being used for ROS2. CTRE Phoenix library is being used to control our motors, and PCL (Point Cloud Library) is used to manage the camera's point cloud data,
 
-/launch currently contains launch files to initialize the motors with ros_phoenix and run other nodes.
-/scripts is currently empty, but Python files would go there.
-/src contains ROS2 nodes for running our robot.
+src contains the packages that run our robot, while everything outside of the directory is an external package that we utilize. 
 
-CMakeLists.txt contains everything needed to compile and run the actual code itself, including finding external libraries like PCL and creating executables.
-package.xml lists certain information about bot_pkg (like what its dependencies are).
+Inside src, autonomous_pkg will contain the necessary code for running the robot autonomously, while manual_control_pkg will contain teleop code for driving the robot manually. lunabot_bringup contains all the launch files for our robot.
