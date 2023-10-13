@@ -19,6 +19,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(message_filters REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(PCL 1.2 REQUIRED)
@@ -32,11 +33,14 @@ include_directories(include)
 
 # Create Cpp executable
 add_executable(pointCloudPipeline src/pointCloudPipeline.cpp)
+add_executable(syncCamera src/syncCamera.cpp)
 ament_target_dependencies(pointCloudPipeline rclcpp sensor_msgs pcl_conversions visualization_msgs)
+ament_target_dependencies(syncCamera rclcpp sensor_msgs message_filters)
 
 target_link_libraries(pointCloudPipeline ${PCL_LIBRARIES})
 
 install(TARGETS
+  syncCamera
   pointCloudPipeline
   DESTINATION lib/${PROJECT_NAME}
 )
