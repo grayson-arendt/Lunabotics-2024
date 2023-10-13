@@ -1,6 +1,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/joy.hpp"
-#include "manual_control_cpp_pkg/DifferentialDrive.hpp"
+#include "manual_control_pkg/DifferentialDrive.hpp"
 
 #define Phoenix_No_WPI
 #include "ctre/Phoenix.h"
