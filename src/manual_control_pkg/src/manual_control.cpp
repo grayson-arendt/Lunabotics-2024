@@ -46,11 +46,6 @@ private:
         RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", d.calculate_wheel_percentOutput()[0], d.calculate_wheel_percentOutput()[1]);
     }
 
-    void callbackMotorPublisher()
-    {
-
-    }
-
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr controller_subscriber;
 };
 
