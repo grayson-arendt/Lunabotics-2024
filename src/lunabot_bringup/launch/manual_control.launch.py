@@ -4,7 +4,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     ld = LaunchDescription()
     
-    remap_joy = ("joy", "controller_input")
+    remap_joy = ("joy", "controller_input") #changes the joy topic name to controller_input
     
     joy_node = Node(
         package="joy",
