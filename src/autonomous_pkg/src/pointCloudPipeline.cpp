@@ -14,6 +14,7 @@
 #include "pcl/io/ply_io.h"
 #include "pcl/point_types.h"
 #include <pcl/common/common.h>
+#include <pcl/surface/mls.h>
 #include <pcl/filters/radius_outlier_removal.h>
 #include <string>
 #include <thread>
@@ -47,7 +48,6 @@ class pointCloudPipeline : public rclcpp::Node {
         }
 
     private:
-        template <typename PointCloudType> 
 
         // Callback for subscriber
         void pipelineCallback(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
@@ -317,6 +317,8 @@ class pointCloudPipeline : public rclcpp::Node {
 
             previous_bbox_id_ = bbox_id;
         }
+
+        template <typename PointCloudType> 
 
         // Streams the point cloud (uses template due to only having two types of used point clouds in this class)
         void streamPointCloud(const typename pcl::PointCloud<PointCloudType>::Ptr& cloud) {
