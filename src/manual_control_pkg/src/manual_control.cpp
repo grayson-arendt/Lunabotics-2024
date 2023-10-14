@@ -31,6 +31,9 @@ class ManualControl : public rclcpp::Node
 public:
     ManualControl() : Node("manual_control")
     {
+        // Inverts right motor
+        right_wheel_motor.SetInverted(true);
+
         // Creates a subscriber of type sensor_msgs::msg::Joy, subscribes to the controller_input topic
         // has a que size of 10, and calls callbackControlRobot function
         controller_subscriber = this->create_subscription<sensor_msgs::msg::Joy>(
