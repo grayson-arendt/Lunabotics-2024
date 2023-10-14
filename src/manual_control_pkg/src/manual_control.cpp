@@ -17,8 +17,6 @@ using namespace ctre::phoenix::motorcontrol::can;
 Author: Anthony Baran
 
 Node that subscribes to the joy topic and uses joystick input to move robot. 
-Motor functions still need to be implemented. Right now left and right wheel percent output
-are printed to the terminal. 
 */
 
 
