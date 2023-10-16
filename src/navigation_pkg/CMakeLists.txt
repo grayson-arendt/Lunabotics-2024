@@ -33,9 +33,7 @@ include_directories(include)
 
 # Create Cpp executable
 add_executable(pointCloudPipeline src/pointCloudPipeline.cpp)
-add_executable(syncCamera src/syncCamera.cpp)
 ament_target_dependencies(pointCloudPipeline rclcpp sensor_msgs pcl_conversions visualization_msgs)
-ament_target_dependencies(syncCamera rclcpp sensor_msgs message_filters)
 
 target_link_libraries(pointCloudPipeline ${PCL_LIBRARIES})
 
@@ -45,7 +43,6 @@ install(
 )
 
 install(TARGETS
-  syncCamera
   pointCloudPipeline
   DESTINATION lib/${PROJECT_NAME}
 )
