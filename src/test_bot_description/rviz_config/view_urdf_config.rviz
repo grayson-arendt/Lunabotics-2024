@@ -57,6 +57,11 @@ Visualization Manager:
       Enabled: true
       Links:
         All Links Enabled: true
+        Ebox_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
@@ -76,6 +81,11 @@ Visualization Manager:
           Show Trail: false
           Value: true
         front_right_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        lidar_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -100,6 +110,8 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
+        Ebox_link:
+          Value: true
         base_footprint:
           Value: true
         base_link:
@@ -107,6 +119,10 @@ Visualization Manager:
         front_left_wheel_link:
           Value: true
         front_right_wheel_link:
+          Value: true
+        lidar_link:
+          Value: true
+        odom:
           Value: true
         rear_left_wheel_link:
           Value: true
@@ -120,15 +136,54 @@ Visualization Manager:
       Tree:
         base_footprint:
           base_link:
+            Ebox_link:
+              {}
             front_left_wheel_link:
               {}
             front_right_wheel_link:
               {}
-            rear_left_wheel_link:
+            lidar_link:
               {}
-            rear_right_wheel_link:
-              {}
+          rear_left_wheel_link:
+            {}
+          rear_right_wheel_link:
+            {}
+        odom:
+          {}
       Update Interval: 0
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 100
+      Min Color: 0; 0; 0
+      Min Intensity: 100
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Flat Squares
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /ray/pointcloud2
+      Use Fixed Frame: true
+      Use rainbow: true
       Value: true
   Enabled: true
   Global Options:
@@ -173,25 +228,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 2.8864524364471436
+      Distance: 3.6278929710388184
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: -2.3283064365386963e-10
+        X: -0.5531189441680908
+        Y: 0.08555418998003006
+        Z: 0.7640184164047241
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.12539882957935333
+      Pitch: 0.5053988099098206
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.2803939580917358
+      Yaw: 3.4353909492492676
     Saved: ~
 Window Geometry:
   Displays:
@@ -207,5 +262,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1200
-  X: 805
+  X: 72
   Y: 119
