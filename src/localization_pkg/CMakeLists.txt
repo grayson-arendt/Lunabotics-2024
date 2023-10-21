@@ -27,7 +27,7 @@ find_package(PCL 1.2 REQUIRED)
 find_package(OpenCV 4.2 REQUIRED)
 find_package(cv_bridge REQUIRED)
 
-find_package(apriltag_msgs REQUIRED)
+# find_package(apriltag_msgs REQUIRED)
 
 
 include_directories(${PCL_INCLUDE_DIRS})
@@ -59,6 +59,11 @@ install(TARGETS
   apriltagDetection
   pointCloudPipeline
   DESTINATION lib/${PROJECT_NAME}
+)
+
+install(
+  DIRECTORY config
+  DESTINATION share/${PROJECT_NAME}
 )
 
 ament_package()

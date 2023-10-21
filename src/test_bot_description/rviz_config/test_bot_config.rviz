@@ -7,6 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /RobotModel1
+        - /PointCloud21
       Splitter Ratio: 0.5
     Tree Height: 617
   - Class: rviz_common/Selection
@@ -45,7 +46,7 @@ Visualization Manager:
       Value: true
     - Alpha: 1
       Class: rviz_default_plugins/RobotModel
-      Collision Enabled: false
+      Collision Enabled: true
       Description File: ""
       Description Source: Topic
       Description Topic:
@@ -85,6 +86,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        imu_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         lidar_link:
           Alpha: 1
           Show Axes: false
@@ -120,6 +126,8 @@ Visualization Manager:
           Value: true
         front_right_wheel_link:
           Value: true
+        imu_link:
+          Value: true
         lidar_link:
           Value: true
         odom:
@@ -142,14 +150,14 @@ Visualization Manager:
               {}
             front_right_wheel_link:
               {}
+            imu_link:
+              {}
             lidar_link:
               {}
           rear_left_wheel_link:
             {}
           rear_right_wheel_link:
             {}
-        odom:
-          {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -181,7 +189,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /ray/pointcloud2
+        Value: /lidar/pointcloud2
       Use Fixed Frame: true
       Use rainbow: true
       Value: true

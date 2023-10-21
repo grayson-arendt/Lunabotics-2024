@@ -12,6 +12,7 @@
   <exec_depend>test_bot_description</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>robot_localization</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

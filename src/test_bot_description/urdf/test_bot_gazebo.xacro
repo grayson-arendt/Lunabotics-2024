@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<robot 
-	xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 	<gazebo reference="Ebox_link">
 		<material>Gazebo/Grey</material>
 	</gazebo>
@@ -49,8 +48,8 @@
             </ray>
             <plugin name="lidar_sensor_plugin" filename="libgazebo_ros_ray_sensor.so">
                 <ros>
-                  <!-- Configure namespace and remap to publish to /ray/pointcloud2 -->
-                  <namespace>/ray</namespace>
+                  <!-- Configure namespace and remap to publish to /lidar/pointcloud2 -->
+                  <namespace>/lidar</namespace>
                   <remapping>~/out:=pointcloud2</remapping>
                 </ros>
                 <!-- Output as a PointCloud2, see above for other types -->
@@ -62,9 +61,78 @@
               </plugin>
         </sensor>
     </gazebo>
+    <gazebo reference="imu_link">
+        <material>Gazebo/Green</material>
+        <sensor name="imu_sensor" type="imu">
+         <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+            <ros>
+              <namespace>/imu_link</namespace>
+              <remapping>~/out:=imu</remapping>
+            </ros>
+            <initial_orientation_as_reference>false</initial_orientation_as_reference>
+          </plugin>
+          <always_on>true</always_on>
+          <update_rate>100</update_rate>
+          <visualize>true</visualize>
+          <imu>
+            <angular_velocity>
+              <x>
+                <noise type="gaussian">
+                  <mean>0.0</mean>
+                  <stddev>2e-4</stddev>
+                  <bias_mean>0.0000075</bias_mean>
+                  <bias_stddev>0.0000008</bias_stddev>
+                </noise>
+              </x>
+              <y>
+                <noise type="gaussian">
+                  <mean>0.0</mean>
+                  <stddev>2e-4</stddev>
+                  <bias_mean>0.0000075</bias_mean>
+                  <bias_stddev>0.0000008</bias_stddev>
+                </noise>
+              </y>
+              <z>
+                <noise type="gaussian">
+                  <mean>0.0</mean>
+                  <stddev>2e-4</stddev>
+                  <bias_mean>0.0000075</bias_mean>
+                  <bias_stddev>0.0000008</bias_stddev>
+                </noise>
+              </z>
+            </angular_velocity>
+            <linear_acceleration>
+              <x>
+                <noise type="gaussian">
+                  <mean>0.0</mean>
+                  <stddev>1.7e-2</stddev>
+                  <bias_mean>0.1</bias_mean>
+                  <bias_stddev>0.001</bias_stddev>
+                </noise>
+              </x>
+              <y>
+                <noise type="gaussian">
+                  <mean>0.0</mean>
+                  <stddev>1.7e-2</stddev>
+                  <bias_mean>0.1</bias_mean>
+                  <bias_stddev>0.001</bias_stddev>
+                </noise>
+              </y>
+              <z>
+                <noise type="gaussian">
+                  <mean>0.0</mean>
+                  <stddev>1.7e-2</stddev>
+                  <bias_mean>0.1</bias_mean>
+                  <bias_stddev>0.001</bias_stddev>
+                </noise>
+              </z>
+            </linear_acceleration>
+          </imu>
+        </sensor>
+    </gazebo>
 	<gazebo>
-		<plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
-			<!-- Update rate in Hz -->
+		<plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">    
+            <!-- Update rate in Hz -->
 			<update_rate>50</update_rate>
 			<!-- wheels -->
 			<left_joint>base_rear_left_wheel_joint</left_joint>
@@ -84,7 +152,7 @@
 			<publish_wheel_tf>true</publish_wheel_tf>
 			<odometry_topic>odom</odometry_topic>
 			<odometry_frame>odom</odometry_frame>
-			<robot_base_frame>base_footprint</robot_base_frame>
+			<robot_base_frame>base_link</robot_base_frame>
 		</plugin>
 	</gazebo>
 </robot>

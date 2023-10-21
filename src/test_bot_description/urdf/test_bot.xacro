@@ -84,10 +84,25 @@
 		</collision>
 		<xacro:cylinder_inertia m="0.1" r="${lidar_radius}" h="${lidar_height}" xyz="0 0 0" rpy="0 0 0" />
 	</link>
+	<link name="imu_link">
+		<visual>
+			<geometry>
+			  <box size="0.05 0.05 0.05"/>
+			</geometry>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<material name="green" />
+		</visual>
+		<collision>
+			<geometry>
+				<box size="0.05 0.05 0.05"/>
+			</geometry>
+		</collision>
+		<xacro:box_inertia m="0.1" l="0.05" w="0.05" h="0.05" xyz="0 0 0" rpy="0 0 0" />
+	</link>
 	<joint name="base_joint" type="fixed">
-		<parent link="base_footprint" />
-		<child link="base_link" />
-		<origin xyz="0 0 ${wheel_radius}" rpy="0 0 0" />
+		<parent link="base_link" />
+		<child link="base_footprint" />
+		<origin xyz="0 0 ${-wheel_radius}" rpy="0 0 0" />
 	</joint>
 	<joint name="base_rear_right_wheel_joint" type="continuous">
 		<parent link="base_link" />
@@ -121,4 +136,9 @@
         <child link="lidar_link" />
         <origin xyz="${(base_length/2) - lidar_radius} 0 ${base_height + (lidar_height/2)}" rpy="0 0 0" />
     </joint>
+	<joint name="base_imu_joint" type="fixed">
+		<parent link="base_link" />
+		<child link="imu_link" />
+		<origin xyz="0 0 ${base_height + 0.025}" rpy="0 0 0" />
+	</joint>
 </robot>
