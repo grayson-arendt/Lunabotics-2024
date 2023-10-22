@@ -50,12 +50,11 @@
       <plugin name="lidar_sensor_plugin"
         filename="libgazebo_ros_ray_sensor.so">
         <ros>
-          <!-- Configure namespace and remap to publish to /lidar/pointcloud2 -->
-          <namespace>/lidar</namespace>
-          <remapping>~/out:=pointcloud2</remapping>
+          <!-- Configure namespace and remap to publish to /scan -->
+          <remapping>~/out:=scan</remapping>
         </ros>
         <!-- Output as a PointCloud2, see above for other types -->
-        <output_type>sensor_msgs/PointCloud2</output_type>
+        <output_type>sensor_msgs/LaserScan</output_type>
         <!-- Clip intensity values so all are above 100, optional -->
         <min_intensity>100.0</min_intensity>
         <!-- Frame id for header of output, defaults to sensor's parent link name -->
