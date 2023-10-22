@@ -30,7 +30,8 @@ def generate_launch_description():
     slam_toolbox_launch_file_path = os.path.join(get_package_share_path('slam_toolbox'),
                                                  'launch', 'online_async_launch.py')
     
-    rviz_nav2_pluggins_launch_file_path = '/home/anthony/lunabot_23-24/src/Lunabotics-2024/src/lunabot_bringup/launch/nav2_bringup/bringup/launch/rviz_launch.py'
+    rviz_nav2_pluggins_launch_file_path = os.path.join(get_package_share_path('lunabot_bringup'),
+                                                       'launch','nav2_bringup','bringup','launch','rviz_launch.py')
     
     robot_state_publisher_node = Node(
         package="robot_state_publisher",

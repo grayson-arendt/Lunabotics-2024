@@ -18,14 +18,15 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, SetEnvironmentVariable, LogInfo
-from launch.substitutions import LaunchConfiguration, PythonExpression
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from nav2_common.launch import RewrittenYaml
 
 
 def generate_launch_description():
     # Get the launch directory
-    bringup_dir = '/home/anthony/lunabot_23-24/src/Lunabotics-2024/src/lunabot_bringup/launch/nav2_bringup'
+    bringup_dir = os.path.join(get_package_share_directory('lunabot_bringup'),
+                               'launch','nav2_bringup')
 
     namespace = LaunchConfiguration('namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
