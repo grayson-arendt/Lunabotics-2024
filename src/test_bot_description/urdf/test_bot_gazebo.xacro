@@ -53,7 +53,7 @@
           <!-- Configure namespace and remap to publish to /scan -->
           <remapping>~/out:=scan</remapping>
         </ros>
-        <!-- Output as a PointCloud2, see above for other types -->
+        <!-- Output as a laserscan, see above for other types -->
         <output_type>sensor_msgs/LaserScan</output_type>
         <!-- Clip intensity values so all are above 100, optional -->
         <min_intensity>100.0</min_intensity>
