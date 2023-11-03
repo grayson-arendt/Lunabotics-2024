@@ -14,12 +14,11 @@ Calculate_wheel_percentOutput calculates what the left and right wheels should o
 class DifferentialDrive
 {
 public:
-    DifferentialDrive(double X, double Y)
-    : percent_output(std::sqrt(X * X + Y * Y)),
+    DifferentialDrive(double X, double Y, double R)
+    : // percent_output(std::sqrt(X * X + Y * Y)),
+      percent_output(R),
       theta(std::atan2(Y, X))
     {
-
-
         // Scale theta to the turning radius output range
         double radiusScaleFactor = 5.0;
         double abstheta = std::abs(theta);
@@ -46,7 +45,7 @@ public:
     std::array<double, 2> calculate_wheel_percentOutput()
     {
         // Buffer for extreme values
-        if (theta >= 0 && theta < 0.14)
+        if (theta >= 0.0 && theta < 0.14)
         {
             wheelPercentOutput[0] = -(percent_output / 2.5) * (2.5 - (robot_width / 2));
             wheelPercentOutput[1] = (percent_output / 2.5) * (2.5 + (robot_width / 2));
@@ -58,7 +57,7 @@ public:
             wheelPercentOutput[1] = (percent_output / turning_radius) * (turning_radius + (robot_width / 2));
         }
         // going straight
-        else if (theta > 1.45 && theta < 1.69)
+        else if (theta > 1.50 && theta < 1.64)
         {
             wheelPercentOutput[0] = percent_output;
             wheelPercentOutput[1] = percent_output;
@@ -88,7 +87,7 @@ public:
             wheelPercentOutput[1] = -(percent_output / turning_radius) * (turning_radius - (robot_width / 2));
         }
         // going straight backwards
-        else if (theta < -1.45 && theta > -1.69)
+        else if (theta < -1.50 && theta > -1.64)
         {
             wheelPercentOutput[0] = -percent_output;
             wheelPercentOutput[1] = -percent_output;
@@ -113,6 +112,6 @@ private:
     double percent_output;
     double theta;
     double turning_radius;
-    double robot_width = 0.5;
+    double robot_width = 2.0;
     std::array<double, 2> wheelPercentOutput; // Element 0 is right and 1 is left
 };

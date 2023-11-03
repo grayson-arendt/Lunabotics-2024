@@ -53,9 +53,11 @@ private:
             in action, ask me. */
         double x = -1 * (controller_input->axes[0]);
         double y = controller_input->axes[1];
+        double r = 1 - controller_input->axes[5];
+        r = std::clamp(r, 0.0, 1.0);
         
         // Creating a DifferentialDrive object, see the differential drive header file to understrand how it works
-        DifferentialDrive d(x, y);
+        DifferentialDrive d(x, y, r);
 
         // FeedEnable needs to be called periodically. It keeps the motors watchdog timers "fed" so they don't shutdown
         // This is a safety mechanism. If it isn't called in 10 seconds, the motor controllers will shutdown.
