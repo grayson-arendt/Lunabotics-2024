@@ -26,8 +26,8 @@ def generate_launch_description():
     lidar_launch_path = os.path.join(get_package_share_path('sllidar_ros2'),
                                      'launch', 'sllidar_a3_launch.py')
     
-    rviz_nav2_pluggins_launch_file_path = os.path.join(get_package_share_path('lunabot_bringup'),
-                                                       'launch','nav2_bringup','bringup','launch','rviz_launch.py')
+    #rviz_nav2_pluggins_launch_file_path = os.path.join(get_package_share_path('lunabot_bringup'),
+    #                                                   'launch','nav2_bringup','bringup','launch','rviz_launch.py')
     
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
@@ -54,8 +54,8 @@ def generate_launch_description():
         robot_state_publisher_node,
         robot_localization_node,
         motor_controller_node,
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(rviz_nav2_pluggins_launch_file_path)),
+        #IncludeLaunchDescription(
+        #    PythonLaunchDescriptionSource(rviz_nav2_pluggins_launch_file_path)),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(slam_toolbox_launch_file_path)),
         IncludeLaunchDescription(

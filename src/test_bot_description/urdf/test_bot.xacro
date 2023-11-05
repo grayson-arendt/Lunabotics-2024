@@ -37,6 +37,8 @@
 	<xacro:property name="camera_pole_height"
 		value="0.7" />-->
 	<link name="base_footprint" />
+	<link name="odom" />
+	<link name="map" />
 	<link name="base_link">
 		<visual>
 			<geometry>
@@ -204,6 +206,20 @@
 			xyz="0 0 0"
 			rpy="0 0 0" />
 	</link>
+	<joint name="odom_map"
+		type="fixed">
+		<parent link="map" />
+		<child link="odom" />
+		<origin xyz="0 0 0"
+			rpy="0 0 0" />
+	</joint>
+	<joint name="base_link_odom"
+		type="fixed">
+		<parent link="odom" />
+		<child link="base_link" />
+		<origin xyz="0 0 0"
+			rpy="0 0 0" />
+	</joint>
 	<joint name="base_joint"
 		type="fixed">
 		<parent link="base_link" />
