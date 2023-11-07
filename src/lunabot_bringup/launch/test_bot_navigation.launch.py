@@ -26,9 +26,6 @@ def generate_launch_description():
     lidar_launch_path = os.path.join(get_package_share_path('sllidar_ros2'),
                                      'launch', 'sllidar_a3_launch.py')
     
-    #rviz_nav2_pluggins_launch_file_path = os.path.join(get_package_share_path('lunabot_bringup'),
-    #                                                   'launch','nav2_bringup','bringup','launch','rviz_launch.py')
-    
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
@@ -40,7 +37,7 @@ def generate_launch_description():
        executable='ekf_node',
        name='ekf_filter_node',
        output='screen',
-       parameters=[ekf_config_path, {'use_sim_time': True}]
+       parameters=[ekf_config_path]
     )
     
     motor_controller_node = Node(
@@ -49,13 +46,9 @@ def generate_launch_description():
     )
     
     return LaunchDescription([
-        DeclareLaunchArgument(name='use_sim_time', default_value='True',
-                                            description='Flag to enable use_sim_time'),
         robot_state_publisher_node,
         robot_localization_node,
         motor_controller_node,
-        #IncludeLaunchDescription(
-        #    PythonLaunchDescriptionSource(rviz_nav2_pluggins_launch_file_path)),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(slam_toolbox_launch_file_path)),
         IncludeLaunchDescription(
