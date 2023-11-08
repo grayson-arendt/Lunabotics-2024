@@ -1,9 +1,9 @@
 # ignore vscode
-/.vscode/
+.vscode/
 
 # ignore build 
-/build/
+build/
 
 # ignore .idea
-/.idea/
+.idea/
 
