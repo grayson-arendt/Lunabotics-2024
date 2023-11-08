@@ -3,3 +3,9 @@
 
 # ignore build 
 **/build/
+
+# ignore .idea
+**/.idea/
+
+# ignore cache
+**/.cache/

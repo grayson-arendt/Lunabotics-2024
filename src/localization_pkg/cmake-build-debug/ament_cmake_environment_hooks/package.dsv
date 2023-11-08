@@ -1,0 +1,4 @@
+source;share/localization_pkg/local_setup.bash
+source;share/localization_pkg/local_setup.dsv
+source;share/localization_pkg/local_setup.sh
+source;share/localization_pkg/local_setup.zsh

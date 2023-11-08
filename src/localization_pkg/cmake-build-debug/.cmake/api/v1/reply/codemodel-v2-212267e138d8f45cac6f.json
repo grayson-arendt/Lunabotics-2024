@@ -1,0 +1,115 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-61747e713389a99e4722.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "localization_pkg",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "PointCloudTo2D::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-PointCloudTo2D-Debug-6d0811115c43cffea0b3.json",
+					"name" : "PointCloudTo2D",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "apriltagDetection::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-apriltagDetection-Debug-549e82e71b9270d98536.json",
+					"name" : "apriltagDetection",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "localization_pkg_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-localization_pkg_uninstall-Debug-ed002769ddabf9032033.json",
+					"name" : "localization_pkg_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "pointCloudPipeline::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-pointCloudPipeline-Debug-9f6babb23726002257f6.json",
+					"name" : "pointCloudPipeline",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "positionEstimation::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-positionEstimation-Debug-c84e685f154b8e1d06b3.json",
+					"name" : "positionEstimation",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "syncCamera::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-syncCamera-Debug-1bbe3b883be64652ae48.json",
+					"name" : "syncCamera",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-Debug-12d08220a43b4139510d.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/grayson/ros2_ws/src/src/localization_pkg/cmake-build-debug",
+		"source" : "/home/grayson/ros2_ws/src/src/localization_pkg"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 5
+	}
+}
