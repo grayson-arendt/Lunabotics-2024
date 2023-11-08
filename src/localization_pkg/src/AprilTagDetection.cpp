@@ -25,9 +25,9 @@ creates an image with marker, id name, and pose overlays,
 then calculates how far the tag is from the camera. 
 */
 
-class aprilTagDetection : public rclcpp::Node {
+class AprilTagDetection : public rclcpp::Node {
     public:
-    aprilTagDetection() : Node("apriltagDetector") {
+    AprilTagDetection() : Node("apriltagDetector") {
 
         // Create subscriber
         imageSub_ = this->create_subscription<sensor_msgs::msg::Image>(
@@ -75,7 +75,7 @@ class aprilTagDetection : public rclcpp::Node {
             cv::aruco::detectMarkers(currentImage_ptr->image, dictionary, markerCorners, markerIds, parameters);
 
             // Estimate pose, need cameraMatrix and distCoeffs first from calibration
-            cv::aruco::estimatePoseSingleMarkers(markerCorners, 0.06, cameraMatrix, distortionCoefficients, rvecs, tvecs);
+            cv::aruco::estimatePoseSingleMarkers(markerCorners, 0.10, cameraMatrix, distortionCoefficients, rvecs, tvecs);
 
              // Check to see if tags have been detected
             if (!markerIds.empty()) {
@@ -113,7 +113,7 @@ class aprilTagDetection : public rclcpp::Node {
 
         /*
         We want to get the pure distance regardless of tag orientation (camera viewing at different angles),
-        so we will now inverse the pose. Inversing the pose brings the object back to original orientation and position
+        so we will now invert the pose. Inverting the pose brings the object back to original orientation and position
         without including the camera's perspective/distortion, so the true distance would be 
         the z value of that original position.
         */
@@ -130,7 +130,7 @@ class aprilTagDetection : public rclcpp::Node {
             // Convert 3D rotation vector to matrix using rodrigues function
             cv::Rodrigues(rvec, r_mat); 
 
-            // Inverse both rotation matrix and translation matrix)
+            // Inverse both rotation matrix and translation matrix
             cv::Mat inversePose = r_mat.inv() * -t_mat;
 
             // Get z value from matrix, (x, y, z) format
@@ -147,7 +147,7 @@ int main(int argc, char * argv[]) {
     rclcpp::init(argc,argv);
 
     // Keep running node
-    rclcpp::spin(std::make_shared<aprilTagDetection>());
+    rclcpp::spin(std::make_shared<AprilTagDetection>());
 
     // Shutdown node
     rclcpp::shutdown();

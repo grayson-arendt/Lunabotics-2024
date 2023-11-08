@@ -34,12 +34,6 @@ pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisual
 
 class pointCloudPipeline : public rclcpp::Node {
 
-    // Variables
-    rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr camera_sub_;
-    std::string previous_cloud_id_;
-    std::string previous_bbox_id_;
-    std::string filterType_;
-
     public: 
 
         // Camera subscriber
@@ -54,13 +48,27 @@ class pointCloudPipeline : public rclcpp::Node {
             RCLCPP_INFO(this->get_logger(), "Received point cloud with %d points FILTER_TYPE: %s", msg->width * msg->height, filterType_.c_str());
 
             pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+
             pcl::fromROSMsg(*msg, *cloud);
+            pcl::visualization::Camera camera;
 
             viewer->setBackgroundColor(0,0,0);
-            
+
+            viewer->getCameraParameters(camera);
+
             // Stream cloud to PCL visualizer
-            streamPointCloud<pcl::PointXYZRGB>(outlierRemoval(cloud));
-            
+            streamPointCloud<pcl::PointNormal>(surfaceSmooth(passThroughFilter(outlierRemoval(voxelFilter(cloud, 0.07), 0.2, 10))));
+            pcl::PointXYZRGB minPt, maxPt;
+
+            //euclideanSeg(passThroughFilter(outlierRemoval(voxelFilter(cloud, 0.07), 0.2, 10)));
+            pcl::getMinMax3D (*passThroughFilter(outlierRemoval(voxelFilter(cloud, 0.07), 0.2, 10)), minPt, maxPt);
+            std::cout << "Max x: " << maxPt.x << std::endl;
+            std::cout << "Max y: " << maxPt.y << std::endl;
+            std::cout << "Max z: " << maxPt.z << std::endl;
+            std::cout << "Min x: " << minPt.x << std::endl;
+            std::cout << "Min y: " << minPt.y << std::endl;
+            std::cout << "Min z: " << minPt.z << std::endl;
+
             viewer->spinOnce(100);
             std::this_thread::sleep_for(100ms);
         }
@@ -75,13 +83,13 @@ class pointCloudPipeline : public rclcpp::Node {
 	        filter.setInputCloud(cloud);
 
 	        // Use all neighbors in a radius of 3cm.
-	        filter.setSearchRadius(0.03);
+	        filter.setSearchRadius(0.1);
 
 	        // If true, the surface and normal are approximated using a polynomial estimation
 	        // (if false, only a tangent one)
-	        filter.setPolynomialOrder(2); 
+	        filter.setPolynomialOrder(3);
 
-	        //filter.setComputeNormals(true);
+	        filter.setComputeNormals(true);
 
 	        // kdtree object for searches
 	        pcl::search::KdTree<pcl::PointXYZRGB>::Ptr kdtree;
@@ -119,15 +127,15 @@ class pointCloudPipeline : public rclcpp::Node {
 	        filter.setInputCloud(cloud);
 
 	        // Filter out all points with Z values not in the [0-2] range.
-	        filter.setFilterFieldName("z");
-	        filter.setFilterLimits(0.0, 4.0); 
+	        filter.setFilterFieldName("y");
+	        filter.setFilterLimits(0.0, 3.0);
 
 	        filter.filter(*filteredCloud);
             return filteredCloud;
         }
 
         // Outlier removal (important for cleaning initial point cloud)
-        const pcl::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB>> outlierRemoval(const pcl::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB>> cloud) {
+        const pcl::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB>> outlierRemoval(const pcl::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB>> cloud, double radius, int points) {
 
             pcl::PointCloud<pcl::PointXYZRGB>::Ptr filteredCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 	        pcl::RadiusOutlierRemoval<pcl::PointXYZRGB> filter;
@@ -136,8 +144,8 @@ class pointCloudPipeline : public rclcpp::Node {
 	        filter.setInputCloud(cloud);
 
 	        // Every point must have 10 neighbors within 10cm, or it will be removed
-	        filter.setRadiusSearch(0.1);
-	        filter.setMinNeighborsInRadius(100);
+	        filter.setRadiusSearch(radius);
+	        filter.setMinNeighborsInRadius(points);
 
 	        filter.filter(*filteredCloud);
             return filteredCloud;
@@ -209,7 +217,7 @@ class pointCloudPipeline : public rclcpp::Node {
             return mainCluster;
         }
 
-        // Euclidean clustering ()
+        // Euclidean clustering
         void euclideanSeg(const pcl::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB>> cloud) {
             pcl::EuclideanClusterExtraction<pcl::PointXYZRGB> clustering;
             std::vector<pcl::PointIndices> clusters;
@@ -217,7 +225,7 @@ class pointCloudPipeline : public rclcpp::Node {
             kdtree->setInputCloud(cloud);
 
             // Identifying clusters of points
-            clustering.setClusterTolerance(0.08); // 8 cm, this value is very sensitive and needs fine-tuning depending on environment
+            clustering.setClusterTolerance(0.075); // 8 cm, this value is very sensitive and needs fine-tuning depending on environment
             clustering.setMinClusterSize(100);
             clustering.setMaxClusterSize(25000);
             clustering.setSearchMethod(kdtree);
@@ -348,9 +356,21 @@ class pointCloudPipeline : public rclcpp::Node {
             previous_cloud_id_ = cloud_id;
             //createBoundingBox(cloud);
         }
+
+    // Variables
+    rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr camera_sub_;
+    std::string previous_cloud_id_;
+    std::string previous_bbox_id_;
+    std::string filterType_;
+
 };
 
 int main(int argc, char **argv) {
+
+    viewer->setCameraPosition(0, -1, -6,  // Camera position (x, y, z)
+                              0, 0, 0,  // Focal point (x, y, z) - set to the center of the point cloud
+                              0.3, -1, 0.5);  // View up vector (x, y, z) - set to (0, -1, 0) to flip the camera orientation
+
 
     // Start ROS2
     rclcpp::init(argc, argv);
