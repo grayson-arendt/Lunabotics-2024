@@ -7,3 +7,4 @@ build/
 # ignore .idea
 .idea/
 
+**/cmake-build-debug/
