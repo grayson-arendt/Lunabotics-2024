@@ -29,7 +29,7 @@ def generate_launch_description():
                                'launch','nav2_bringup')
 
     namespace = LaunchConfiguration('namespace')
-    use_sim_time = LaunchConfiguration('use_sim_time')
+    #use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
     params_file = LaunchConfiguration('params_file')
     default_bt_xml_filename = LaunchConfiguration('default_bt_xml_filename')
@@ -52,7 +52,7 @@ def generate_launch_description():
 
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
-        'use_sim_time': use_sim_time,
+        #'use_sim_time': use_sim_time,
         'default_bt_xml_filename': default_bt_xml_filename,
         'autostart': autostart,
         'map_subscribe_transient_local': map_subscribe_transient_local}
@@ -141,7 +141,7 @@ def generate_launch_description():
             executable='lifecycle_manager',
             name='lifecycle_manager_navigation',
             output='screen',
-            parameters=[{'use_sim_time': use_sim_time},
+            parameters=[#{'use_sim_time': use_sim_time},
                         {'autostart': autostart},
                         {'node_names': lifecycle_nodes}]),
 
