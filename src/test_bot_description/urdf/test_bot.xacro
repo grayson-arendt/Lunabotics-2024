@@ -2,7 +2,7 @@
 <robot name="test_bot"
 	xmlns:xacro="http://www.ros.org/wiki/xacro">
 	<xacro:include filename="common_properties.xacro" />
-	<xacro:include filename="test_bot_gazebo.xacro" />
+	<!--<xacro:include filename="test_bot_gazebo.xacro" />-->
 	<xacro:property name="base_length"
 		value="0.8" />
 	<xacro:property name="base_width"
@@ -24,7 +24,7 @@
 		value="0.04" />
 	<xacro:property name="lidar_height"
 		value="0.04" />
-	<xacro:property name="camera_length"
+	<!--<xacro:property name="camera_length"
 		value="0.015" />
 	<xacro:property name="camera_width"
 		value="0.130" />
@@ -35,7 +35,7 @@
 	<xacro:property name="camera_pole_width"
 		value="0.02" />
 	<xacro:property name="camera_pole_height"
-		value="0.7" />
+		value="0.7" />-->
 	<link name="base_footprint" />
 	<!--<link name="odom" />
 	<link name="map" />-->
@@ -55,12 +55,12 @@
 			<origin xyz="0 0 ${base_height / 2}"
 				rpy="0 0 0" />
 		</collision>
-		<xacro:box_inertia m="7.0"
+		<!--<xacro:box_inertia m="7.0"
 			l="${base_length}"
 			w="${base_width}"
 			h="${base_height}"
 			xyz="0 0 ${base_height / 2}"
-			rpy="0 0 0" />
+			rpy="0 0 0" />-->
 	</link>
 	<xacro:macro name="wheel_link"
 		params="prefix">
@@ -82,11 +82,11 @@
 				<origin xyz="0 0 0"
 					rpy="${pi / 2.0} 0 0" />
 			</collision>
-			<xacro:cylinder_inertia m="1.5"
+			<!--<xacro:cylinder_inertia m="1.5"
 				r="${wheel_radius}"
 				h="${wheel_length}"
 				xyz="0 0 0"
-				rpy="${pi / 2.0} 0 0" />
+				rpy="${pi / 2.0} 0 0" />-->
 		</link>
 	</xacro:macro>
 	<xacro:wheel_link prefix="front_right" />
@@ -109,14 +109,14 @@
 			<origin xyz="0 0 0"
 				rpy="0 0 0" />
 		</collision>
-		<xacro:box_inertia m="2.0"
+		<!--<xacro:box_inertia m="2.0"
 			l="${Ebox_length}"
 			w="${Ebox_width}"
 			h="${Ebox_height}"
 			xyz="0 0 0"
-			rpy="0 0 0" />
+			rpy="0 0 0" />-->
 	</link>
-	<link name="camera_pole_link">
+	<!--<link name="camera_pole_link">
 		<visual>
 			<geometry>
 				<box size="${camera_pole_length} ${camera_pole_width} ${camera_pole_height}" />
@@ -138,7 +138,7 @@
 			h="${camera_pole_height}"
 			xyz="0 0 0"
 			rpy="0 0 0" />
-	</link>
+	</link>-->
 	<link name="lidar_link">
 		<visual>
 			<geometry>
@@ -155,13 +155,13 @@
 					length="${lidar_height}" />
 			</geometry>
 		</collision>
-		<xacro:cylinder_inertia m="0.1"
+		<!--<xacro:cylinder_inertia m="0.1"
 			r="${lidar_radius}"
 			h="${lidar_height}"
 			xyz="0 0 0"
-			rpy="0 0 0" />
+			rpy="0 0 0" />-->
 	</link>
-	<link name="camera_link">
+	<!--<link name="camera_link">
 		<visual>
 			<origin xyz="0 0 0"
 				rpy="0 0 0" />
@@ -206,7 +206,7 @@
 			xyz="0 0 0"
 			rpy="0 0 0" />
 	</link>
-	<!--<joint name="odom_map"
+	<joint name="odom_map"
 		type="fixed">
 		<parent link="map" />
 		<child link="odom" />
@@ -228,20 +228,20 @@
 			rpy="0 0 0" />
 	</joint>
 	<joint name="base_rear_right_wheel_joint"
-		type="continuous">
+		type="fixed">
 		<parent link="base_link" />
 		<child link="rear_right_wheel_link" />
 		<origin xyz="${-base_length / 4.0} ${-(base_width + wheel_length) / 2.0} 0"
 			rpy="0 0 0" />
-		<axis xyz="0 1 0" />
+		<!--<axis xyz="0 1 0" />-->
 	</joint>
 	<joint name="base_rear_left_wheel_joint"
-		type="continuous">
+		type="fixed">
 		<parent link="base_link" />
 		<child link="rear_left_wheel_link" />
 		<origin xyz="${-base_length / 4.0} ${(base_width + wheel_length) / 2.0} 0"
 			rpy="0 0 0" />
-		<axis xyz="0 1 0" />
+		<!--<axis xyz="0 1 0" />-->
 	</joint>
 	<joint name="base_front_right_wheel_joint"
 		type="fixed">
@@ -264,13 +264,13 @@
 		<origin xyz="${(-base_length / 2) - (Ebox_length / 2)} 0 ${Ebox_height / 2}"
 			rpy="0 0 0" />
 	</joint>
-	<joint name="base_camera_pole_joint"
+	<!--<joint name="base_camera_pole_joint"
 		type="fixed">
 		<parent link="base_link" />
 		<child link="camera_pole_link" />
 		<origin xyz="${(base_length / 2) - (2*lidar_radius) - (camera_pole_length/2)} 0 ${(base_height/2) + (camera_pole_height/2)}"
 			rpy="0 0 0" />
-	</joint>
+	</joint>-->
 	<joint name="base_lidar_joint"
 		type="fixed">
 		<parent link="base_link" />
@@ -278,7 +278,7 @@
 		<origin xyz="${(base_length/2) - lidar_radius} 0 ${base_height + (lidar_height/2)}"
 			rpy="0 0 0" />
 	</joint>
-	<joint name="base_camera_joint"
+	<!--<joint name="base_camera_joint"
 		type="fixed">
 		<parent link="base_link" />
 		<child link="camera_link" />
@@ -296,5 +296,5 @@
 		<child link="imu_link" />
 		<origin xyz="0 0 ${base_height + 0.025}"
 			rpy="0 0 0" />
-	</joint>
+	</joint>-->
 </robot>

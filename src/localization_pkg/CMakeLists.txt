@@ -44,10 +44,12 @@ include_directories(include)
 add_executable(pointCloudPipeline src/pointCloudPipeline.cpp)
 add_executable(apriltagDetection src/apriltagDetection.cpp)
 add_executable(test_goal_publisher src/test_goal_publisher.cpp)
+add_executable(set_initial_pose src/set_initial_pose.cpp)
 
 ament_target_dependencies(pointCloudPipeline rclcpp sensor_msgs pcl_conversions visualization_msgs)
 ament_target_dependencies(apriltagDetection rclcpp std_msgs sensor_msgs cv_bridge OpenCV)
 ament_target_dependencies(test_goal_publisher rclcpp geometry_msgs)
+ament_target_dependencies(set_initial_pose rclcpp geometry_msgs)
 
 target_link_libraries(pointCloudPipeline ${PCL_LIBRARIES})
 target_link_libraries(apriltagDetection ${OpenCV_LIBRARIES})
@@ -62,6 +64,7 @@ install(TARGETS
   apriltagDetection
   pointCloudPipeline
   test_goal_publisher
+  set_initial_pose
   DESTINATION lib/${PROJECT_NAME}
 )
 

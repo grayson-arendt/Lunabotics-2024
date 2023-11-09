@@ -20,11 +20,14 @@ def generate_launch_description():
     ekf_config_path = os.path.join(get_package_share_path('localization_pkg'),
                                    'config', 'ekf.yaml')
     
-    slam_toolbox_launch_file_path = os.path.join(get_package_share_path('slam_toolbox'),
-                                                 'launch', 'online_async_launch.py')
+    #slam_toolbox_launch_file_path = os.path.join(get_package_share_path('slam_toolbox'),
+    #                                             'launch', 'online_async_launch.py')
     
     lidar_launch_path = os.path.join(get_package_share_path('sllidar_ros2'),
                                      'launch', 'sllidar_a3_launch.py')
+    
+    t265_launch_path = os.path.join(get_package_share_path('realsense2_camera'),
+                                    'launch', 'rs_t265_launch.py')
     
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
@@ -45,12 +48,25 @@ def generate_launch_description():
         executable='motor_controller'
     )
     
+    initial_pose_publisher_node = Node(
+        package='localization_pkg',
+        executable='set_initial_pose'
+    )
+    
+    #rviz_nav2_pluggins_launch_file_path = os.path.join(get_package_share_path('lunabot_bringup'),
+    #                                                   'launch','nav2_bringup','bringup','launch','rviz_launch.py')
+    
     return LaunchDescription([
         robot_state_publisher_node,
-        robot_localization_node,
-        motor_controller_node,
+        #robot_localization_node,
+        #motor_controller_node,
+        initial_pose_publisher_node,
+        #IncludeLaunchDescription(
+        #    PythonLaunchDescriptionSource(slam_toolbox_launch_file_path)),
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(slam_toolbox_launch_file_path)),
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(lidar_launch_path))
+            PythonLaunchDescriptionSource(lidar_launch_path)),
+        #IncludeLaunchDescription(
+        #    PythonLaunchDescriptionSource(t265_launch_path)),
+        #IncludeLaunchDescription(
+        #    PythonLaunchDescriptionSource(rviz_nav2_pluggins_launch_file_path))
     ])
