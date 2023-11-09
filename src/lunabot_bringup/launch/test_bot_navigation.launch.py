@@ -55,14 +55,15 @@ def generate_launch_description():
     
     map_transform_node = Node(
         package='localization_pkg',
-        executable='map_transform'
-        arguments = ['0', '0', '0', '0', '0', '0', 'map', 'odom']
+        executable='map_transform',
+        arguments = ['map','odom', '0', '0', '0', '0', '0', '0']
     )
     
     odom_transform_node = Node(
         package='localization_pkg',
-        executable='odom_transform'
-        arguments = ['0', '0', '0', '0', '0', '0', 'odom', 'base_link']
+        executable='odom_transform',
+        arguments = ['odom','base_link', '0', '0', '0', '0', '0', '0']
+    )
     
     #rviz_nav2_pluggins_launch_file_path = os.path.join(get_package_share_path('lunabot_bringup'),
     #                                                   'launch','nav2_bringup','bringup','launch','rviz_launch.py')
@@ -73,7 +74,7 @@ def generate_launch_description():
         odom_transform_node,
         #robot_localization_node,
         #motor_controller_node,
-        initial_pose_publisher_node,
+        #initial_pose_publisher_node,
         #IncludeLaunchDescription(
         #    PythonLaunchDescriptionSource(slam_toolbox_launch_file_path)),
         IncludeLaunchDescription(

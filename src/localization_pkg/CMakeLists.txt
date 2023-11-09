@@ -20,6 +20,8 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
 
 # Include Cpp "include" directory
 include_directories(include)
@@ -32,8 +34,8 @@ add_executable(odom_transform src/odom_transform.cpp)
 
 ament_target_dependencies(test_goal_publisher rclcpp geometry_msgs)
 ament_target_dependencies(set_initial_pose rclcpp geometry_msgs)
-ament_target_dependencies(map_transform rclcpp geometry_msgs tf2 tf_ros)
-ament_target_dependencies(odom_transform rclcpp geometry_msgs tf2 tf_ros)
+ament_target_dependencies(map_transform rclcpp geometry_msgs tf2 tf2_ros)
+ament_target_dependencies(odom_transform rclcpp geometry_msgs tf2 tf2_ros)
 
 install(
   DIRECTORY phoenix_lib/
