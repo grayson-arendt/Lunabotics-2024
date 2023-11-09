@@ -3,24 +3,24 @@
 #include "tf2/LinearMath/Quaternion.h"
 #include "tf2_ros/static_transform_broadcaster.h"
 
-class StaticMapFramePublisher : public rclcpp::Node
+class StaticOdomFramePublisher : public rclcpp::Node
 {
 public:
-    explicit StaticMapFramePublisher(char * transformation[])
-    : Node("static_map_tf2_broadcaster")
+    explicit StaticOdomFramePublisher(char * transformation[])
+    : Node("static_odom_tf2_broadcaster")
     {
         tf_static_broadcaster = std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
 
         // Publish static transforms once at startup
-        this->make_map_transforms(transformation);
+        this->make_odom_transforms(transformation);
     }
 private:
-    void make_map_transforms(char * transformation[])
+    void make_odom_transforms(char * transformation[])
     {
         geometry_msgs::msg::TransformStamped t;
 
         t.header.stamp = this->get_clock()->now();
-        t.header.frame_id = "map";
+        t.header.frame_id = "odom";
         t.child_frame_id = transformation[1];
 
         t.transform.translation.x = atof(transformation[2]);
@@ -56,14 +56,14 @@ int main(int argc, char * argv[])
 
     // As the parent frame of the transform is `world`, it is
     // necessary to check that the frame name passed is different
-    if (strcmp(argv[1], "map") == 0) {
+    if (strcmp(argv[1], "odom") == 0) {
         RCLCPP_INFO(logger, "Your static turtle name cannot be 'map'");
         return 1;
     }
 
     // Pass parameters and initialize node
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<StaticMapFramePublisher>(argv));
+    rclcpp::spin(std::make_shared<StaticOdomFramePublisher>(argv));
     rclcpp::shutdown();
     return 0;
 }
