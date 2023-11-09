@@ -20,39 +20,16 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(message_filters REQUIRED)
-find_package(visualization_msgs REQUIRED)
-find_package(pcl_conversions REQUIRED)
-
-find_package(PCL 1.2 REQUIRED)
-find_package(OpenCV 4.2 REQUIRED)
-find_package(cv_bridge REQUIRED)
-
-# find_package(apriltag_msgs REQUIRED)
-
-
-include_directories(${PCL_INCLUDE_DIRS})
-include_directories(${OpenCV_INCLUDE_DIRS} /usr/include/opencv4)
-
-link_directories(${PCL_LIBRARY_DIRS})
-add_definitions(${PCL_DEFINITIONS})
 
 # Include Cpp "include" directory
 include_directories(include)
 
 # Create Cpp executable
-add_executable(pointCloudPipeline src/pointCloudPipeline.cpp)
-add_executable(apriltagDetection src/apriltagDetection.cpp)
 add_executable(test_goal_publisher src/test_goal_publisher.cpp)
 add_executable(set_initial_pose src/set_initial_pose.cpp)
 
-ament_target_dependencies(pointCloudPipeline rclcpp sensor_msgs pcl_conversions visualization_msgs)
-ament_target_dependencies(apriltagDetection rclcpp std_msgs sensor_msgs cv_bridge OpenCV)
 ament_target_dependencies(test_goal_publisher rclcpp geometry_msgs)
 ament_target_dependencies(set_initial_pose rclcpp geometry_msgs)
-
-target_link_libraries(pointCloudPipeline ${PCL_LIBRARIES})
-target_link_libraries(apriltagDetection ${OpenCV_LIBRARIES})
 
 
 install(
@@ -61,8 +38,6 @@ install(
 )
 
 install(TARGETS
-  apriltagDetection
-  pointCloudPipeline
   test_goal_publisher
   set_initial_pose
   DESTINATION lib/${PROJECT_NAME}

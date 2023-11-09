@@ -20,26 +20,14 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
-find_package(message_filters REQUIRED)
-find_package(visualization_msgs REQUIRED)
-find_package(pcl_conversions REQUIRED)
-find_package(PCL 1.2 REQUIRED)
-
-include_directories(${PCL_INCLUDE_DIRS})
-link_directories(${PCL_LIBRARY_DIRS})
-add_definitions(${PCL_DEFINITIONS})
 
 # Include Cpp "include" directory
 include_directories(include)
 
 # Create Cpp executable
-add_executable(pointCloudPipeline src/pointCloudPipeline.cpp)
-ament_target_dependencies(pointCloudPipeline rclcpp sensor_msgs pcl_conversions visualization_msgs)
 
 add_executable(motor_controller src/motor_controller.cpp)
 ament_target_dependencies(motor_controller rclcpp geometry_msgs)
-
-target_link_libraries(pointCloudPipeline ${PCL_LIBRARIES})
 
 install(
   DIRECTORY phoenix_lib/
@@ -47,7 +35,6 @@ install(
 )
 
 install(TARGETS
-  pointCloudPipeline
   motor_controller
   DESTINATION lib/${PROJECT_NAME}
 )
