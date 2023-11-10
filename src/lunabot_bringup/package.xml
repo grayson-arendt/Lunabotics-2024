@@ -17,6 +17,7 @@
   <exec_depend>navigation2</exec_depend>
   <exec_depend>navigation_pkg</exec_depend>
   <exec_depend>sllidar_ros2</exec_depend>
+  <exec_depend>laser_filters</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

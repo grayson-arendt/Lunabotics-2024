@@ -1,9 +1,11 @@
 from launch import LaunchDescription 
 from launch_ros.parameter_descriptions import ParameterValue
+from launch.substitutions import PathJoinSubstitution
 from launch_ros.actions import Node
 from launch.substitutions import Command
 import os
 from ament_index_python.packages import get_package_share_path
+from ament_index_python.packages import get_package_share_directory
 from launch.actions import IncludeLaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -25,6 +27,9 @@ def generate_launch_description():
     
     lidar_launch_path = os.path.join(get_package_share_path('sllidar_ros2'),
                                      'launch', 'sllidar_a3_launch.py')
+    
+    laser_scan_config_path = os.path.join(get_package_share_path('lunabot_bringup'),
+                                          'config', 'laser_filter.yaml')
     
     t265_launch_path = os.path.join(get_package_share_path('realsense2_camera'),
                                     'launch', 'rs_t265_launch.py')
@@ -63,6 +68,12 @@ def generate_launch_description():
         executable='wheel_odom_publisher'
     )
     
+    laser_filter = Node(
+        package="laser_filters",
+        executable="scan_to_scan_filter_chain",
+        parameters=[laser_scan_config_path]
+    )
+    
     #rviz_nav2_pluggins_launch_file_path = os.path.join(get_package_share_path('lunabot_bringup'),
     #                                                   'launch','nav2_bringup','bringup','launch','rviz_launch.py')
     
@@ -71,12 +82,13 @@ def generate_launch_description():
         wheel_odom_node,
         map_transform_node,
         robot_localization_node,
+        laser_filter,
         #motor_controller_node,
         #initial_pose_publisher_node,
-        #IncludeLaunchDescription(
-        #    PythonLaunchDescriptionSource(slam_toolbox_launch_file_path)),
-        #IncludeLaunchDescription(
-        #    PythonLaunchDescriptionSource(lidar_launch_path)),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(slam_toolbox_launch_file_path)),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(lidar_launch_path)),
         #IncludeLaunchDescription(
         #    PythonLaunchDescriptionSource(t265_launch_path)),
         #IncludeLaunchDescription(

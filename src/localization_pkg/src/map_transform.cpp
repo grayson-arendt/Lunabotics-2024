@@ -16,7 +16,7 @@ public:
         tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
 
         timer_ = this->create_wall_timer(
-            std::chrono::milliseconds(100), 
+            std::chrono::milliseconds(10), 
             std::bind(&FramePublisher::broadcast_transform_callback, this));
     }
 
