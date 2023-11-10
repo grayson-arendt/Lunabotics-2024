@@ -79,7 +79,7 @@ def generate_launch_description():
     
     return LaunchDescription([
         robot_state_publisher_node,
-        wheel_odom_node,
+        #wheel_odom_node,
         map_transform_node,
         robot_localization_node,
         laser_filter,
@@ -89,8 +89,8 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(slam_toolbox_launch_file_path)),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(lidar_launch_path)),
-        #IncludeLaunchDescription(
-        #    PythonLaunchDescriptionSource(t265_launch_path)),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(t265_launch_path)),
         #IncludeLaunchDescription(
         #    PythonLaunchDescriptionSource(rviz_nav2_pluggins_launch_file_path))
     ])
