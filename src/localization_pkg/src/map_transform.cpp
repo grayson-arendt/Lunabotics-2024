@@ -1,52 +1,52 @@
+#include <chrono>
+#include <functional>
+#include <memory>
+
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "tf2/LinearMath/Quaternion.h"
-#include "tf2_ros/static_transform_broadcaster.h"
+#include "tf2_ros/transform_broadcaster.h"
 
-class StaticMapFramePublisher : public rclcpp::Node
+class FramePublisher : public rclcpp::Node
 {
 public:
-    explicit StaticMapFramePublisher(char * transformation[])
-    : Node("static_map_tf2_broadcaster")
+    explicit FramePublisher()
+        : Node("tf2_broadcaster")
     {
-        tf_static_broadcaster = std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
+        tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
 
-        // Publish static transforms once at startup
-        this->make_map_transforms(transformation);
+        timer_ = this->create_wall_timer(
+            std::chrono::milliseconds(100), 
+            std::bind(&FramePublisher::broadcast_transform_callback, this));
     }
+
 private:
-    void make_map_transforms(char * transformation[])
+    void broadcast_transform_callback()
     {
         geometry_msgs::msg::TransformStamped t;
 
         t.header.stamp = this->get_clock()->now();
         t.header.frame_id = "map";
-        t.child_frame_id = transformation[1];
+        t.child_frame_id = "odom";
 
-        t.transform.translation.x = atof(transformation[2]);
-        t.transform.translation.y = atof(transformation[3]);
-        t.transform.translation.z = atof(transformation[4]);
-        tf2::Quaternion q;
-        q.setRPY(
-        atof(transformation[5]),
-        atof(transformation[6]),
-        atof(transformation[7]));
-        t.transform.rotation.x = q.x();
-        t.transform.rotation.y = q.y();
-        t.transform.rotation.z = q.z();
-        t.transform.rotation.w = q.w();
+        t.transform.translation.x = 0.0;
+        t.transform.translation.y = 0.0;
+        t.transform.translation.z = 0.12;
+        t.transform.rotation.x = 0.0;
+        t.transform.rotation.y = 0.0;
+        t.transform.rotation.z = 0.0;
+        t.transform.rotation.w = 1.0;
 
-        tf_static_broadcaster->sendTransform(t);
+        tf_broadcaster_->sendTransform(t);
     }
-
-    std::shared_ptr<tf2_ros::StaticTransformBroadcaster> tf_static_broadcaster;
+    rclcpp::TimerBase::SharedPtr timer_;
+    std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 };
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
-    // Pass parameters and initialize node
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<StaticMapFramePublisher>(argv));
+    rclcpp::spin(std::make_shared<FramePublisher>());
     rclcpp::shutdown();
     return 0;
 }
