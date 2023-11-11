@@ -38,6 +38,11 @@ def generate_launch_description():
         executable="robot_state_publisher",
         parameters=[{'robot_description': robot_description}]
     )
+    
+    joint_state_publisher_node = Node(
+        package="joint_state_publisher",
+        executable="joint_state_publisher"
+    )
 
     spawn_robot_node = Node(
         package="gazebo_ros",
@@ -61,6 +66,7 @@ def generate_launch_description():
         DeclareLaunchArgument(name='use_sim_time', default_value='True',
                                             description='Flag to enable use_sim_time'),
         robot_state_publisher_node,
+        joint_state_publisher_node,
         spawn_robot_node,
         robot_localization_node,
         IncludeLaunchDescription(

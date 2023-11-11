@@ -40,6 +40,11 @@ def generate_launch_description():
         parameters=[{'robot_description': robot_description}]
     )
     
+    joint_state_publisher_node = Node(
+        package="joint_state_publisher",
+        executable="joint_state_publisher"
+    )
+    
     robot_localization_node = Node(
        package='robot_localization',
        executable='ekf_node',
@@ -79,18 +84,19 @@ def generate_launch_description():
     
     return LaunchDescription([
         robot_state_publisher_node,
+        joint_state_publisher_node,
         #wheel_odom_node,
-        map_transform_node,
-        robot_localization_node,
-        laser_filter,
+        #map_transform_node,
+        #robot_localization_node,
+        #laser_filter,
         #motor_controller_node,
         #initial_pose_publisher_node,
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(slam_toolbox_launch_file_path)),
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(lidar_launch_path)),
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(t265_launch_path)),
+        #IncludeLaunchDescription(
+        #    PythonLaunchDescriptionSource(slam_toolbox_launch_file_path)),
+        #IncludeLaunchDescription(
+        #    PythonLaunchDescriptionSource(lidar_launch_path)),
+        #IncludeLaunchDescription(
+        #    PythonLaunchDescriptionSource(t265_launch_path)),
         #IncludeLaunchDescription(
         #    PythonLaunchDescriptionSource(rviz_nav2_pluggins_launch_file_path))
     ])

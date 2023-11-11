@@ -70,7 +70,7 @@
         name="imu_plugin">
         <ros>
           <namespace>/imu_link</namespace>
-          <remapping>~/out:=imu</remapping>
+          <remapping>~/out:=camera/odom/sample</remapping>
         </ros>
         <initial_orientation_as_reference>false</initial_orientation_as_reference>
       </plugin>
@@ -136,30 +136,28 @@
   <gazebo>
     <plugin name="diff_drive_controller"
       filename="libgazebo_ros_diff_drive.so">
-      <!-- Update rate in Hz -->
       <update_rate>50</update_rate>
-      <!-- wheels -->
       <left_joint>base_rear_left_wheel_joint</left_joint>
       <right_joint>base_rear_right_wheel_joint</right_joint>
-      <!-- kinematics -->
+
       <wheel_separation>0.6</wheel_separation>
       <wheel_diameter>0.3</wheel_diameter>
-      <!-- limits 
+
 			<max_wheel_torque>20</max_wheel_torque>
-			<max_wheel_acceleration>1.0</max_wheel_acceleration> -->
-      <!-- input 
-			<command_topic>cmd_vel</command_topic> cms_vel is default-->
-      <!-- output -->
-      <!--keeping track of the robot based on wheel encoders-->
+			<max_wheel_acceleration>1.0</max_wheel_acceleration> 
+
+			<command_topic>cmd_vel</command_topic>
+
+
       <publish_odom>true</publish_odom>
       <publish_odom_tf>true</publish_odom_tf>
       <publish_wheel_tf>true</publish_wheel_tf>
       <odometry_topic>odom</odometry_topic>
       <odometry_frame>odom</odometry_frame>
-      <robot_base_frame>base_link</robot_base_frame>
+      <robot_base_frame>base_footprint</robot_base_frame>
     </plugin>
   </gazebo>
-  <gazebo reference="camera_link">
+  <!--<gazebo reference="camera_link">
     <material>Gazebo/Green</material>
     <sensor name="depth_camera" type="depth">
       <visualize>true</visualize>
@@ -195,5 +193,5 @@
         <hackBaseline>0</hackBaseline>
       </plugin>
     </sensor>
-  </gazebo>
+  </gazebo>-->
 </robot>

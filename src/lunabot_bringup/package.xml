@@ -11,6 +11,7 @@
 
   <exec_depend>test_bot_description</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>robot_localization</exec_depend>
   <exec_depend>slam_toolbox</exec_depend>
