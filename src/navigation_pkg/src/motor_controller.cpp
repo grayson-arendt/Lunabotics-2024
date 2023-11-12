@@ -1,6 +1,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
-#include "navigation_pkg/DifferentialDrive.hpp"
+//#include "navigation_pkg/DifferentialDrive.hpp"
 
 #define Phoenix_No_WPI
 #include "ctre/Phoenix.h"
@@ -21,31 +21,44 @@ class MotorController : public rclcpp::Node
 {
 public:
     MotorController() : Node("motor_controller")
-    {
+    {        
         right_wheel_motor.SetInverted(true);
+
+        RCLCPP_INFO(this->get_logger(), " Motor control started. ");
 
         motor_controller_subscriber = this->create_subscription<geometry_msgs::msg::Twist>(
             "cmd_vel", 10,
             std::bind(&MotorController::callbackMotors, this, std::placeholders::_1));
+
+        RCLCPP_INFO(this->get_logger(), " Motor control started. ");
     }
+    double velocity_left_cmd;
+    double velocity_right_cmd;
 
 private:
 
     void callbackMotors(const geometry_msgs::msg::Twist::SharedPtr cmd_vel)
     {
-        float x_linear = cmd_vel->linear.x;
-        float z_angular = cmd_vel->angular.z;
+        double linear_velocity = cmd_vel->linear.x;
+        double angular_velocity = cmd_vel->angular.z;
 
-        DifferentialDrive d(x_linear, z_angular);
+        //DifferentialDrive d(x_linear, z_angular);
 
         ctre::phoenix::unmanaged::Unmanaged::FeedEnable(10000);
 
-        left_wheel_motor.Set(ControlMode::PercentOutput, d.calculate_wheel_percentOutput()[1]);
-        right_wheel_motor.Set(ControlMode::PercentOutput, d.calculate_wheel_percentOutput()[0]);
+        velocity_left_cmd = ((linear_velocity - angular_velocity) * 0.4 / 2.0)/0.1;
 
-        RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", d.calculate_wheel_percentOutput()[0], d.calculate_wheel_percentOutput()[1]);
+        velocity_right_cmd = ((linear_velocity + angular_velocity) * 0.4 / 2.0)/0.1;
+
+        right_wheel_motor.Set(ControlMode::PercentOutput, 0.5);
+
+        left_wheel_motor.Set(ControlMode::PercentOutput, velocity_left_cmd);
+        //right_wheel_motor.Set(ControlMode::PercentOutput, velocity_right_cmd);
+
+        RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", velocity_right_cmd, velocity_left_cmd);
     }
 
+    
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr motor_controller_subscriber;
 };
 

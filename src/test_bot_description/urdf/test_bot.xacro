@@ -2,24 +2,25 @@
 <robot name="test_bot"
 	xmlns:xacro="http://www.ros.org/wiki/xacro">
 	<xacro:include filename="common_properties.xacro" />
+	<!--<xacro:include filename="ros2_control.xacro" />-->
 	<!--<xacro:include filename="test_bot_gazebo.xacro" />-->
 	<xacro:property name="base_length"
-		value="0.8" />
+		value="0.915" />
 	<xacro:property name="base_width"
-		value="0.4" />
+		value="0.43" />
 	<xacro:property name="base_height"
 		value="0.08" />
 	<xacro:property name="wheel_radius"
-		value="0.12" />
+		value="0.1" />
 	<xacro:property name="wheel_length"
 		value="0.08" />
 	<!--Ebox = Electrical box-->
 	<xacro:property name="Ebox_length"
 		value="0.1" />
 	<xacro:property name="Ebox_width"
-		value="0.4" />
+		value="0.43" />
 	<xacro:property name="Ebox_height"
-		value="0.25" />
+		value="0.3" />
 	<xacro:property name="lidar_radius"
 		value="0.04" />
 	<xacro:property name="lidar_height"
@@ -206,6 +207,9 @@
 			xyz="0 0 0"
 			rpy="0 0 0" />
 	</link>
+	<link name="camera_fisheye1_optical_frame" />
+	<link name="camera_fisheye2_optical_frame" />
+	<link name="camera_pose_optical_frame" />
 	<!--<joint name="odom_map"
 		type="fixed">
 		<parent link="map" />
@@ -294,6 +298,27 @@
 		type="fixed">
 		<parent link="base_link" />
 		<child link="camera_link" />
+		<origin xyz="0 0 ${base_height + 0.025}"
+			rpy="0 0 0" />
+	</joint>
+	<joint name="base_camera_fisheye1_joint"
+		type="fixed">
+		<parent link="base_link" />
+		<child link="camera_fisheye1_optical_frame" />
+		<origin xyz="0 0 ${base_height + 0.025}"
+			rpy="0 0 0" />
+	</joint>
+	<joint name="base_camera_fisheye2_joint"
+		type="fixed">
+		<parent link="base_link" />
+		<child link="camera_fisheye2_optical_frame" />
+		<origin xyz="0 0 ${base_height + 0.025}"
+			rpy="0 0 0" />
+	</joint>
+	<joint name="base_camera_pose_frame"
+		type="fixed">
+		<parent link="base_link" />
+		<child link="camera_pose_optical_frame" />
 		<origin xyz="0 0 ${base_height + 0.025}"
 			rpy="0 0 0" />
 	</joint>

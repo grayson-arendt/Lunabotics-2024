@@ -20,7 +20,7 @@ def generate_launch_description():
         Command(['xacro ', urdf_path]), value_type=str)
     
     ekf_config_path = os.path.join(get_package_share_path('localization_pkg'),
-                                   'config', 'ekf.yaml')
+                                   'config', 'ekf_.yaml')
     
     slam_toolbox_launch_file_path = os.path.join(get_package_share_path('slam_toolbox'),
                                                  'launch', 'online_async_launch.py')
@@ -71,9 +71,9 @@ def generate_launch_description():
     return LaunchDescription([
         robot_state_publisher_node,
         joint_state_publisher_node,
-        #robot_localization_node,
+        robot_localization_node,
         laser_filter,
-        #motor_controller_node,
+        motor_controller_node,
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(slam_toolbox_launch_file_path)),
         IncludeLaunchDescription(

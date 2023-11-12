@@ -28,7 +28,7 @@ public:
         }
 
         // limit the percent output
-        percent_output = std::clamp(percent_output, 0.0, 0.3000);
+        percent_output = std::clamp(percent_output, 0.0, 1.0);
     }
     
     double gettheta()
