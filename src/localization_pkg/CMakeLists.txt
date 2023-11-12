@@ -29,16 +29,8 @@ find_package(nav_msgs REQUIRED)
 include_directories(include)
 
 # Create Cpp executable
-add_executable(test_goal_publisher src/test_goal_publisher.cpp)
-add_executable(set_initial_pose src/set_initial_pose.cpp)
-add_executable(map_transform src/map_transform.cpp)
-add_executable(wheel_velocity_publisher src/wheel_velocity_publisher.cpp)
 add_executable(wheel_odom_publisher src/wheel_odom_publisher.cpp)
 
-ament_target_dependencies(test_goal_publisher rclcpp geometry_msgs)
-ament_target_dependencies(set_initial_pose rclcpp geometry_msgs)
-ament_target_dependencies(map_transform rclcpp geometry_msgs tf2 tf2_ros)
-ament_target_dependencies(wheel_velocity_publisher rclcpp std_msgs)
 ament_target_dependencies(wheel_odom_publisher rclcpp std_msgs nav_msgs geometry_msgs tf2 tf2_ros)
 
 
@@ -48,10 +40,6 @@ install(
 )
 
 install(TARGETS
-  test_goal_publisher
-  set_initial_pose
-  map_transform
-  wheel_velocity_publisher
   wheel_odom_publisher
   DESTINATION lib/${PROJECT_NAME}
 )
@@ -69,8 +57,8 @@ else()
     set(PHOENIX_LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/phoenix_lib/x86-64)
 endif()
 
-target_link_libraries(wheel_velocity_publisher ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so)
-target_link_libraries(wheel_velocity_publisher ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so)
-target_link_libraries(wheel_velocity_publisher ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so)
+target_link_libraries(wheel_odom_publisher ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so)
+target_link_libraries(wheel_odom_publisher ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so)
+target_link_libraries(wheel_odom_publisher ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so)
 
 ament_package()

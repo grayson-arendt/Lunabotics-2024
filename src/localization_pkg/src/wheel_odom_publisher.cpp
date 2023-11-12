@@ -7,6 +7,21 @@
 #include <cmath>
 #include <chrono>
 
+#define Phoenix_No_WPI
+#include "ctre/Phoenix.h"
+#include "ctre/phoenix/platform/Platform.hpp"
+#include "ctre/phoenix/unmanaged/Unmanaged.h"
+#include "ctre/phoenix/cci/Unmanaged_CCI.h"
+
+using namespace ctre::phoenix;
+using namespace ctre::phoenix::platform;
+using namespace ctre::phoenix::motorcontrol;
+using namespace ctre::phoenix::motorcontrol::can;
+
+std::string interface = "can0";
+TalonFX left_wheel_motor(2, interface);
+TalonFX right_wheel_motor(3);
+
 using std::placeholders::_1;
 
 class OdomPublisher : public rclcpp::Node

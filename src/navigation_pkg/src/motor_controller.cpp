@@ -1,6 +1,6 @@
+#include <algorithm>
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
-//#include "navigation_pkg/DifferentialDrive.hpp"
 
 #define Phoenix_No_WPI
 #include "ctre/Phoenix.h"
@@ -27,7 +27,7 @@ public:
         RCLCPP_INFO(this->get_logger(), " Motor control started. ");
 
         motor_controller_subscriber = this->create_subscription<geometry_msgs::msg::Twist>(
-            "cmd_vel", 10,
+            "cmd_vel", 1,
             std::bind(&MotorController::callbackMotors, this, std::placeholders::_1));
 
         RCLCPP_INFO(this->get_logger(), " Motor control started. ");
@@ -42,18 +42,17 @@ private:
         double linear_velocity = cmd_vel->linear.x;
         double angular_velocity = cmd_vel->angular.z;
 
-        //DifferentialDrive d(x_linear, z_angular);
-
         ctre::phoenix::unmanaged::Unmanaged::FeedEnable(10000);
 
-        velocity_left_cmd = ((linear_velocity - angular_velocity) * 0.4 / 2.0)/0.1;
+        velocity_left_cmd = ((linear_velocity - (angular_velocity * 0.4) / 2.0) / 0.1);
 
-        velocity_right_cmd = ((linear_velocity + angular_velocity) * 0.4 / 2.0)/0.1;
+        velocity_right_cmd = ((linear_velocity + (angular_velocity * 0.4) / 2.0) / 0.1);
 
-        right_wheel_motor.Set(ControlMode::PercentOutput, 0.5);
+        velocity_left_cmd = std::clamp(velocity_left_cmd, -0.2, 0.2);
+        velocity_right_cmd = std::clamp(velocity_right_cmd, -0.2, 0.2);
 
         left_wheel_motor.Set(ControlMode::PercentOutput, velocity_left_cmd);
-        //right_wheel_motor.Set(ControlMode::PercentOutput, velocity_right_cmd);
+        right_wheel_motor.Set(ControlMode::PercentOutput, velocity_right_cmd);
 
         RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", velocity_right_cmd, velocity_left_cmd);
     }

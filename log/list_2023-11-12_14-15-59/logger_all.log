@@ -1,0 +1,676 @@
+[10.060s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'list', '-p', '--base-paths', '/home/codetc/lunabot_ws/src/Lunabotics-2024']
+[10.061s] DEBUG:colcon:Parsed command line arguments: Namespace(allow_overriding=[], base_paths=['/home/codetc/lunabot_ws/src/Lunabotics-2024'], build_base='build', ignore_user_meta=False, log_base=None, log_level=None, main=<bound method ListVerb.main of <colcon_package_information.verb.list.ListVerb object at 0xffff93d1de20>>, metas=['./colcon.meta'], names_only=False, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_end=None, packages_ignore=None, packages_ignore_regex=None, packages_select=None, packages_select_build_failed=False, packages_select_by_dep=None, packages_select_regex=None, packages_select_test_failures=False, packages_skip=None, packages_skip_build_finished=False, packages_skip_by_dep=None, packages_skip_regex=None, packages_skip_test_passed=False, packages_skip_up_to=None, packages_start=None, packages_up_to=None, packages_up_to_regex=None, paths=None, paths_only=True, topological_graph=False, topological_graph_density=False, topological_graph_dot=False, topological_graph_dot_cluster=False, topological_graph_dot_include_skipped=False, topological_graph_legend=False, topological_order=False, verb_extension=<colcon_package_information.verb.list.ListVerb object at 0xffff93d1de20>, verb_name='list', verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0xffff9390daf0>)
+[10.452s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[10.453s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[10.453s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[10.453s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[10.453s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[10.453s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/codetc/lunabot_ws/src/Lunabotics-2024'
+[10.454s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extensions ['ignore', 'ignore_ament_install']
+[10.454s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extension 'ignore'
+[10.455s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extension 'ignore_ament_install'
+[10.455s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extensions ['colcon_pkg']
+[10.455s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extension 'colcon_pkg'
+[10.455s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extensions ['colcon_meta']
+[10.456s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extension 'colcon_meta'
+[10.456s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extensions ['ros']
+[10.456s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extension 'ros'
+[10.504s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extensions ['cmake', 'python']
+[10.505s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extension 'cmake'
+[10.505s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extension 'python'
+[10.505s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extensions ['python_setup_py']
+[10.505s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024) by extension 'python_setup_py'
+[10.506s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/log) by extensions ['ignore', 'ignore_ament_install']
+[10.507s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/log) by extension 'ignore'
+[10.507s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/log) ignored
+[10.508s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extensions ['ignore', 'ignore_ament_install']
+[10.508s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extension 'ignore'
+[10.508s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extension 'ignore_ament_install'
+[10.508s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extensions ['colcon_pkg']
+[10.509s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extension 'colcon_pkg'
+[10.509s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extensions ['colcon_meta']
+[10.509s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extension 'colcon_meta'
+[10.509s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extensions ['ros']
+[10.509s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extension 'ros'
+[10.510s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extensions ['cmake', 'python']
+[10.510s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extension 'cmake'
+[10.510s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extension 'python'
+[10.510s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extensions ['python_setup_py']
+[10.510s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src) by extension 'python_setup_py'
+[10.511s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/example_2) by extensions ['ignore', 'ignore_ament_install']
+[10.511s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/example_2) by extension 'ignore'
+[10.512s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/example_2) by extension 'ignore_ament_install'
+[10.512s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/example_2) by extensions ['colcon_pkg']
+[10.512s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/example_2) by extension 'colcon_pkg'
+[10.512s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/example_2) by extensions ['colcon_meta']
+[10.512s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/example_2) by extension 'colcon_meta'
+[10.513s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/example_2) by extensions ['ros']
+[10.513s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/example_2) by extension 'ros'
+[10.529s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/example_2' with type 'ros.ament_cmake' and name 'ros2_control_demo_example_2'
+[10.530s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/localization_pkg) by extensions ['ignore', 'ignore_ament_install']
+[10.531s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/localization_pkg) by extension 'ignore'
+[10.531s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/localization_pkg) by extension 'ignore_ament_install'
+[10.531s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/localization_pkg) by extensions ['colcon_pkg']
+[10.532s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/localization_pkg) by extension 'colcon_pkg'
+[10.532s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/localization_pkg) by extensions ['colcon_meta']
+[10.532s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/localization_pkg) by extension 'colcon_meta'
+[10.532s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/localization_pkg) by extensions ['ros']
+[10.532s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/localization_pkg) by extension 'ros'
+[10.537s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/localization_pkg' with type 'ros.ament_cmake' and name 'localization_pkg'
+[10.538s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/lunabot_bringup) by extensions ['ignore', 'ignore_ament_install']
+[10.539s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/lunabot_bringup) by extension 'ignore'
+[10.539s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/lunabot_bringup) by extension 'ignore_ament_install'
+[10.539s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/lunabot_bringup) by extensions ['colcon_pkg']
+[10.539s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/lunabot_bringup) by extension 'colcon_pkg'
+[10.540s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/lunabot_bringup) by extensions ['colcon_meta']
+[10.540s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/lunabot_bringup) by extension 'colcon_meta'
+[10.540s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/lunabot_bringup) by extensions ['ros']
+[10.540s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/lunabot_bringup) by extension 'ros'
+[10.543s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/lunabot_bringup' with type 'ros.ament_cmake' and name 'lunabot_bringup'
+[10.544s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extensions ['ignore', 'ignore_ament_install']
+[10.544s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extension 'ignore'
+[10.545s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extension 'ignore_ament_install'
+[10.545s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extensions ['colcon_pkg']
+[10.545s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extension 'colcon_pkg'
+[10.545s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extensions ['colcon_meta']
+[10.545s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extension 'colcon_meta'
+[10.546s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extensions ['ros']
+[10.546s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extension 'ros'
+[10.546s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extensions ['cmake', 'python']
+[10.546s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extension 'cmake'
+[10.547s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extension 'python'
+[10.547s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extensions ['python_setup_py']
+[10.547s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2) by extension 'python_setup_py'
+[10.548s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extensions ['ignore', 'ignore_ament_install']
+[10.548s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extension 'ignore'
+[10.548s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extension 'ignore_ament_install'
+[10.548s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extensions ['colcon_pkg']
+[10.549s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extension 'colcon_pkg'
+[10.549s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extensions ['colcon_meta']
+[10.549s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extension 'colcon_meta'
+[10.549s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extensions ['ros']
+[10.549s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extension 'ros'
+[10.550s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extensions ['cmake', 'python']
+[10.550s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extension 'cmake'
+[10.550s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extension 'python'
+[10.550s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extensions ['python_setup_py']
+[10.550s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc) by extension 'python_setup_py'
+[10.551s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extensions ['ignore', 'ignore_ament_install']
+[10.551s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extension 'ignore'
+[10.552s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extension 'ignore_ament_install'
+[10.552s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extensions ['colcon_pkg']
+[10.552s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extension 'colcon_pkg'
+[10.552s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extensions ['colcon_meta']
+[10.552s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extension 'colcon_meta'
+[10.553s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extensions ['ros']
+[10.553s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extension 'ros'
+[10.553s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extensions ['cmake', 'python']
+[10.553s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extension 'cmake'
+[10.553s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extension 'python'
+[10.554s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extensions ['python_setup_py']
+[10.554s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/architecture) by extension 'python_setup_py'
+[10.554s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extensions ['ignore', 'ignore_ament_install']
+[10.555s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extension 'ignore'
+[10.555s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extension 'ignore_ament_install'
+[10.555s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extensions ['colcon_pkg']
+[10.555s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extension 'colcon_pkg'
+[10.555s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extensions ['colcon_meta']
+[10.556s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extension 'colcon_meta'
+[10.556s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extensions ['ros']
+[10.556s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extension 'ros'
+[10.556s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extensions ['cmake', 'python']
+[10.557s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extension 'cmake'
+[10.557s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extension 'python'
+[10.557s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extensions ['python_setup_py']
+[10.557s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/design) by extension 'python_setup_py'
+[10.558s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extensions ['ignore', 'ignore_ament_install']
+[10.558s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extension 'ignore'
+[10.558s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extension 'ignore_ament_install'
+[10.558s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extensions ['colcon_pkg']
+[10.558s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extension 'colcon_pkg'
+[10.559s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extensions ['colcon_meta']
+[10.559s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extension 'colcon_meta'
+[10.559s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extensions ['ros']
+[10.559s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extension 'ros'
+[10.560s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extensions ['cmake', 'python']
+[10.560s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extension 'cmake'
+[10.560s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extension 'python'
+[10.560s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extensions ['python_setup_py']
+[10.560s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/process) by extension 'python_setup_py'
+[10.561s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extensions ['ignore', 'ignore_ament_install']
+[10.561s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extension 'ignore'
+[10.561s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extension 'ignore_ament_install'
+[10.562s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extensions ['colcon_pkg']
+[10.562s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extension 'colcon_pkg'
+[10.562s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extensions ['colcon_meta']
+[10.562s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extension 'colcon_meta'
+[10.562s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extensions ['ros']
+[10.562s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extension 'ros'
+[10.563s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extensions ['cmake', 'python']
+[10.563s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extension 'cmake'
+[10.563s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extension 'python'
+[10.563s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extensions ['python_setup_py']
+[10.564s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements) by extension 'python_setup_py'
+[10.564s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extensions ['ignore', 'ignore_ament_install']
+[10.565s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extension 'ignore'
+[10.565s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extension 'ignore_ament_install'
+[10.565s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extensions ['colcon_pkg']
+[10.565s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extension 'colcon_pkg'
+[10.565s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extensions ['colcon_meta']
+[10.566s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extension 'colcon_meta'
+[10.566s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extensions ['ros']
+[10.566s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extension 'ros'
+[10.566s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extensions ['cmake', 'python']
+[10.567s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extension 'cmake'
+[10.567s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extension 'python'
+[10.567s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extensions ['python_setup_py']
+[10.567s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/requirements/images) by extension 'python_setup_py'
+[10.568s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extensions ['ignore', 'ignore_ament_install']
+[10.568s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extension 'ignore'
+[10.568s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extension 'ignore_ament_install'
+[10.569s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extensions ['colcon_pkg']
+[10.569s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extension 'colcon_pkg'
+[10.569s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extensions ['colcon_meta']
+[10.569s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extension 'colcon_meta'
+[10.569s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extensions ['ros']
+[10.569s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extension 'ros'
+[10.570s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extensions ['cmake', 'python']
+[10.570s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extension 'cmake'
+[10.570s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extension 'python'
+[10.570s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extensions ['python_setup_py']
+[10.570s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/doc/use_cases) by extension 'python_setup_py'
+[10.571s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_amcl) by extensions ['ignore', 'ignore_ament_install']
+[10.571s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_amcl) by extension 'ignore'
+[10.572s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_amcl) by extension 'ignore_ament_install'
+[10.572s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_amcl) by extensions ['colcon_pkg']
+[10.572s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_amcl) by extension 'colcon_pkg'
+[10.572s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_amcl) by extensions ['colcon_meta']
+[10.572s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_amcl) by extension 'colcon_meta'
+[10.573s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_amcl) by extensions ['ros']
+[10.573s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_amcl) by extension 'ros'
+[10.581s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_amcl' with type 'ros.ament_cmake' and name 'nav2_amcl'
+[10.582s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_behavior_tree) by extensions ['ignore', 'ignore_ament_install']
+[10.582s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_behavior_tree) by extension 'ignore'
+[10.583s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_behavior_tree) by extension 'ignore_ament_install'
+[10.583s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_behavior_tree) by extensions ['colcon_pkg']
+[10.583s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_behavior_tree) by extension 'colcon_pkg'
+[10.583s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_behavior_tree) by extensions ['colcon_meta']
+[10.583s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_behavior_tree) by extension 'colcon_meta'
+[10.584s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_behavior_tree) by extensions ['ros']
+[10.584s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_behavior_tree) by extension 'ros'
+[10.587s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_behavior_tree' with type 'ros.ament_cmake' and name 'nav2_behavior_tree'
+[10.588s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extensions ['ignore', 'ignore_ament_install']
+[10.589s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extension 'ignore'
+[10.589s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extension 'ignore_ament_install'
+[10.589s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extensions ['colcon_pkg']
+[10.589s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extension 'colcon_pkg'
+[10.589s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extensions ['colcon_meta']
+[10.590s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extension 'colcon_meta'
+[10.590s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extensions ['ros']
+[10.590s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extension 'ros'
+[10.591s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extensions ['cmake', 'python']
+[10.591s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extension 'cmake'
+[10.591s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extension 'python'
+[10.591s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extensions ['python_setup_py']
+[10.591s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup) by extension 'python_setup_py'
+[10.592s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/bringup) by extensions ['ignore', 'ignore_ament_install']
+[10.592s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/bringup) by extension 'ignore'
+[10.593s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/bringup) by extension 'ignore_ament_install'
+[10.593s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/bringup) by extensions ['colcon_pkg']
+[10.593s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/bringup) by extension 'colcon_pkg'
+[10.593s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/bringup) by extensions ['colcon_meta']
+[10.593s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/bringup) by extension 'colcon_meta'
+[10.594s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/bringup) by extensions ['ros']
+[10.594s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/bringup) by extension 'ros'
+[10.596s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/bringup' with type 'ros.ament_cmake' and name 'nav2_bringup'
+[10.597s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/nav2_gazebo_spawner) by extensions ['ignore', 'ignore_ament_install']
+[10.597s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/nav2_gazebo_spawner) by extension 'ignore'
+[10.598s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/nav2_gazebo_spawner) by extension 'ignore_ament_install'
+[10.598s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/nav2_gazebo_spawner) by extensions ['colcon_pkg']
+[10.598s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/nav2_gazebo_spawner) by extension 'colcon_pkg'
+[10.598s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/nav2_gazebo_spawner) by extensions ['colcon_meta']
+[10.598s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/nav2_gazebo_spawner) by extension 'colcon_meta'
+[10.599s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/nav2_gazebo_spawner) by extensions ['ros']
+[10.599s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/nav2_gazebo_spawner) by extension 'ros'
+[10.601s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bringup/nav2_gazebo_spawner' with type 'ros.ament_python' and name 'nav2_gazebo_spawner'
+[10.601s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bt_navigator) by extensions ['ignore', 'ignore_ament_install']
+[10.602s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bt_navigator) by extension 'ignore'
+[10.602s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bt_navigator) by extension 'ignore_ament_install'
+[10.602s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bt_navigator) by extensions ['colcon_pkg']
+[10.602s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bt_navigator) by extension 'colcon_pkg'
+[10.603s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bt_navigator) by extensions ['colcon_meta']
+[10.603s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bt_navigator) by extension 'colcon_meta'
+[10.603s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bt_navigator) by extensions ['ros']
+[10.603s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bt_navigator) by extension 'ros'
+[10.607s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_bt_navigator' with type 'ros.ament_cmake' and name 'nav2_bt_navigator'
+[10.608s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_common) by extensions ['ignore', 'ignore_ament_install']
+[10.608s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_common) by extension 'ignore'
+[10.608s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_common) by extension 'ignore_ament_install'
+[10.609s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_common) by extensions ['colcon_pkg']
+[10.609s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_common) by extension 'colcon_pkg'
+[10.609s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_common) by extensions ['colcon_meta']
+[10.609s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_common) by extension 'colcon_meta'
+[10.610s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_common) by extensions ['ros']
+[10.610s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_common) by extension 'ros'
+[10.613s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_common' with type 'ros.ament_cmake' and name 'nav2_common'
+[10.613s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_controller) by extensions ['ignore', 'ignore_ament_install']
+[10.614s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_controller) by extension 'ignore'
+[10.614s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_controller) by extension 'ignore_ament_install'
+[10.614s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_controller) by extensions ['colcon_pkg']
+[10.614s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_controller) by extension 'colcon_pkg'
+[10.615s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_controller) by extensions ['colcon_meta']
+[10.615s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_controller) by extension 'colcon_meta'
+[10.615s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_controller) by extensions ['ros']
+[10.615s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_controller) by extension 'ros'
+[10.620s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_controller' with type 'ros.ament_cmake' and name 'nav2_controller'
+[10.620s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_core) by extensions ['ignore', 'ignore_ament_install']
+[10.621s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_core) by extension 'ignore'
+[10.621s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_core) by extension 'ignore_ament_install'
+[10.621s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_core) by extensions ['colcon_pkg']
+[10.621s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_core) by extension 'colcon_pkg'
+[10.621s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_core) by extensions ['colcon_meta']
+[10.621s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_core) by extension 'colcon_meta'
+[10.622s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_core) by extensions ['ros']
+[10.622s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_core) by extension 'ros'
+[10.626s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_core' with type 'ros.ament_cmake' and name 'nav2_core'
+[10.627s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_costmap_2d) by extensions ['ignore', 'ignore_ament_install']
+[10.627s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_costmap_2d) by extension 'ignore'
+[10.627s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_costmap_2d) by extension 'ignore_ament_install'
+[10.628s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_costmap_2d) by extensions ['colcon_pkg']
+[10.628s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_costmap_2d) by extension 'colcon_pkg'
+[10.628s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_costmap_2d) by extensions ['colcon_meta']
+[10.628s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_costmap_2d) by extension 'colcon_meta'
+[10.629s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_costmap_2d) by extensions ['ros']
+[10.629s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_costmap_2d) by extension 'ros'
+[10.637s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_costmap_2d' with type 'ros.ament_cmake' and name 'nav2_costmap_2d'
+[10.637s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extensions ['ignore', 'ignore_ament_install']
+[10.638s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extension 'ignore'
+[10.638s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extension 'ignore_ament_install'
+[10.638s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extensions ['colcon_pkg']
+[10.638s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extension 'colcon_pkg'
+[10.639s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extensions ['colcon_meta']
+[10.639s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extension 'colcon_meta'
+[10.639s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extensions ['ros']
+[10.639s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extension 'ros'
+[10.640s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extensions ['cmake', 'python']
+[10.640s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extension 'cmake'
+[10.640s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extension 'python'
+[10.640s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extensions ['python_setup_py']
+[10.640s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller) by extension 'python_setup_py'
+[10.641s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/costmap_queue) by extensions ['ignore', 'ignore_ament_install']
+[10.641s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/costmap_queue) by extension 'ignore'
+[10.642s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/costmap_queue) by extension 'ignore_ament_install'
+[10.642s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/costmap_queue) by extensions ['colcon_pkg']
+[10.642s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/costmap_queue) by extension 'colcon_pkg'
+[10.642s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/costmap_queue) by extensions ['colcon_meta']
+[10.642s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/costmap_queue) by extension 'colcon_meta'
+[10.643s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/costmap_queue) by extensions ['ros']
+[10.643s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/costmap_queue) by extension 'ros'
+[10.645s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/costmap_queue' with type 'ros.ament_cmake' and name 'costmap_queue'
+[10.646s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_core) by extensions ['ignore', 'ignore_ament_install']
+[10.646s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_core) by extension 'ignore'
+[10.646s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_core) by extension 'ignore_ament_install'
+[10.647s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_core) by extensions ['colcon_pkg']
+[10.647s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_core) by extension 'colcon_pkg'
+[10.647s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_core) by extensions ['colcon_meta']
+[10.647s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_core) by extension 'colcon_meta'
+[10.648s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_core) by extensions ['ros']
+[10.648s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_core) by extension 'ros'
+[10.651s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_core' with type 'ros.ament_cmake' and name 'dwb_core'
+[10.652s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_critics) by extensions ['ignore', 'ignore_ament_install']
+[10.652s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_critics) by extension 'ignore'
+[10.652s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_critics) by extension 'ignore_ament_install'
+[10.652s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_critics) by extensions ['colcon_pkg']
+[10.653s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_critics) by extension 'colcon_pkg'
+[10.653s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_critics) by extensions ['colcon_meta']
+[10.653s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_critics) by extension 'colcon_meta'
+[10.653s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_critics) by extensions ['ros']
+[10.653s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_critics) by extension 'ros'
+[10.658s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_critics' with type 'ros.ament_cmake' and name 'dwb_critics'
+[10.659s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_msgs) by extensions ['ignore', 'ignore_ament_install']
+[10.660s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_msgs) by extension 'ignore'
+[10.660s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_msgs) by extension 'ignore_ament_install'
+[10.660s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_msgs) by extensions ['colcon_pkg']
+[10.660s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_msgs) by extension 'colcon_pkg'
+[10.660s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_msgs) by extensions ['colcon_meta']
+[10.661s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_msgs) by extension 'colcon_meta'
+[10.661s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_msgs) by extensions ['ros']
+[10.661s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_msgs) by extension 'ros'
+[10.664s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_msgs' with type 'ros.ament_cmake' and name 'dwb_msgs'
+[10.665s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_plugins) by extensions ['ignore', 'ignore_ament_install']
+[10.665s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_plugins) by extension 'ignore'
+[10.666s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_plugins) by extension 'ignore_ament_install'
+[10.666s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_plugins) by extensions ['colcon_pkg']
+[10.666s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_plugins) by extension 'colcon_pkg'
+[10.666s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_plugins) by extensions ['colcon_meta']
+[10.666s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_plugins) by extension 'colcon_meta'
+[10.667s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_plugins) by extensions ['ros']
+[10.667s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_plugins) by extension 'ros'
+[10.671s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/dwb_plugins' with type 'ros.ament_cmake' and name 'dwb_plugins'
+[10.671s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extensions ['ignore', 'ignore_ament_install']
+[10.672s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extension 'ignore'
+[10.672s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extension 'ignore_ament_install'
+[10.672s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extensions ['colcon_pkg']
+[10.672s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extension 'colcon_pkg'
+[10.673s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extensions ['colcon_meta']
+[10.673s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extension 'colcon_meta'
+[10.673s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extensions ['ros']
+[10.673s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extension 'ros'
+[10.674s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extensions ['cmake', 'python']
+[10.674s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extension 'cmake'
+[10.674s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extension 'python'
+[10.674s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extensions ['python_setup_py']
+[10.674s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/images) by extension 'python_setup_py'
+[10.675s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav2_dwb_controller) by extensions ['ignore', 'ignore_ament_install']
+[10.675s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav2_dwb_controller) by extension 'ignore'
+[10.676s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav2_dwb_controller) by extension 'ignore_ament_install'
+[10.676s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav2_dwb_controller) by extensions ['colcon_pkg']
+[10.676s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav2_dwb_controller) by extension 'colcon_pkg'
+[10.676s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav2_dwb_controller) by extensions ['colcon_meta']
+[10.676s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav2_dwb_controller) by extension 'colcon_meta'
+[10.677s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav2_dwb_controller) by extensions ['ros']
+[10.677s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav2_dwb_controller) by extension 'ros'
+[10.681s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav2_dwb_controller' with type 'ros.ament_cmake' and name 'nav2_dwb_controller'
+[10.681s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_msgs) by extensions ['ignore', 'ignore_ament_install']
+[10.682s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_msgs) by extension 'ignore'
+[10.682s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_msgs) by extension 'ignore_ament_install'
+[10.682s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_msgs) by extensions ['colcon_pkg']
+[10.682s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_msgs) by extension 'colcon_pkg'
+[10.683s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_msgs) by extensions ['colcon_meta']
+[10.683s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_msgs) by extension 'colcon_meta'
+[10.683s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_msgs) by extensions ['ros']
+[10.683s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_msgs) by extension 'ros'
+[10.686s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_msgs' with type 'ros.ament_cmake' and name 'nav_2d_msgs'
+[10.687s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_utils) by extensions ['ignore', 'ignore_ament_install']
+[10.688s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_utils) by extension 'ignore'
+[10.688s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_utils) by extension 'ignore_ament_install'
+[10.688s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_utils) by extensions ['colcon_pkg']
+[10.688s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_utils) by extension 'colcon_pkg'
+[10.688s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_utils) by extensions ['colcon_meta']
+[10.689s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_utils) by extension 'colcon_meta'
+[10.689s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_utils) by extensions ['ros']
+[10.689s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_utils) by extension 'ros'
+[10.693s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_dwb_controller/nav_2d_utils' with type 'ros.ament_cmake' and name 'nav_2d_utils'
+[10.694s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_lifecycle_manager) by extensions ['ignore', 'ignore_ament_install']
+[10.694s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_lifecycle_manager) by extension 'ignore'
+[10.694s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_lifecycle_manager) by extension 'ignore_ament_install'
+[10.695s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_lifecycle_manager) by extensions ['colcon_pkg']
+[10.695s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_lifecycle_manager) by extension 'colcon_pkg'
+[10.695s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_lifecycle_manager) by extensions ['colcon_meta']
+[10.695s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_lifecycle_manager) by extension 'colcon_meta'
+[10.695s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_lifecycle_manager) by extensions ['ros']
+[10.696s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_lifecycle_manager) by extension 'ros'
+[10.698s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_lifecycle_manager' with type 'ros.ament_cmake' and name 'nav2_lifecycle_manager'
+[10.699s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_map_server) by extensions ['ignore', 'ignore_ament_install']
+[10.699s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_map_server) by extension 'ignore'
+[10.699s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_map_server) by extension 'ignore_ament_install'
+[10.700s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_map_server) by extensions ['colcon_pkg']
+[10.700s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_map_server) by extension 'colcon_pkg'
+[10.700s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_map_server) by extensions ['colcon_meta']
+[10.700s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_map_server) by extension 'colcon_meta'
+[10.700s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_map_server) by extensions ['ros']
+[10.701s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_map_server) by extension 'ros'
+[10.705s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_map_server' with type 'ros.ament_cmake' and name 'nav2_map_server'
+[10.706s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_msgs) by extensions ['ignore', 'ignore_ament_install']
+[10.707s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_msgs) by extension 'ignore'
+[10.707s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_msgs) by extension 'ignore_ament_install'
+[10.707s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_msgs) by extensions ['colcon_pkg']
+[10.707s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_msgs) by extension 'colcon_pkg'
+[10.707s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_msgs) by extensions ['colcon_meta']
+[10.707s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_msgs) by extension 'colcon_meta'
+[10.708s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_msgs) by extensions ['ros']
+[10.708s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_msgs) by extension 'ros'
+[10.712s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_msgs' with type 'ros.ament_cmake' and name 'nav2_msgs'
+[10.713s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_navfn_planner) by extensions ['ignore', 'ignore_ament_install']
+[10.713s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_navfn_planner) by extension 'ignore'
+[10.713s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_navfn_planner) by extension 'ignore_ament_install'
+[10.714s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_navfn_planner) by extensions ['colcon_pkg']
+[10.714s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_navfn_planner) by extension 'colcon_pkg'
+[10.714s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_navfn_planner) by extensions ['colcon_meta']
+[10.714s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_navfn_planner) by extension 'colcon_meta'
+[10.714s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_navfn_planner) by extensions ['ros']
+[10.715s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_navfn_planner) by extension 'ros'
+[10.720s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_navfn_planner' with type 'ros.ament_cmake' and name 'nav2_navfn_planner'
+[10.721s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_planner) by extensions ['ignore', 'ignore_ament_install']
+[10.721s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_planner) by extension 'ignore'
+[10.721s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_planner) by extension 'ignore_ament_install'
+[10.722s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_planner) by extensions ['colcon_pkg']
+[10.722s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_planner) by extension 'colcon_pkg'
+[10.722s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_planner) by extensions ['colcon_meta']
+[10.722s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_planner) by extension 'colcon_meta'
+[10.723s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_planner) by extensions ['ros']
+[10.723s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_planner) by extension 'ros'
+[10.728s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_planner' with type 'ros.ament_cmake' and name 'nav2_planner'
+[10.729s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_recoveries) by extensions ['ignore', 'ignore_ament_install']
+[10.729s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_recoveries) by extension 'ignore'
+[10.729s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_recoveries) by extension 'ignore_ament_install'
+[10.730s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_recoveries) by extensions ['colcon_pkg']
+[10.730s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_recoveries) by extension 'colcon_pkg'
+[10.730s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_recoveries) by extensions ['colcon_meta']
+[10.730s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_recoveries) by extension 'colcon_meta'
+[10.731s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_recoveries) by extensions ['ros']
+[10.731s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_recoveries) by extension 'ros'
+[10.734s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_recoveries' with type 'ros.ament_cmake' and name 'nav2_recoveries'
+[10.735s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_regulated_pure_pursuit_controller) by extensions ['ignore', 'ignore_ament_install']
+[10.735s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_regulated_pure_pursuit_controller) by extension 'ignore'
+[10.736s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_regulated_pure_pursuit_controller) by extension 'ignore_ament_install'
+[10.736s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_regulated_pure_pursuit_controller) by extensions ['colcon_pkg']
+[10.736s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_regulated_pure_pursuit_controller) by extension 'colcon_pkg'
+[10.736s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_regulated_pure_pursuit_controller) by extensions ['colcon_meta']
+[10.736s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_regulated_pure_pursuit_controller) by extension 'colcon_meta'
+[10.737s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_regulated_pure_pursuit_controller) by extensions ['ros']
+[10.737s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_regulated_pure_pursuit_controller) by extension 'ros'
+[10.741s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_regulated_pure_pursuit_controller' with type 'ros.ament_cmake' and name 'nav2_regulated_pure_pursuit_controller'
+[10.742s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rotation_shim_controller) by extensions ['ignore', 'ignore_ament_install']
+[10.742s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rotation_shim_controller) by extension 'ignore'
+[10.742s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rotation_shim_controller) by extension 'ignore_ament_install'
+[10.743s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rotation_shim_controller) by extensions ['colcon_pkg']
+[10.743s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rotation_shim_controller) by extension 'colcon_pkg'
+[10.743s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rotation_shim_controller) by extensions ['colcon_meta']
+[10.743s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rotation_shim_controller) by extension 'colcon_meta'
+[10.743s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rotation_shim_controller) by extensions ['ros']
+[10.743s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rotation_shim_controller) by extension 'ros'
+[10.748s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rotation_shim_controller' with type 'ros.ament_cmake' and name 'nav2_rotation_shim_controller'
+[10.749s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rviz_plugins) by extensions ['ignore', 'ignore_ament_install']
+[10.749s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rviz_plugins) by extension 'ignore'
+[10.749s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rviz_plugins) by extension 'ignore_ament_install'
+[10.750s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rviz_plugins) by extensions ['colcon_pkg']
+[10.750s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rviz_plugins) by extension 'colcon_pkg'
+[10.750s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rviz_plugins) by extensions ['colcon_meta']
+[10.750s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rviz_plugins) by extension 'colcon_meta'
+[10.750s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rviz_plugins) by extensions ['ros']
+[10.751s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rviz_plugins) by extension 'ros'
+[10.758s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_rviz_plugins' with type 'ros.ament_cmake' and name 'nav2_rviz_plugins'
+[10.758s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_simple_commander) by extensions ['ignore', 'ignore_ament_install']
+[10.759s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_simple_commander) by extension 'ignore'
+[10.759s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_simple_commander) by extension 'ignore_ament_install'
+[10.759s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_simple_commander) by extensions ['colcon_pkg']
+[10.760s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_simple_commander) by extension 'colcon_pkg'
+[10.760s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_simple_commander) by extensions ['colcon_meta']
+[10.760s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_simple_commander) by extension 'colcon_meta'
+[10.760s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_simple_commander) by extensions ['ros']
+[10.760s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_simple_commander) by extension 'ros'
+[10.762s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_simple_commander' with type 'ros.ament_python' and name 'nav2_simple_commander'
+[10.763s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_smac_planner) by extensions ['ignore', 'ignore_ament_install']
+[10.764s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_smac_planner) by extension 'ignore'
+[10.764s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_smac_planner) by extension 'ignore_ament_install'
+[10.764s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_smac_planner) by extensions ['colcon_pkg']
+[10.764s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_smac_planner) by extension 'colcon_pkg'
+[10.764s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_smac_planner) by extensions ['colcon_meta']
+[10.765s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_smac_planner) by extension 'colcon_meta'
+[10.765s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_smac_planner) by extensions ['ros']
+[10.765s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_smac_planner) by extension 'ros'
+[10.772s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_smac_planner' with type 'ros.ament_cmake' and name 'nav2_smac_planner'
+[10.773s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_system_tests) by extensions ['ignore', 'ignore_ament_install']
+[10.773s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_system_tests) by extension 'ignore'
+[10.773s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_system_tests) by extension 'ignore_ament_install'
+[10.774s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_system_tests) by extensions ['colcon_pkg']
+[10.774s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_system_tests) by extension 'colcon_pkg'
+[10.774s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_system_tests) by extensions ['colcon_meta']
+[10.774s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_system_tests) by extension 'colcon_meta'
+[10.774s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_system_tests) by extensions ['ros']
+[10.774s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_system_tests) by extension 'ros'
+[10.779s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_system_tests' with type 'ros.ament_cmake' and name 'nav2_system_tests'
+[10.780s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_theta_star_planner) by extensions ['ignore', 'ignore_ament_install']
+[10.780s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_theta_star_planner) by extension 'ignore'
+[10.780s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_theta_star_planner) by extension 'ignore_ament_install'
+[10.780s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_theta_star_planner) by extensions ['colcon_pkg']
+[10.781s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_theta_star_planner) by extension 'colcon_pkg'
+[10.781s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_theta_star_planner) by extensions ['colcon_meta']
+[10.781s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_theta_star_planner) by extension 'colcon_meta'
+[10.781s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_theta_star_planner) by extensions ['ros']
+[10.781s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_theta_star_planner) by extension 'ros'
+[10.786s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_theta_star_planner' with type 'ros.ament_cmake' and name 'nav2_theta_star_planner'
+[10.787s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_util) by extensions ['ignore', 'ignore_ament_install']
+[10.787s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_util) by extension 'ignore'
+[10.788s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_util) by extension 'ignore_ament_install'
+[10.788s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_util) by extensions ['colcon_pkg']
+[10.788s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_util) by extension 'colcon_pkg'
+[10.788s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_util) by extensions ['colcon_meta']
+[10.788s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_util) by extension 'colcon_meta'
+[10.789s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_util) by extensions ['ros']
+[10.789s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_util) by extension 'ros'
+[10.795s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_util' with type 'ros.ament_cmake' and name 'nav2_util'
+[10.796s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_voxel_grid) by extensions ['ignore', 'ignore_ament_install']
+[10.797s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_voxel_grid) by extension 'ignore'
+[10.797s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_voxel_grid) by extension 'ignore_ament_install'
+[10.797s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_voxel_grid) by extensions ['colcon_pkg']
+[10.797s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_voxel_grid) by extension 'colcon_pkg'
+[10.797s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_voxel_grid) by extensions ['colcon_meta']
+[10.798s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_voxel_grid) by extension 'colcon_meta'
+[10.798s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_voxel_grid) by extensions ['ros']
+[10.798s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_voxel_grid) by extension 'ros'
+[10.801s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_voxel_grid' with type 'ros.ament_cmake' and name 'nav2_voxel_grid'
+[10.801s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_waypoint_follower) by extensions ['ignore', 'ignore_ament_install']
+[10.802s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_waypoint_follower) by extension 'ignore'
+[10.802s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_waypoint_follower) by extension 'ignore_ament_install'
+[10.802s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_waypoint_follower) by extensions ['colcon_pkg']
+[10.802s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_waypoint_follower) by extension 'colcon_pkg'
+[10.803s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_waypoint_follower) by extensions ['colcon_meta']
+[10.803s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_waypoint_follower) by extension 'colcon_meta'
+[10.803s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_waypoint_follower) by extensions ['ros']
+[10.803s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_waypoint_follower) by extension 'ros'
+[10.808s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/nav2_waypoint_follower' with type 'ros.ament_cmake' and name 'nav2_waypoint_follower'
+[10.809s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/navigation2) by extensions ['ignore', 'ignore_ament_install']
+[10.809s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/navigation2) by extension 'ignore'
+[10.810s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/navigation2) by extension 'ignore_ament_install'
+[10.810s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/navigation2) by extensions ['colcon_pkg']
+[10.810s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/navigation2) by extension 'colcon_pkg'
+[10.810s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/navigation2) by extensions ['colcon_meta']
+[10.810s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/navigation2) by extension 'colcon_meta'
+[10.810s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/navigation2) by extensions ['ros']
+[10.811s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/navigation2) by extension 'ros'
+[10.813s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/navigation2' with type 'ros.ament_cmake' and name 'navigation2'
+[10.814s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extensions ['ignore', 'ignore_ament_install']
+[10.814s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extension 'ignore'
+[10.815s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extension 'ignore_ament_install'
+[10.815s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extensions ['colcon_pkg']
+[10.815s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extension 'colcon_pkg'
+[10.815s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extensions ['colcon_meta']
+[10.815s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extension 'colcon_meta'
+[10.816s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extensions ['ros']
+[10.816s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extension 'ros'
+[10.816s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extensions ['cmake', 'python']
+[10.816s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extension 'cmake'
+[10.817s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extension 'python'
+[10.817s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extensions ['python_setup_py']
+[10.817s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation2/tools) by extension 'python_setup_py'
+[10.818s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation_pkg) by extensions ['ignore', 'ignore_ament_install']
+[10.818s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation_pkg) by extension 'ignore'
+[10.818s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation_pkg) by extension 'ignore_ament_install'
+[10.818s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation_pkg) by extensions ['colcon_pkg']
+[10.818s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation_pkg) by extension 'colcon_pkg'
+[10.819s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation_pkg) by extensions ['colcon_meta']
+[10.819s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation_pkg) by extension 'colcon_meta'
+[10.819s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation_pkg) by extensions ['ros']
+[10.819s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation_pkg) by extension 'ros'
+[10.822s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/navigation_pkg' with type 'ros.ament_cmake' and name 'navigation_pkg'
+[10.823s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extensions ['ignore', 'ignore_ament_install']
+[10.823s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extension 'ignore'
+[10.823s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extension 'ignore_ament_install'
+[10.824s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extensions ['colcon_pkg']
+[10.824s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extension 'colcon_pkg'
+[10.824s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extensions ['colcon_meta']
+[10.824s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extension 'colcon_meta'
+[10.825s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extensions ['ros']
+[10.825s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extension 'ros'
+[10.825s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extensions ['cmake', 'python']
+[10.825s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extension 'cmake'
+[10.825s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extension 'python'
+[10.826s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extensions ['python_setup_py']
+[10.826s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros) by extension 'python_setup_py'
+[10.826s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera) by extensions ['ignore', 'ignore_ament_install']
+[10.827s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera) by extension 'ignore'
+[10.827s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera) by extension 'ignore_ament_install'
+[10.827s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera) by extensions ['colcon_pkg']
+[10.827s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera) by extension 'colcon_pkg'
+[10.827s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera) by extensions ['colcon_meta']
+[10.828s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera) by extension 'colcon_meta'
+[10.828s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera) by extensions ['ros']
+[10.828s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera) by extension 'ros'
+[10.835s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera' with type 'ros.ament_cmake' and name 'realsense2_camera'
+[10.836s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera_msgs) by extensions ['ignore', 'ignore_ament_install']
+[10.836s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera_msgs) by extension 'ignore'
+[10.837s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera_msgs) by extension 'ignore_ament_install'
+[10.837s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera_msgs) by extensions ['colcon_pkg']
+[10.837s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera_msgs) by extension 'colcon_pkg'
+[10.837s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera_msgs) by extensions ['colcon_meta']
+[10.837s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera_msgs) by extension 'colcon_meta'
+[10.838s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera_msgs) by extensions ['ros']
+[10.838s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera_msgs) by extension 'ros'
+[10.840s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_camera_msgs' with type 'ros.ament_cmake' and name 'realsense2_camera_msgs'
+[10.841s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_description) by extensions ['ignore', 'ignore_ament_install']
+[10.841s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_description) by extension 'ignore'
+[10.841s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_description) by extension 'ignore_ament_install'
+[10.841s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_description) by extensions ['colcon_pkg']
+[10.841s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_description) by extension 'colcon_pkg'
+[10.842s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_description) by extensions ['colcon_meta']
+[10.842s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_description) by extension 'colcon_meta'
+[10.842s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_description) by extensions ['ros']
+[10.842s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_description) by extension 'ros'
+[10.845s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/realsense-ros/realsense2_description' with type 'ros.ament_cmake' and name 'realsense2_description'
+[10.846s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extensions ['ignore', 'ignore_ament_install']
+[10.846s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extension 'ignore'
+[10.846s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extension 'ignore_ament_install'
+[10.847s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extensions ['colcon_pkg']
+[10.847s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extension 'colcon_pkg'
+[10.847s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extensions ['colcon_meta']
+[10.847s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extension 'colcon_meta'
+[10.847s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extensions ['ros']
+[10.848s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extension 'ros'
+[10.848s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extensions ['cmake', 'python']
+[10.848s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extension 'cmake'
+[10.848s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extension 'python'
+[10.848s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extensions ['python_setup_py']
+[10.849s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/robot_localization) by extension 'python_setup_py'
+[10.849s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/slam_toolbox) by extensions ['ignore', 'ignore_ament_install']
+[10.850s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/slam_toolbox) by extension 'ignore'
+[10.850s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/slam_toolbox) by extension 'ignore_ament_install'
+[10.850s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/slam_toolbox) by extensions ['colcon_pkg']
+[10.850s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/slam_toolbox) by extension 'colcon_pkg'
+[10.850s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/slam_toolbox) by extensions ['colcon_meta']
+[10.850s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/slam_toolbox) by extension 'colcon_meta'
+[10.851s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/slam_toolbox) by extensions ['ros']
+[10.851s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/slam_toolbox) by extension 'ros'
+[10.857s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/slam_toolbox' with type 'ros.ament_cmake' and name 'slam_toolbox'
+[10.858s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/sllidar_ros2) by extensions ['ignore', 'ignore_ament_install']
+[10.858s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/sllidar_ros2) by extension 'ignore'
+[10.859s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/sllidar_ros2) by extension 'ignore_ament_install'
+[10.859s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/sllidar_ros2) by extensions ['colcon_pkg']
+[10.859s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/sllidar_ros2) by extension 'colcon_pkg'
+[10.859s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/sllidar_ros2) by extensions ['colcon_meta']
+[10.859s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/sllidar_ros2) by extension 'colcon_meta'
+[10.860s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/sllidar_ros2) by extensions ['ros']
+[10.860s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/sllidar_ros2) by extension 'ros'
+[10.862s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/sllidar_ros2' with type 'ros.ament_cmake' and name 'sllidar_ros2'
+[10.863s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/test_bot_description) by extensions ['ignore', 'ignore_ament_install']
+[10.863s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/test_bot_description) by extension 'ignore'
+[10.864s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/test_bot_description) by extension 'ignore_ament_install'
+[10.864s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/test_bot_description) by extensions ['colcon_pkg']
+[10.864s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/test_bot_description) by extension 'colcon_pkg'
+[10.864s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/test_bot_description) by extensions ['colcon_meta']
+[10.864s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/test_bot_description) by extension 'colcon_meta'
+[10.865s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/test_bot_description) by extensions ['ros']
+[10.865s] Level 1:colcon.colcon_core.package_identification:_identify(/home/codetc/lunabot_ws/src/Lunabotics-2024/src/test_bot_description) by extension 'ros'
+[10.866s] DEBUG:colcon.colcon_core.package_identification:Package '/home/codetc/lunabot_ws/src/Lunabotics-2024/src/test_bot_description' with type 'ros.ament_cmake' and name 'test_bot_description'
+[10.867s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
