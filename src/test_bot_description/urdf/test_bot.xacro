@@ -2,7 +2,7 @@
 <robot name="test_bot"
 	xmlns:xacro="http://www.ros.org/wiki/xacro">
 	<xacro:include filename="common_properties.xacro" />
-	<xacro:include filename="test_bot_gazebo.xacro" />
+	<!--<xacro:include filename="test_bot_gazebo.xacro" />-->
 	<xacro:property name="base_length"
 		value="0.8" />
 	<xacro:property name="base_width"
@@ -185,7 +185,7 @@
 			rpy="0 0 0" />
 	</link>
 	<link name="camera_depth_frame"/>-->
-	<link name="imu_link">
+	<link name="camera_link">
 		<visual>
 			<geometry>
 				<box size="0.05 0.05 0.05" />
@@ -276,7 +276,7 @@
 		<parent link="base_link" />
 		<child link="lidar_link" />
 		<origin xyz="${(base_length/2) - lidar_radius} 0 ${base_height + (lidar_height/2)}"
-			rpy="0 0 0" />
+			rpy="0 0 -3.14" />
 	</joint>
 	<!--<joint name="base_camera_joint"
 		type="fixed">
@@ -290,10 +290,10 @@
 		<parent link="camera_link"/>
 		<child link="camera_depth_frame"/>
 	</joint>-->
-	<joint name="base_imu_joint"
+	<joint name="base_camera_joint"
 		type="fixed">
 		<parent link="base_link" />
-		<child link="imu_link" />
+		<child link="camera_link" />
 		<origin xyz="0 0 ${base_height + 0.025}"
 			rpy="0 0 0" />
 	</joint>

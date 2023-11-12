@@ -37,12 +37,13 @@ def generate_launch_description():
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
-        parameters=[{'robot_description': robot_description}]
+        parameters=[{'robot_description': robot_description}, {"use_sim_time": False}]
     )
     
     joint_state_publisher_node = Node(
         package="joint_state_publisher",
-        executable="joint_state_publisher"
+        executable="joint_state_publisher",
+        parameters=[{"use_sim_time": False}]
     )
     
     robot_localization_node = Node(
@@ -58,45 +59,27 @@ def generate_launch_description():
         executable='motor_controller'
     )
     
-    initial_pose_publisher_node = Node(
-        package='localization_pkg',
-        executable='set_initial_pose'
-    )
-    
-    map_transform_node = Node(
-        package='localization_pkg',
-        executable='map_transform'
-    )
-    
-    wheel_odom_node = Node(
-        package='localization_pkg',
-        executable='wheel_odom_publisher'
-    )
-    
     laser_filter = Node(
         package="laser_filters",
         executable="scan_to_scan_filter_chain",
         parameters=[laser_scan_config_path]
     )
     
-    #rviz_nav2_pluggins_launch_file_path = os.path.join(get_package_share_path('lunabot_bringup'),
-    #                                                   'launch','nav2_bringup','bringup','launch','rviz_launch.py')
+    rviz_nav2_pluggins_launch_file_path = os.path.join(get_package_share_path('lunabot_bringup'),
+                                                       'launch','nav2_bringup','bringup','launch','rviz_launch.py')
     
     return LaunchDescription([
         robot_state_publisher_node,
         joint_state_publisher_node,
-        #wheel_odom_node,
-        #map_transform_node,
         #robot_localization_node,
-        #laser_filter,
+        laser_filter,
         #motor_controller_node,
-        #initial_pose_publisher_node,
-        #IncludeLaunchDescription(
-        #    PythonLaunchDescriptionSource(slam_toolbox_launch_file_path)),
-        #IncludeLaunchDescription(
-        #    PythonLaunchDescriptionSource(lidar_launch_path)),
-        #IncludeLaunchDescription(
-        #    PythonLaunchDescriptionSource(t265_launch_path)),
-        #IncludeLaunchDescription(
-        #    PythonLaunchDescriptionSource(rviz_nav2_pluggins_launch_file_path))
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(slam_toolbox_launch_file_path)),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(lidar_launch_path)),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(t265_launch_path)),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(rviz_nav2_pluggins_launch_file_path))
     ])
