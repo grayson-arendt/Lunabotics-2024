@@ -19,6 +19,7 @@
   <depend>tf2_ros</depend>
   <depend>nav_msgs</depend>
   <depend>sensor_msgs</depend>
+  <depend>navigation_pkg</depend>
 
 
   <test_depend>ament_lint_auto</test_depend>

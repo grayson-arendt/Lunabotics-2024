@@ -30,7 +30,8 @@ def main():
     initial_pose.pose.position.y = 0.0
     initial_pose.pose.orientation.z = 0.0
     initial_pose.pose.orientation.w = 0.0
-    nav.setInitialPose(initial_pose)
+    #nav.setInitialPose(initial_pose)
+    # temporarily removed this since slam_toolbox sets it already
     
     # --- Wait for Nav2 ---
     nav.waitUntilNav2Active(localizer="bt_navigator")
@@ -38,8 +39,8 @@ def main():
     goal_pose = PoseStamped()
     goal_pose.header.frame_id = 'map'
     goal_pose.header.stamp = nav.get_clock().now().to_msg()
-    goal_pose.pose.position.x = 0.5
-    goal_pose.pose.position.y = 2.0
+    goal_pose.pose.position.x = 0.0
+    goal_pose.pose.position.y = 1.0
     goal_pose.pose.orientation.w = 1.0
     
     nav.goToPose(goal_pose)

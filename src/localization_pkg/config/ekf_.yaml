@@ -42,8 +42,9 @@ ekf_filter_node:
 # Defaults to "robot_localization_debug.txt" if unspecified. Please specify the full path.
         debug_out_file: /path/to/debug/file.txt
 
+# changed to false
 # Whether to broadcast the transformation over the /tf topic. Defaults to true if unspecified.
-        publish_tf: true
+        publish_tf: false
 
 # Whether to publish the acceleration state. Defaults to false if unspecified.
         publish_acceleration: false
@@ -72,8 +73,10 @@ ekf_filter_node:
 #         estimation node from robot_localization! However, that instance should *not* fuse the global data.
         map_frame: map                   # Defaults to "map" if unspecified
         odom_frame: odom                 # Defaults to "odom" if unspecified
-        base_link_frame: base_footprint  # Defaults to "base_link" if unspecified
-        #world_frame: odom              # Defaults to the value of odom_frame if unspecified
+        # changed to base_link
+        base_link_frame: base_link  # Defaults to "base_link" if unspecified
+        # changed to map instead of odom
+        world_frame: odom              # Defaults to the value of odom_frame if unspecified
 
 # The filter accepts an arbitrary number of inputs from each input message type (nav_msgs/Odometry,
 # geometry_msgs/PoseWithCovarianceStamped, geometry_msgs/TwistWithCovarianceStamped,
@@ -90,7 +93,7 @@ ekf_filter_node:
 # has no pose information, so the first six values would be meaningless in that case. Each vector defaults to all false
 # if unspecified, effectively making this parameter required for each sensor.
         odom0_config: [true, true, false,
-                       false, false, true,
+                       false, false, false,
                        false, false, false,
                        false, false, false,
                        false, false, false]
@@ -118,13 +121,13 @@ ekf_filter_node:
 # data is converted to velocity data by differentiating the absolute pose measurements. These velocities are then
 # integrated as usual. NOTE: this only applies to sensors that provide pose measurements; setting differential to true
 # for twist measurements has no effect.
-        odom0_differential: true
+        odom0_differential: false
 
 # [ADVANCED] When the node starts, if this parameter is true, then the first measurement is treated as a "zero point"
 # for all future measurements. While you can achieve the same effect with the differential paremeter, the key
 # difference is that the relative parameter doesn't cause the measurement to be converted to a velocity before
 # integrating it. If you simply want your measurements to start at 0 for a given sensor, set this to true.
-        odom0_relative: false
+        odom0_relative: true
 
 # [ADVANCED] If your data is subject to outliers, use these threshold settings, expressed as Mahalanobis distances, to
 # control how far away from the current vehicle state a sensor measurement is permitted to be. Each defaults to
@@ -132,10 +135,13 @@ ekf_filter_node:
 # required. Data is specified at the level of pose and twist variables, rather than for each variable in isolation.
 # For messages that have both pose and twist data, the parameter specifies to which part of the message we are applying
 # the thresholds.
-        odom0_pose_rejection_threshold: 5.0
+
+        # changed this to stop jerky movement, it removes outliers
+        odom0_pose_rejection_threshold: 1.0
         odom0_twist_rejection_threshold: 1.0
 
-        imu0: /camera/odom
+        # changed to example
+        imu0: /example/imu
         imu0_config: [true, true, true,
                       true,  true,  true,
                       false, false, false,
@@ -149,7 +155,7 @@ ekf_filter_node:
         #         x_accel , y_accel  , z_accel]
         
         imu0_nodelay: false
-        imu0_differential: false
+        imu0_differential: true
         imu0_relative: true
         imu0_queue_size: 7
         imu0_pose_rejection_threshold: 0.8                 # Note the difference in parameter names

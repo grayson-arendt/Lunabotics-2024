@@ -1,6 +1,8 @@
 #include <algorithm>
+#include <vector>
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
+#include "navigation_pkg/msg/encoder.hpp"
 
 #define Phoenix_No_WPI
 #include "ctre/Phoenix.h"
@@ -22,43 +24,86 @@ class MotorController : public rclcpp::Node
 public:
     MotorController() : Node("motor_controller")
     {        
+        c_FeedEnable(5000);
         right_wheel_motor.SetInverted(true);
 
-        RCLCPP_INFO(this->get_logger(), " Motor control started. ");
+        left_wheel_motor.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, 0, 10);
+        right_wheel_motor.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, 0, 10);
+
+        // Zero the encoders 
+        left_wheel_motor.SetSelectedSensorPosition(0, 0, 10);
+        right_wheel_motor.SetSelectedSensorPosition(0, 0, 10);
+
+        left_encoder_values.push_back(0.0);
+        right_encoder_values.push_back(0.0);
 
         motor_controller_subscriber = this->create_subscription<geometry_msgs::msg::Twist>(
-            "cmd_vel", 1,
+            "cmd_vel", 10,
             std::bind(&MotorController::callbackMotors, this, std::placeholders::_1));
 
-        RCLCPP_INFO(this->get_logger(), " Motor control started. ");
+        encoder_pub_ = this->create_publisher<navigation_pkg::msg::Encoder>("encoders", 10);
+
+        timer_ = this->create_wall_timer(std::chrono::milliseconds(100), std::bind(&MotorController::encoders_callback, this));
+
+        RCLCPP_INFO(this->get_logger(), "Motor control started.");
+        iteration = 0;
+
     }
+
     double velocity_left_cmd;
     double velocity_right_cmd;
+    double l_initial;
+    double r_initial;
+    double l_final;
+    double r_final;
+    int iteration;
+    std::vector<double> left_encoder_values;
+    std::vector<double> right_encoder_values;
 
 private:
+    void encoders_callback() {
+        c_FeedEnable(5000);
+
+        auto msg = navigation_pkg::msg::Encoder();
+
+        left_encoder_values.push_back(left_wheel_motor.GetSelectedSensorPosition());
+        right_encoder_values.push_back(right_wheel_motor.GetSelectedSensorPosition());
+
+        msg.left_initial = left_encoder_values[iteration];
+        msg.right_initial = right_encoder_values[iteration];
+        msg.left_final = left_encoder_values[iteration+1];
+        msg.right_final = right_encoder_values[iteration+1];
+        
+        encoder_pub_->publish(msg);
+        iteration++;
+        //RCLCPP_INFO(this->get_logger(), "L_ENCODER: %f R_ENCODER: %f ", l_encoder, r_encoder);
+    }
 
     void callbackMotors(const geometry_msgs::msg::Twist::SharedPtr cmd_vel)
     {
+        c_FeedEnable(5000);
+
         double linear_velocity = cmd_vel->linear.x;
         double angular_velocity = cmd_vel->angular.z;
 
-        ctre::phoenix::unmanaged::Unmanaged::FeedEnable(10000);
+        // Simplfied equation, got rid of dividing by 0.1 so that it's within -1 to 1 range, also made half the speed because it was too fast
+        velocity_left_cmd = ((linear_velocity - (angular_velocity * (0.2))));
+        velocity_right_cmd = ((linear_velocity + (angular_velocity * (0.2))));
 
-        velocity_left_cmd = ((linear_velocity - (angular_velocity * 0.4) / 2.0) / 0.1);
-
-        velocity_right_cmd = ((linear_velocity + (angular_velocity * 0.4) / 2.0) / 0.1);
-
-        velocity_left_cmd = std::clamp(velocity_left_cmd, -0.2, 0.2);
-        velocity_right_cmd = std::clamp(velocity_right_cmd, -0.2, 0.2);
+        //velocity_left_cmd = std::clamp(velocity_left_cmd, -0.3, 0.3);
+        //velocity_right_cmd = std::clamp(velocity_right_cmd, -0.3, 0.3);
+        
+        //RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", velocity_right_cmd, velocity_left_cmd);
 
         left_wheel_motor.Set(ControlMode::PercentOutput, velocity_left_cmd);
         right_wheel_motor.Set(ControlMode::PercentOutput, velocity_right_cmd);
 
-        RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", velocity_right_cmd, velocity_left_cmd);
     }
 
-    
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr motor_controller_subscriber;
+    rclcpp::TimerBase::SharedPtr timer_;
+    rclcpp::Publisher<navigation_pkg::msg::Encoder>::SharedPtr encoder_pub_;
+
 };
 
 int main(int argc, char **argv)

@@ -24,15 +24,18 @@ find_package(std_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(nav_msgs REQUIRED)
+find_package(navigation_pkg REQUIRED)
 
 # Include Cpp "include" directory
 include_directories(include)
 
 # Create Cpp executable
-add_executable(wheel_odom_publisher src/wheel_odom_publisher.cpp)
+# temporarily replaced imu_wheel_odom
+add_executable(wheel_odom_publisher src/imu_wheel_odom_publisher.cpp)
+add_executable(filtered_odom_transform src/filtered_odom_transform.cpp)
 
-ament_target_dependencies(wheel_odom_publisher rclcpp nav_msgs geometry_msgs tf2 tf2_ros sensor_msgs)
-
+ament_target_dependencies(wheel_odom_publisher rclcpp nav_msgs std_msgs geometry_msgs tf2 tf2_ros sensor_msgs navigation_pkg)
+ament_target_dependencies(filtered_odom_transform rclcpp nav_msgs geometry_msgs tf2 tf2_ros)
 
 install(
   DIRECTORY phoenix_lib/
@@ -41,6 +44,7 @@ install(
 
 install(TARGETS
   wheel_odom_publisher
+  filtered_odom_transform
   DESTINATION lib/${PROJECT_NAME}
 )
 

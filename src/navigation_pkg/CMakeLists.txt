@@ -20,14 +20,31 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/Encoder.msg"
+)
 
 # Include Cpp "include" directory
 include_directories(include)
 
 # Create Cpp executable
-
 add_executable(motor_controller src/motor_controller.cpp)
+add_executable(motor_pid src/motor_pid.cpp)
+add_executable(motor_test src/motor_test.cpp)
+
 ament_target_dependencies(motor_controller rclcpp geometry_msgs)
+ament_target_dependencies(motor_pid rclcpp sensor_msgs)
+ament_target_dependencies(motor_test rclcpp sensor_msgs)
+
+rosidl_target_interfaces(motor_controller ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 install(
   DIRECTORY phoenix_lib/
@@ -36,6 +53,8 @@ install(
 
 install(TARGETS
   motor_controller
+  motor_pid
+  motor_test
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -50,5 +69,13 @@ endif()
 target_link_libraries(motor_controller ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so)
 target_link_libraries(motor_controller ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so)
 target_link_libraries(motor_controller ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so)
+
+target_link_libraries(motor_pid ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so)
+target_link_libraries(motor_pid ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so)
+target_link_libraries(motor_pid ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so)
+
+target_link_libraries(motor_test ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so)
+target_link_libraries(motor_test ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so)
+target_link_libraries(motor_test ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so)
 
 ament_package()
