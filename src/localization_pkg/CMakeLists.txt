@@ -31,7 +31,7 @@ include_directories(include)
 # Create Cpp executable
 add_executable(wheel_odom_publisher src/wheel_odom_publisher.cpp)
 
-ament_target_dependencies(wheel_odom_publisher rclcpp std_msgs nav_msgs geometry_msgs tf2 tf2_ros)
+ament_target_dependencies(wheel_odom_publisher rclcpp nav_msgs geometry_msgs tf2 tf2_ros sensor_msgs)
 
 
 install(

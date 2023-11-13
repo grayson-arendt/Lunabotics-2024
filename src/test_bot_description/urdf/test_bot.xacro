@@ -2,7 +2,6 @@
 <robot name="test_bot"
 	xmlns:xacro="http://www.ros.org/wiki/xacro">
 	<xacro:include filename="common_properties.xacro" />
-	<!--<xacro:include filename="ros2_control.xacro" />-->
 	<!--<xacro:include filename="test_bot_gazebo.xacro" />-->
 	<xacro:property name="base_length"
 		value="0.915" />

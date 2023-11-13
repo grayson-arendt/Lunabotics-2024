@@ -65,12 +65,18 @@ def generate_launch_description():
         parameters=[laser_scan_config_path]
     )
     
+    wheel_odom_publisher = Node(
+        package="localization_pkg",
+        executable="wheel_odom_publisher"
+    )
+    
     rviz_nav2_pluggins_launch_file_path = os.path.join(get_package_share_path('lunabot_bringup'),
                                                        'launch','nav2_bringup','bringup','launch','rviz_launch.py')
     
     return LaunchDescription([
         robot_state_publisher_node,
         joint_state_publisher_node,
+        wheel_odom_publisher,
         robot_localization_node,
         laser_filter,
         motor_controller_node,
@@ -80,6 +86,6 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(lidar_launch_path)),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(t265_launch_path)),
-        #IncludeLaunchDescription(
-        #    PythonLaunchDescriptionSource(rviz_nav2_pluggins_launch_file_path))
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(rviz_nav2_pluggins_launch_file_path))
     ])
