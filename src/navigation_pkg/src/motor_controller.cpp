@@ -1,21 +1,7 @@
 #include <algorithm>
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
-
-#define Phoenix_No_WPI
-#include "ctre/Phoenix.h"
-#include "ctre/phoenix/platform/Platform.hpp"
-#include "ctre/phoenix/unmanaged/Unmanaged.h"
-#include "ctre/phoenix/cci/Unmanaged_CCI.h"
-
-using namespace ctre::phoenix;
-using namespace ctre::phoenix::platform;
-using namespace ctre::phoenix::motorcontrol;
-using namespace ctre::phoenix::motorcontrol::can;
-
-std::string interface = "can0";
-TalonFX left_wheel_motor(2, interface);
-TalonFX right_wheel_motor(3);
+#include "localization_pkg/motor_includes.h"
 
 class MotorController : public rclcpp::Node
 {
@@ -27,7 +13,7 @@ public:
         RCLCPP_INFO(this->get_logger(), " Motor control started. ");
 
         motor_controller_subscriber = this->create_subscription<geometry_msgs::msg::Twist>(
-            "cmd_vel", 1,
+            "cmd_vel", 10,
             std::bind(&MotorController::callbackMotors, this, std::placeholders::_1));
 
         RCLCPP_INFO(this->get_logger(), " Motor control started. ");
@@ -42,14 +28,12 @@ private:
         double linear_velocity = cmd_vel->linear.x;
         double angular_velocity = cmd_vel->angular.z;
 
-        ctre::phoenix::unmanaged::Unmanaged::FeedEnable(10000);
-
         velocity_left_cmd = ((linear_velocity - (angular_velocity * 0.4) / 2.0) / 0.1);
 
         velocity_right_cmd = ((linear_velocity + (angular_velocity * 0.4) / 2.0) / 0.1);
 
-        velocity_left_cmd = std::clamp(velocity_left_cmd, -0.2, 0.2);
-        velocity_right_cmd = std::clamp(velocity_right_cmd, -0.2, 0.2);
+        velocity_left_cmd = std::clamp(velocity_left_cmd, -0.3, 0.3);
+        velocity_right_cmd = std::clamp(velocity_right_cmd, -0.3, 0.3);
 
         left_wheel_motor.Set(ControlMode::PercentOutput, velocity_left_cmd);
         right_wheel_motor.Set(ControlMode::PercentOutput, velocity_right_cmd);

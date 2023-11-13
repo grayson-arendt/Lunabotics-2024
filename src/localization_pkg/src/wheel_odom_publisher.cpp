@@ -9,27 +9,7 @@
 #include "tf2_ros/transform_broadcaster.h"
 #include "sensor_msgs/msg/joint_state.hpp"
 
-#define Phoenix_No_WPI
-#include "ctre/Phoenix.h"
-#include "ctre/phoenix/platform/Platform.hpp"
-#include "ctre/phoenix/unmanaged/Unmanaged.h"
-#include "ctre/phoenix/cci/Unmanaged_CCI.h"
-
-using namespace ctre::phoenix;
-using namespace ctre::phoenix::platform;
-using namespace ctre::phoenix::motorcontrol;
-using namespace ctre::phoenix::motorcontrol::can;
-
-std::string interface = "can0";
-TalonFX left_wheel_motor(2, interface);
-TalonFX right_wheel_motor(3);
-/* look into getting this working, right now it gives an error
-TalonFXConfiguration config;
-config.supplyCurrLimit.enable = true;
-config.supplyCurrLimit.triggerThresholdCurrent = 40;
-left_wheel_motor.ConfigAllSettings(config);
-right_wheel_motor.ConfigAllSettings(config);
-*/
+#include "localization_pkg/motor_includes.h"
 
 class OdomPublisher : public rclcpp::Node
 {
@@ -53,10 +33,10 @@ public:
 private:
     void publish_odom_tf_joints()
     {
-        ctre::phoenix::unmanaged::Unmanaged::FeedEnable(10000);
+        ctre::phoenix::unmanaged::Unmanaged::FeedEnable(5000);
         r_encoder_initial = right_wheel_motor.GetSelectedSensorPosition();
         l_encoder_initial = left_wheel_motor.GetSelectedSensorPosition();
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
         r_encoder_final = right_wheel_motor.GetSelectedSensorPosition();
         l_encoder_final = left_wheel_motor.GetSelectedSensorPosition();
 
@@ -136,8 +116,6 @@ private:
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
-    right_wheel_motor.SetSelectedSensorPosition(0.0);
-    left_wheel_motor.SetSelectedSensorPosition(0.0);
     auto node = std::make_shared<OdomPublisher>();
     rclcpp::spin(node);
     rclcpp::shutdown();

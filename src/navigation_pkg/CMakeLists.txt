@@ -20,6 +20,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(localization_pkg REQUIRED)
 
 # Include Cpp "include" directory
 include_directories(include)
@@ -27,7 +28,7 @@ include_directories(include)
 # Create Cpp executable
 
 add_executable(motor_controller src/motor_controller.cpp)
-ament_target_dependencies(motor_controller rclcpp geometry_msgs)
+ament_target_dependencies(motor_controller rclcpp geometry_msgs localization_pkg)
 
 install(
   DIRECTORY phoenix_lib/

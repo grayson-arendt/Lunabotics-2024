@@ -13,7 +13,6 @@
 		value="0.1" />
 	<xacro:property name="wheel_length"
 		value="0.08" />
-	<!--Ebox = Electrical box-->
 	<xacro:property name="Ebox_length"
 		value="0.1" />
 	<xacro:property name="Ebox_width"
@@ -37,8 +36,6 @@
 	<xacro:property name="camera_pole_height"
 		value="0.7" />-->
 	<link name="base_footprint" />
-	<!--<link name="odom" />
-	<link name="map" />-->
 	<link name="base_link">
 		<visual>
 			<geometry>
@@ -209,25 +206,11 @@
 	<link name="camera_fisheye1_optical_frame" />
 	<link name="camera_fisheye2_optical_frame" />
 	<link name="camera_pose_optical_frame" />
-	<!--<joint name="odom_map"
-		type="fixed">
-		<parent link="map" />
-		<child link="odom" />
-		<origin xyz="0 0 0"
-			rpy="0 0 0" />
-	</joint>
-	<joint name="base_link_odom"
-		type="fixed">
-		<parent link="odom" />
-		<child link="base_link" />
-		<origin xyz="0 0 0"
-			rpy="0 0 0" />
-	</joint>-->
 	<joint name="base_joint"
 		type="fixed">
 		<parent link="base_footprint" />
 		<child link="base_link" />
-		<origin xyz="0 0 ${wheel_radius}"
+		<origin xyz="${base_length / 4.0} 0 ${wheel_radius}"
 			rpy="0 0 0" />
 	</joint>
 	<joint name="base_rear_right_wheel_joint"
@@ -264,7 +247,7 @@
 		type="fixed">
 		<parent link="base_link" />
 		<child link="Ebox_link" />
-		<origin xyz="${(-base_length / 2) - (Ebox_length / 2)} 0 ${Ebox_height / 2}"
+		<origin xyz="${(-base_length / 2.0) - (Ebox_length / 2.0)} 0 ${Ebox_height / 2.0}"
 			rpy="0 0 0" />
 	</joint>
 	<!--<joint name="base_camera_pole_joint"
@@ -278,7 +261,7 @@
 		type="fixed">
 		<parent link="base_link" />
 		<child link="lidar_link" />
-		<origin xyz="${(base_length/2) - lidar_radius} 0 ${base_height + (lidar_height/2)}"
+		<origin xyz="${(base_length/2.0) - lidar_radius} 0 ${base_height + (lidar_height/2.0)}"
 			rpy="0 0 -3.14" />
 	</joint>
 	<!--<joint name="base_camera_joint"
@@ -297,28 +280,28 @@
 		type="fixed">
 		<parent link="base_link" />
 		<child link="camera_link" />
-		<origin xyz="0 0 ${base_height + 0.025}"
+		<origin xyz="${-base_length / 4.0} 0 ${base_height + 0.025}"
 			rpy="0 0 0" />
 	</joint>
 	<joint name="base_camera_fisheye1_joint"
 		type="fixed">
 		<parent link="base_link" />
 		<child link="camera_fisheye1_optical_frame" />
-		<origin xyz="0 0 ${base_height + 0.025}"
+		<origin xyz="${-base_length / 4.0} 0 ${base_height + 0.025}"
 			rpy="0 0 0" />
 	</joint>
 	<joint name="base_camera_fisheye2_joint"
 		type="fixed">
 		<parent link="base_link" />
 		<child link="camera_fisheye2_optical_frame" />
-		<origin xyz="0 0 ${base_height + 0.025}"
+		<origin xyz="${-base_length / 4.0} 0 ${base_height + 0.025}"
 			rpy="0 0 0" />
 	</joint>
 	<joint name="base_camera_pose_frame"
 		type="fixed">
 		<parent link="base_link" />
 		<child link="camera_pose_optical_frame" />
-		<origin xyz="0 0 ${base_height + 0.025}"
+		<origin xyz="${-base_length / 4.0} 0 ${base_height + 0.025}"
 			rpy="0 0 0" />
 	</joint>
 </robot>
