@@ -16,8 +16,7 @@ using namespace ctre::phoenix::motorcontrol::can;
 
 
 std::string interface = "can0";
-// create wheel objects of the TalonFX class, pass in the motor ID and interface, default interface is can0
-// leaving interface as a parameter for example, in our case we don't need to because the CANbus is named can0
+
 // Get the motor IDs with phoenix tuner and the canable. (Step 2 on jetbrains doc)
 TalonSRX left_motor('Insert motor ID here', interface);
 TalonSRX right_motor('Insert motor ID here');
