@@ -75,15 +75,6 @@ def generate_launch_description():
             output='screen',
             name='static_transform_publisher',
     )
-
-    # might not even be necessary tbh
-    base_footprint_to_base_link = Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            arguments=['0', '0', '0.0889', '0', '0', '0', 'base_footprint', 'base_link'],
-            output='screen',
-            name='static_transform_publisher',
-    )
     
     robot_localization_node = Node(
        package='robot_localization',
@@ -108,7 +99,7 @@ def generate_launch_description():
                 parameters=[imu_filter_dir]
     )
     '''
-
+    
     imu_filter = Node(
                 package='imu_complementary_filter',
                 executable='complementary_filter_node',
@@ -148,7 +139,6 @@ def generate_launch_description():
         robot_localization_node,
         wheel_odom_publisher,
         filtered_odom_transform,
-        base_footprint_to_base_link,
         map_to_odom_tf,
         laser_filter,
         imu_filter,

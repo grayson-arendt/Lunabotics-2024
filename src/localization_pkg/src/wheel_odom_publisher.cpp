@@ -11,6 +11,13 @@
 #include "tf2/LinearMath/Quaternion.h"
 #include "sensor_msgs/msg/joint_state.hpp"
 
+/*
+Author: Anthony Baran
+Modified by: Grayson Arendt
+
+This node uses encoders only to calculate the position/orientation then publishes to wheel_odom.
+*/
+
 class OdomPublisher : public rclcpp::Node
 {
 public:
@@ -88,7 +95,6 @@ private:
     double right_wheel_distance;
     // base_footprint is underneath base_link
     const double wheel_to_base_footprint = 0.5207;
-    //const double encoder_ticks = 70000; I measured about 91500 ticks per revolution using the GetSelectedSensorPosition function
     const double encoder_ticks = 91500; 
     const double pi = 3.141592653589793;
     double distance_traveled;

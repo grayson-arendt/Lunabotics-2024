@@ -18,6 +18,9 @@ TalonFX left_wheel_motor(2, interface);
 //TalonFX right_wheel_motor(3);
 
 /*
+Modified by: Grayson Arendt
+
+Sample code for PID adjusted for ROS2 usage.
 This uses a DualShock4 controller
 */
 

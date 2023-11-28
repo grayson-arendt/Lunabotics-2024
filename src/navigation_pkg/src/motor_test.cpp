@@ -17,7 +17,10 @@ std::string interface = "can0";
 TalonFX left_wheel_motor(2, interface);
 
 /*
-This uses a DualShock4 controller
+Author: Grayson Arendt
+
+Simple node for testing encoders.
+This uses a DualShock4 controller.
 */
 
 class MotorTest : public rclcpp::Node
@@ -39,10 +42,8 @@ private:
     {   
         c_FeedEnable(5000);
 
-        //zero encoders
-        if(controller_input->buttons[1])
-        {
-            /* Zero the sensor */
+        // Zero encoders
+        if(controller_input->buttons[1]) {
             left_wheel_motor.SetSelectedSensorPosition(0, 0, 10);
         }
 
@@ -54,12 +55,6 @@ private:
         else {
             left_wheel_motor.Set(ControlMode::PercentOutput, 0.0);
         }
-
-
-
-        //double leftYstick = controller_input->axes[1];
-        //RCLCPP_INFO(this->get_logger(), "Left Y: %f, Encoder Pos: %f", leftYstick, left_wheel_motor.GetSelectedSensorPosition());
-        //left_wheel_motor.Set(ControlMode::PercentOutput, leftYstick);
     }
 
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr controller_subscriber;

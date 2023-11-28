@@ -19,6 +19,15 @@ std::string interface = "can0";
 TalonFX left_wheel_motor(2, interface);
 TalonFX right_wheel_motor(3);
 
+/*
+Author: Anthony Baran
+Modified by: Grayson Arendt
+
+This node converts velocity commands into percent output for the motors. 
+It also creates an array of all encoder values then publishes the previous
+and current encoder values to a custom Encoder.msg.
+*/
+
 class MotorController : public rclcpp::Node
 {
 public:
@@ -71,12 +80,11 @@ private:
 
         msg.left_initial = left_encoder_values[iteration];
         msg.right_initial = right_encoder_values[iteration];
-        msg.left_final = left_encoder_values[iteration+1];
-        msg.right_final = right_encoder_values[iteration+1];
+        msg.left_final = left_encoder_values[iteration + 1];
+        msg.right_final = right_encoder_values[iteration + 1];
         
         encoder_pub_->publish(msg);
         iteration++;
-        //RCLCPP_INFO(this->get_logger(), "L_ENCODER: %f R_ENCODER: %f ", l_encoder, r_encoder);
     }
 
     void callbackMotors(const geometry_msgs::msg::Twist::SharedPtr cmd_vel)
@@ -86,14 +94,10 @@ private:
         double linear_velocity = cmd_vel->linear.x;
         double angular_velocity = cmd_vel->angular.z;
 
-        // Simplfied equation, got rid of dividing by 0.1 so that it's within -1 to 1 range, also made half the speed because it was too fast
-        velocity_left_cmd = ((linear_velocity - (angular_velocity * (0.2))));
-        velocity_right_cmd = ((linear_velocity + (angular_velocity * (0.2))));
-
-        //velocity_left_cmd = std::clamp(velocity_left_cmd, -0.3, 0.3);
-        //velocity_right_cmd = std::clamp(velocity_right_cmd, -0.3, 0.3);
+        velocity_left_cmd = (linear_velocity - (angular_velocity * (0.2)));
+        velocity_right_cmd = (linear_velocity + (angular_velocity * (0.2)));
         
-        //RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", velocity_right_cmd, velocity_left_cmd);
+        RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", velocity_right_cmd, velocity_left_cmd);
 
         left_wheel_motor.Set(ControlMode::PercentOutput, velocity_left_cmd);
         right_wheel_motor.Set(ControlMode::PercentOutput, velocity_right_cmd);
@@ -101,8 +105,8 @@ private:
     }
 
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr motor_controller_subscriber;
-    rclcpp::TimerBase::SharedPtr timer_;
     rclcpp::Publisher<navigation_pkg::msg::Encoder>::SharedPtr encoder_pub_;
+    rclcpp::TimerBase::SharedPtr timer_;
 
 };
 

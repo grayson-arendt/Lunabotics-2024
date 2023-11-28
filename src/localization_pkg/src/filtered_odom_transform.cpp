@@ -3,6 +3,11 @@
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "tf2_ros/transform_broadcaster.h"
 
+/*
+Author: Grayson Arendt
+
+This node subscribes to the wheel odometry and creates the odom->base_link transform.
+*/
 
 class FilteredOdomTF : public rclcpp::Node
 {
@@ -11,7 +16,6 @@ public:
 
         tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
 
-        // This is getting the filtered odometry data from the ekf_filter_node from robot_localization package
         filtered_odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
             "wheel_odom", 10,
             std::bind(&FilteredOdomTF::transform_filtered_odom, this, std::placeholders::_1));
@@ -24,7 +28,6 @@ private:
         geometry_msgs::msg::TransformStamped filtered_odom_tf;
         filtered_odom_tf.header.stamp = this->get_clock()->now();
         filtered_odom_tf.header.frame_id = "odom";
-        // changing all base_footprint to base_link
         filtered_odom_tf.child_frame_id = "base_link";
         filtered_odom_tf.transform.translation.x = filtered_odom->pose.pose.position.x;
         filtered_odom_tf.transform.translation.y = filtered_odom->pose.pose.position.y;
