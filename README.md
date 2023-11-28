@@ -11,12 +11,12 @@
 There should now be flashing orange lights on the PDP. If it is flashing red then check the green and yellow wires, these lights mean that there is no CAN bus communication detected. CAN-High is represented by the yellow wire, while CAN-Low is represented by the green wire.
 
 ### Software
-#### Launch the test bot and slam_toolbox:
+Launch the test bot and slam_toolbox:
 ```bash
 ros2 launch lunabot_bringup test_bot_navigation.launch.py
 ```
 - Wait for RViz to finish loading before launching Navigation2
-#### Launch Navigation2
+Launch Navigation2
 ```bash
 ros2 launch nav2_bringup navigation_launch.py
 ```
