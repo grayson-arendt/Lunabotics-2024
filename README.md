@@ -16,6 +16,7 @@ Launch the test bot and slam_toolbox:
 ros2 launch lunabot_bringup test_bot_navigation.launch.py
 ```
 - Wait for RViz to finish loading before launching Navigation2
+
 Launch Navigation2
 ```bash
 ros2 launch nav2_bringup navigation_launch.py
