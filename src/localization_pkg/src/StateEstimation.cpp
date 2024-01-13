@@ -28,62 +28,40 @@ public:
 
         // Create subscriber (lambda expression)
         imageSub_ = this->create_subscription<sensor_msgs::msg::Image>("camera/color/image_raw", rclcpp::QoS(10).reliable(),
-                                                                       [this](const sensor_msgs::msg::Image::SharedPtr image) {
+        [this](const sensor_msgs::msg::Image::SharedPtr image) {
+            if (state == FilterState::INIT) {
+                // Perform initialization logic 
+                 if (!initTagsDetected) {
+                    getInitPosition(image, 0.10, 0, 1, 0.30, 0.30);
+                } else {
+                    init_values = getInitValues();
+                    pf->init(init_values[0], init_values[1], init_values[2]);
+                    movement_values = simulateMovement(init_values[0], init_values[1], init_values[2]);
+                    state = FilterState::PREDICT;
+                }
+            } else if (state == FilterState::PREDICT) {
+                // Perform prediction logic 
+                pf->predict(movement_values[0], movement_values[1], movement_values[2]);
+                pf->updateWeight(true, 5.0, 4.0, 3.0);
+                pf->resample();
+                updated_particles = pf->getParticles();
 
+                for (auto &&particle : updated_particles) {
+                    readParticle(particle);
+                }
+                
+                movement_values = simulateMovement(movement_values[0],movement_values[1],movement_values[2]);
+            }
 
-                                                                               if (state == FilterState::INIT) {
-                                                                                   // Perform initialization logic here
-                                                                                   if (!initTagsDetected) {
-                                                                                       getInitPosition(image,
-                                                                                                              0.10, 0,
-                                                                                                              1, 0.30,
-                                                                                                              0.30);
-                                                                                   } else {
-                                                                                       init_values = getInitValues();
-                                                                                       pf->init(init_values[0],
-                                                                                                init_values[1],
-                                                                                                init_values[2]);
-                                                                                       movement_values = simulateMovement(
-                                                                                               init_values[0],
-                                                                                               init_values[1],
-                                                                                               init_values[2]);
-                                                                                       state = FilterState::PREDICT;
-                                                                                   }
-                                                                               } else if (state ==
-                                                                                          FilterState::PREDICT) {
-                                                                                   // Perform prediction logic here
-                                                                                   pf->predict(movement_values[0],
-                                                                                               movement_values[1],
-                                                                                               movement_values[2]);
-                                                                                   pf->updateWeight(true, 5.0, 4.0, 3.0);
-                                                                                   pf->resample();
-
-                                                                                   updated_particles = pf->getParticles();
-
-                                                                                   for (auto &&particle : updated_particles) {
-                                                                                       readParticle(particle);
-                                                                                   }
-
-                                                                                   movement_values = simulateMovement(
-                                                                                           movement_values[0],
-                                                                                           movement_values[1],
-                                                                                           movement_values[2]);
-                                                                               }
-
-                                                                           resetTimer();
-
-
-                                                                       });
+            resetTimer();
+        });
 
         // Set up a timer to check for liveliness
         imageTimer_ = create_wall_timer(std::chrono::seconds(1),
-                                              [this]() {
-
-                                                  RCLCPP_WARN(get_logger(), "\033[0;36mCAMERA:\033[0m \033[1;31mDISCONNECTED\033[0m");
-                                              });
-
+        [this]() {
+            RCLCPP_WARN(get_logger(), "\033[0;36mCAMERA:\033[0m \033[1;31mDISCONNECTED\033[0m");
+        });
     }
-
 
 private:
 
@@ -153,7 +131,7 @@ private:
 
         else {
             direction = "COUNTER-CLOCKWISE";
-
+            
             /* Rotate robot here (right wheel forward, left wheel backward)
            *
            *
