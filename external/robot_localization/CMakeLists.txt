@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(robot_localization)
 
 if(NOT WIN32)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -74,8 +74,8 @@ add_library(
   src/ros_filter_utilities.cpp
   src/ros_robot_localization_listener.cpp)
 
-rosidl_target_interfaces(${library_name}
-  ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+target_link_libraries(${library_name} "${cpp_typesupport_target}")
 
 add_executable(
   ekf_node
@@ -179,8 +179,10 @@ if(BUILD_TESTING)
   ament_add_gtest_executable(test_filter_base_diagnostics_timestamps
                     test/test_filter_base_diagnostics_timestamps.cpp)
   target_link_libraries(test_filter_base_diagnostics_timestamps ${library_name})
-  rosidl_target_interfaces(test_filter_base_diagnostics_timestamps
-    ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+  rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+  target_link_libraries(test_filter_base_diagnostics_timestamps "${cpp_typesupport_target}")
+
   add_dependencies(test_filter_base_diagnostics_timestamps ekf_node)
   ament_add_test(test_filter_base_diagnostics_timestamps
     GENERATE_RESULT_FOR_RETURN_CODE_ZERO
@@ -192,14 +194,17 @@ if(BUILD_TESTING)
   #### EKF TESTS ######
   ament_add_gtest(test_ekf test/test_ekf.cpp)
   target_link_libraries(test_ekf ${library_name})
-  rosidl_target_interfaces(test_ekf
-    ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+  rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+  target_link_libraries(test_ekf "${cpp_typesupport_target}")
 
   ament_add_gtest_executable(test_ekf_localization_node_interfaces
                     test/test_ekf_localization_node_interfaces.cpp)
   target_link_libraries(test_ekf_localization_node_interfaces ${library_name})
-  rosidl_target_interfaces(test_ekf_localization_node_interfaces
-    ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+  rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+  target_link_libraries(test_ekf_localization_node_interfaces "${cpp_typesupport_target}")
+
   add_dependencies(test_ekf_localization_node_interfaces ekf_node)
   ament_add_test(test_ekf_localization_node_interfaces
     GENERATE_RESULT_FOR_RETURN_CODE_ZERO
@@ -211,15 +216,17 @@ if(BUILD_TESTING)
   #### UKF TESTS #####
   ament_add_gtest(test_ukf test/test_ukf.cpp)
   target_link_libraries(test_ukf ${library_name})
-  rosidl_target_interfaces(test_ukf
-    ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
+  rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+  target_link_libraries(test_ukf "${cpp_typesupport_target}")
 
   ament_add_gtest_executable(test_ukf_localization_node_interfaces
                     test/test_ukf_localization_node_interfaces.cpp)
   target_link_libraries(test_ukf_localization_node_interfaces ${library_name})
-  rosidl_target_interfaces(test_ukf_localization_node_interfaces
-    ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+  rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+  target_link_libraries(test_ukf_localization_node_interfaces "${cpp_typesupport_target}")
+
   add_dependencies(test_ukf_localization_node_interfaces ukf_node)
   ament_add_test(test_ukf_localization_node_interfaces
     GENERATE_RESULT_FOR_RETURN_CODE_ZERO
@@ -251,8 +258,8 @@ if(BUILD_TESTING)
   ament_add_gtest_executable(test_robot_localization_estimator
                   test/test_robot_localization_estimator.cpp)
   target_link_libraries(test_robot_localization_estimator ${library_name})
-  rosidl_target_interfaces(test_robot_localization_estimator
-    ${PROJECT_NAME} "rosidl_typesupport_cpp")
+  rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+  target_link_libraries(test_robot_localization_estimator "${cpp_typesupport_target}")
   ament_add_test(test_robot_localization_estimator
     GENERATE_RESULT_FOR_RETURN_CODE_ZERO
     TIMEOUT 100
@@ -260,16 +267,20 @@ if(BUILD_TESTING)
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
   )
 
+  #### NAVSAT CONVERSION TESTS ####
+  ament_add_gtest(test_navsat_conversions test/test_navsat_conversions.cpp)
+  target_link_libraries(test_navsat_conversions ${library_name})
+
   ament_add_gtest_executable(test_ros_robot_localization_listener
                   test/test_ros_robot_localization_listener.cpp)
   target_link_libraries(test_ros_robot_localization_listener ${library_name})
-  rosidl_target_interfaces(test_ros_robot_localization_listener
-    ${PROJECT_NAME} "rosidl_typesupport_cpp")
+  rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+  target_link_libraries(test_ros_robot_localization_listener "${cpp_typesupport_target}")
   ament_add_gtest_executable(test_ros_robot_localization_listener_publisher
                   test/test_ros_robot_localization_listener_publisher.cpp)
   target_link_libraries(test_ros_robot_localization_listener_publisher ${library_name})
-  rosidl_target_interfaces(test_ros_robot_localization_listener_publisher
-    ${PROJECT_NAME} "rosidl_typesupport_cpp")
+  rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+  target_link_libraries(test_ros_robot_localization_listener_publisher "${cpp_typesupport_target}")
   ament_add_test(test_ros_robot_localization_listener
     GENERATE_RESULT_FOR_RETURN_CODE_ZERO
     TIMEOUT 100
@@ -294,6 +305,7 @@ if(BUILD_TESTING)
     #test_ekf_localization_node_bag2
     #test_ekf_localization_node_bag3
     test_robot_localization_estimator
+    test_navsat_conversions
     test_ros_robot_localization_listener
     test_ros_robot_localization_listener_publisher
     #test_ukf_localization_node_bag1
@@ -325,6 +337,11 @@ install(TARGETS ${library_name}
   RUNTIME DESTINATION bin
 )
 
+install(DIRECTORY
+  include/
+  DESTINATION include/${PROJECT_NAME}
+  USE_SOURCE_PERMISSIONS)
+
 # Install params config files.
 install(DIRECTORY
   params
@@ -332,8 +349,6 @@ install(DIRECTORY
   DESTINATION share/${PROJECT_NAME}
   USE_SOURCE_PERMISSIONS
 )
-
-install(DIRECTORY include/ DESTINATION include)
 
 ament_export_include_directories(include)
 ament_export_libraries(${library_name})

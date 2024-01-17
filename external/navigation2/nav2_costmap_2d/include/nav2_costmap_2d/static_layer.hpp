@@ -40,6 +40,7 @@
 
 #include <mutex>
 #include <string>
+#include <vector>
 
 #include "map_msgs/msg/occupancy_grid_update.hpp"
 #include "message_filters/subscriber.h"
@@ -122,7 +123,7 @@ public:
    */
   virtual void matchSize();
 
-private:
+protected:
   /**
    * @brief Get parameters of layer
    */
@@ -152,6 +153,13 @@ private:
    */
   unsigned char interpretValue(unsigned char value);
 
+  /**
+   * @brief Callback executed when a parameter change is detected
+   * @param event ParameterEvent message
+   */
+  rcl_interfaces::msg::SetParametersResult
+  dynamicParametersCallback(std::vector<rclcpp::Parameter> parameters);
+
   std::string global_frame_;  ///< @brief The global frame for the costmap
   std::string map_frame_;  /// @brief frame that map is located in
 
@@ -175,9 +183,11 @@ private:
   unsigned char unknown_cost_value_;
   bool trinary_costmap_;
   bool map_received_{false};
+  bool map_received_in_update_bounds_{false};
   tf2::Duration transform_tolerance_;
-  std::atomic<bool> update_in_progress_;
   nav_msgs::msg::OccupancyGrid::SharedPtr map_buffer_;
+  // Dynamic parameters handler
+  rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr dyn_params_handler_;
 };
 
 }  // namespace nav2_costmap_2d

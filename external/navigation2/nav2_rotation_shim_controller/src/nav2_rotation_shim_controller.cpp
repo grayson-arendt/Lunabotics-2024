@@ -35,8 +35,8 @@ RotationShimController::RotationShimController()
 
 void RotationShimController::configure(
   const rclcpp_lifecycle::LifecycleNode::WeakPtr & parent,
-  std::string name, const std::shared_ptr<tf2_ros::Buffer> & tf,
-  const std::shared_ptr<nav2_costmap_2d::Costmap2DROS> & costmap_ros)
+  std::string name, std::shared_ptr<tf2_ros::Buffer> tf,
+  std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros)
 {
   plugin_name_ = name;
   node_ = parent;
@@ -141,6 +141,9 @@ geometry_msgs::msg::TwistStamped RotationShimController::computeVelocityCommands
   nav2_core::GoalChecker * goal_checker)
 {
   if (path_updated_) {
+    nav2_costmap_2d::Costmap2D * costmap = costmap_ros_->getCostmap();
+    std::unique_lock<nav2_costmap_2d::Costmap2D::mutex_t> lock(*(costmap->getMutex()));
+
     std::lock_guard<std::mutex> lock_reinit(mutex_);
     try {
       geometry_msgs::msg::Pose sampled_pt_base = transformPoseToBaseFrame(getSampledPathPt());

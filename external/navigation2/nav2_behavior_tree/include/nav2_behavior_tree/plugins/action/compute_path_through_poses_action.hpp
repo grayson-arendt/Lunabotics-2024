@@ -55,6 +55,16 @@ public:
   BT::NodeStatus on_success() override;
 
   /**
+   * @brief Function to perform some user-defined operation upon abortion of the action
+   */
+  BT::NodeStatus on_aborted() override;
+
+  /**
+   * @brief Function to perform some user-defined operation upon cancelation of the action
+   */
+  BT::NodeStatus on_cancelled() override;
+
+  /**
    * @brief Creates list of BT ports
    * @return BT::PortsList Containing basic ports along with node-specific ports
    */
@@ -68,7 +78,9 @@ public:
           "Destinations to plan through"),
         BT::InputPort<geometry_msgs::msg::PoseStamped>(
           "start", "Start pose of the path if overriding current robot pose"),
-        BT::InputPort<std::string>("planner_id", ""),
+        BT::InputPort<std::string>(
+          "planner_id", "",
+          "Mapped name to the planner plugin type to use"),
       });
   }
 };

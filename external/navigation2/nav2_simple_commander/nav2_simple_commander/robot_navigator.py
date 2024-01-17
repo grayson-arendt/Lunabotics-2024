@@ -23,13 +23,15 @@ from geometry_msgs.msg import Point
 from geometry_msgs.msg import PoseStamped
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from lifecycle_msgs.srv import GetState
-from nav2_msgs.action import BackUp, Spin
+from nav2_msgs.action import AssistedTeleop, BackUp, Spin
 from nav2_msgs.action import ComputePathThroughPoses, ComputePathToPose
 from nav2_msgs.action import FollowPath, FollowWaypoints, NavigateThroughPoses, NavigateToPose
+from nav2_msgs.action import SmoothPath
 from nav2_msgs.srv import ClearEntireCostmap, GetCostmap, LoadMap, ManageLifecycleNodes
 
 import rclpy
 from rclpy.action import ActionClient
+from rclpy.duration import Duration as rclpyDuration
 from rclpy.node import Node
 from rclpy.qos import QoSDurabilityPolicy, QoSHistoryPolicy
 from rclpy.qos import QoSProfile, QoSReliabilityPolicy
@@ -44,8 +46,8 @@ class TaskResult(Enum):
 
 class BasicNavigator(Node):
 
-    def __init__(self):
-        super().__init__(node_name='basic_navigator')
+    def __init__(self, node_name='basic_navigator', namespace=''):
+        super().__init__(node_name=node_name, namespace=namespace)
         self.initial_pose = PoseStamped()
         self.initial_pose.header.frame_id = 'map'
         self.goal_handle = None
@@ -70,8 +72,10 @@ class BasicNavigator(Node):
                                                         'compute_path_to_pose')
         self.compute_path_through_poses_client = ActionClient(self, ComputePathThroughPoses,
                                                               'compute_path_through_poses')
+        self.smoother_client = ActionClient(self, SmoothPath, 'smooth_path')
         self.spin_client = ActionClient(self, Spin, 'spin')
         self.backup_client = ActionClient(self, BackUp, 'backup')
+        self.assisted_teleop_client = ActionClient(self, AssistedTeleop, 'assisted_teleop')
         self.localization_pose_sub = self.create_subscription(PoseWithCovarianceStamped,
                                                               'amcl_pose',
                                                               self._amclPoseCallback,
@@ -79,13 +83,13 @@ class BasicNavigator(Node):
         self.initial_pose_pub = self.create_publisher(PoseWithCovarianceStamped,
                                                       'initialpose',
                                                       10)
-        self.change_maps_srv = self.create_client(LoadMap, '/map_server/load_map')
+        self.change_maps_srv = self.create_client(LoadMap, 'map_server/load_map')
         self.clear_costmap_global_srv = self.create_client(
-            ClearEntireCostmap, '/global_costmap/clear_entirely_global_costmap')
+            ClearEntireCostmap, 'global_costmap/clear_entirely_global_costmap')
         self.clear_costmap_local_srv = self.create_client(
-            ClearEntireCostmap, '/local_costmap/clear_entirely_local_costmap')
-        self.get_costmap_global_srv = self.create_client(GetCostmap, '/global_costmap/get_costmap')
-        self.get_costmap_local_srv = self.create_client(GetCostmap, '/local_costmap/get_costmap')
+            ClearEntireCostmap, 'local_costmap/clear_entirely_local_costmap')
+        self.get_costmap_global_srv = self.create_client(GetCostmap, 'global_costmap/get_costmap')
+        self.get_costmap_local_srv = self.create_client(GetCostmap, 'local_costmap/get_costmap')
 
     def destroyNode(self):
         self.destroy_node()
@@ -97,6 +101,7 @@ class BasicNavigator(Node):
         self.follow_path_client.destroy()
         self.compute_path_to_pose_client.destroy()
         self.compute_path_through_poses_client.destroy()
+        self.smoother_client.destroy()
         self.spin_client.destroy()
         self.backup_client.destroy()
         super().destroy_node()
@@ -177,12 +182,13 @@ class BasicNavigator(Node):
         self.result_future = self.goal_handle.get_result_async()
         return True
 
-    def spin(self, spin_dist=1.57):
+    def spin(self, spin_dist=1.57, time_allowance=10):
         self.debug("Waiting for 'Spin' action server")
         while not self.spin_client.wait_for_server(timeout_sec=1.0):
             self.info("'Spin' action server not available, waiting...")
         goal_msg = Spin.Goal()
         goal_msg.target_yaw = spin_dist
+        goal_msg.time_allowance = Duration(sec=time_allowance)
 
         self.info(f'Spinning to angle {goal_msg.target_yaw}....')
         send_goal_future = self.spin_client.send_goal_async(goal_msg, self._feedbackCallback)
@@ -196,13 +202,14 @@ class BasicNavigator(Node):
         self.result_future = self.goal_handle.get_result_async()
         return True
 
-    def backup(self, backup_dist=0.15, backup_speed=0.025):
+    def backup(self, backup_dist=0.15, backup_speed=0.025, time_allowance=10):
         self.debug("Waiting for 'Backup' action server")
         while not self.backup_client.wait_for_server(timeout_sec=1.0):
             self.info("'Backup' action server not available, waiting...")
         goal_msg = BackUp.Goal()
         goal_msg.target = Point(x=float(backup_dist))
         goal_msg.speed = backup_speed
+        goal_msg.time_allowance = Duration(sec=time_allowance)
 
         self.info(f'Backing up {goal_msg.target.x} m at {goal_msg.speed} m/s....')
         send_goal_future = self.backup_client.send_goal_async(goal_msg, self._feedbackCallback)
@@ -211,6 +218,26 @@ class BasicNavigator(Node):
 
         if not self.goal_handle.accepted:
             self.error('Backup request was rejected!')
+            return False
+
+        self.result_future = self.goal_handle.get_result_async()
+        return True
+
+    def assistedTeleop(self, time_allowance=30):
+        self.debug("Wainting for 'assisted_teleop' action server")
+        while not self.assisted_teleop_client.wait_for_server(timeout_sec=1.0):
+            self.info("'assisted_teleop' action server not available, waiting...")
+        goal_msg = AssistedTeleop.Goal()
+        goal_msg.time_allowance = Duration(sec=time_allowance)
+
+        self.info("Running 'assisted_teleop'....")
+        send_goal_future = \
+            self.assisted_teleop_client.send_goal_async(goal_msg, self._feedbackCallback)
+        rclpy.spin_until_future_complete(self, send_goal_future)
+        self.goal_handle = send_goal_future.result()
+
+        if not self.goal_handle.accepted:
+            self.error('Assisted Teleop request was rejected!')
             return False
 
         self.result_future = self.goal_handle.get_result_async()
@@ -290,8 +317,12 @@ class BasicNavigator(Node):
         self.info('Nav2 is ready for use!')
         return
 
-    def getPath(self, start, goal, planner_id='', use_start=False):
-        """Send a `ComputePathToPose` action request."""
+    def _getPathImpl(self, start, goal, planner_id='', use_start=False):
+        """
+        Send a `ComputePathToPose` action request.
+
+        Internal implementation to get the full result, not just the path.
+        """
         self.debug("Waiting for 'ComputePathToPose' action server")
         while not self.compute_path_to_pose_client.wait_for_server(timeout_sec=1.0):
             self.info("'ComputePathToPose' action server not available, waiting...")
@@ -318,7 +349,15 @@ class BasicNavigator(Node):
             self.warn(f'Getting path failed with status code: {self.status}')
             return None
 
-        return self.result_future.result().result.path
+        return self.result_future.result().result
+
+    def getPath(self, start, goal, planner_id='', use_start=False):
+        """Send a `ComputePathToPose` action request."""
+        rtn = self._getPathImpl(start, goal, planner_id, use_start)
+        if not rtn:
+            return None
+        else:
+            return rtn.path
 
     def getPathThroughPoses(self, start, goals, planner_id='', use_start=False):
         """Send a `ComputePathThroughPoses` action request."""
@@ -349,6 +388,49 @@ class BasicNavigator(Node):
             return None
 
         return self.result_future.result().result.path
+
+    def _smoothPathImpl(self, path, smoother_id='', max_duration=2.0, check_for_collision=False):
+        """
+        Send a `SmoothPath` action request.
+
+        Internal implementation to get the full result, not just the path.
+        """
+        self.debug("Waiting for 'SmoothPath' action server")
+        while not self.smoother_client.wait_for_server(timeout_sec=1.0):
+            self.info("'SmoothPath' action server not available, waiting...")
+
+        goal_msg = SmoothPath.Goal()
+        goal_msg.path = path
+        goal_msg.max_smoothing_duration = rclpyDuration(seconds=max_duration).to_msg()
+        goal_msg.smoother_id = smoother_id
+        goal_msg.check_for_collisions = check_for_collision
+
+        self.info('Smoothing path...')
+        send_goal_future = self.smoother_client.send_goal_async(goal_msg)
+        rclpy.spin_until_future_complete(self, send_goal_future)
+        self.goal_handle = send_goal_future.result()
+
+        if not self.goal_handle.accepted:
+            self.error('Smooth path was rejected!')
+            return None
+
+        self.result_future = self.goal_handle.get_result_async()
+        rclpy.spin_until_future_complete(self, self.result_future)
+        self.status = self.result_future.result().status
+        if self.status != GoalStatus.STATUS_SUCCEEDED:
+            self.warn(f'Getting path failed with status code: {self.status}')
+            return None
+
+        return self.result_future.result().result
+
+    def smoothPath(self, path, smoother_id='', max_duration=2.0, check_for_collision=False):
+        """Send a `SmoothPath` action request."""
+        rtn = self._smoothPathImpl(
+            path, smoother_id, max_duration, check_for_collision)
+        if not rtn:
+            return None
+        else:
+            return rtn.path
 
     def changeMap(self, map_filepath):
         """Change the current static map in the map server."""

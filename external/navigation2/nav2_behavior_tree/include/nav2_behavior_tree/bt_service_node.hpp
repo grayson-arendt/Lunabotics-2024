@@ -17,6 +17,7 @@
 
 #include <string>
 #include <memory>
+#include <chrono>
 
 #include "behaviortree_cpp_v3/action_node.h"
 #include "nav2_util/node_utils.hpp"
@@ -25,6 +26,8 @@
 
 namespace nav2_behavior_tree
 {
+
+using namespace std::chrono_literals;  // NOLINT
 
 /**
  * @brief Abstract class representing a service based BT node
@@ -36,13 +39,16 @@ class BtServiceNode : public BT::ActionNodeBase
 public:
   /**
    * @brief A nav2_behavior_tree::BtServiceNode constructor
-   * @param service_node_name Service name this node creates a client for
+   * @param service_node_name BT node name
    * @param conf BT node configuration
+   * @param service_name Optional service name this node creates a client for instead of from input port
    */
   BtServiceNode(
     const std::string & service_node_name,
-    const BT::NodeConfiguration & conf)
-  : BT::ActionNodeBase(service_node_name, conf), service_node_name_(service_node_name)
+    const BT::NodeConfiguration & conf,
+    const std::string & service_name = "")
+  : BT::ActionNodeBase(service_node_name, conf), service_name_(service_name), service_node_name_(
+      service_node_name)
   {
     node_ = config().blackboard->template get<rclcpp::Node::SharedPtr>("node");
     callback_group_ = node_->create_callback_group(
@@ -61,7 +67,7 @@ public:
     getInput("service_name", service_name_);
     service_client_ = node_->create_client<ServiceT>(
       service_name_,
-      rmw_qos_profile_services_default,
+      rclcpp::ServicesQoS().get_rmw_qos_profile(),
       callback_group_);
 
     // Make a request for the service without parameter
@@ -71,7 +77,15 @@ public:
     RCLCPP_DEBUG(
       node_->get_logger(), "Waiting for \"%s\" service",
       service_name_.c_str());
-    service_client_->wait_for_service();
+    if (!service_client_->wait_for_service(1s)) {
+      RCLCPP_ERROR(
+        node_->get_logger(), "\"%s\" service server not available after waiting for 1 s",
+        service_node_name.c_str());
+      throw std::runtime_error(
+              std::string(
+                "Service server %s not available",
+                service_node_name.c_str()));
+    }
 
     RCLCPP_DEBUG(
       node_->get_logger(), "\"%s\" BtServiceNode initialized",
@@ -117,8 +131,18 @@ public:
   BT::NodeStatus tick() override
   {
     if (!request_sent_) {
+      // reset the flag to send the request or not,
+      // allowing the user the option to set it in on_tick
+      should_send_request_ = true;
+
+      // user defined callback, may modify "should_send_request_".
       on_tick();
-      future_result_ = service_client_->async_send_request(request_);
+
+      if (!should_send_request_) {
+        return BT::NodeStatus::FAILURE;
+      }
+
+      future_result_ = service_client_->async_send_request(request_).share();
       sent_time_ = node_->now();
       request_sent_ = true;
     }
@@ -145,9 +169,10 @@ public:
   /**
    * @brief Function to perform some user-defined operation upon successful
    * completion of the service. Could put a value on the blackboard.
+   * @param response can be used to get the result of the service call in the BT Node.
    * @return BT::NodeStatus Returns SUCCESS by default, user may override to return another value
    */
-  virtual BT::NodeStatus on_completion()
+  virtual BT::NodeStatus on_completion(std::shared_ptr<typename ServiceT::Response>/*response*/)
   {
     return BT::NodeStatus::SUCCESS;
   }
@@ -165,10 +190,10 @@ public:
       auto timeout = remaining > bt_loop_duration_ ? bt_loop_duration_ : remaining;
 
       rclcpp::FutureReturnCode rc;
-      rc = callback_group_executor_.spin_until_future_complete(future_result_, server_timeout_);
+      rc = callback_group_executor_.spin_until_future_complete(future_result_, timeout);
       if (rc == rclcpp::FutureReturnCode::SUCCESS) {
         request_sent_ = false;
-        BT::NodeStatus status = on_completion();
+        BT::NodeStatus status = on_completion(future_result_.get());
         return status;
       }
 
@@ -228,6 +253,9 @@ protected:
   std::shared_future<typename ServiceT::Response::SharedPtr> future_result_;
   bool request_sent_{false};
   rclcpp::Time sent_time_;
+
+  // Can be set in on_tick or on_wait_for_result to indicate if a request should be sent.
+  bool should_send_request_;
 };
 
 }  // namespace nav2_behavior_tree

@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. Reserved.
 
-#include <boost/filesystem.hpp>
-
 #include <vector>
 #include <string>
 #include <fstream>
 #include <memory>
 #include <utility>
+#include <boost/filesystem.hpp>
 
 #include "gtest/gtest.h"
 
@@ -29,6 +28,8 @@
 #include "tf2_ros/buffer.h"
 #include "tf2_ros/transform_listener.h"
 #include "tf2_ros/create_timer_ros.h"
+
+#include "nav2_util/odometry_utils.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "ament_index_cpp/get_package_share_directory.hpp"
@@ -52,29 +53,38 @@ public:
     tf_->setUsingDedicatedThread(true);
     tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_, node_, false);
 
+    odom_smoother_ = std::make_shared<nav2_util::OdomSmoother>(node_);
+
     const std::vector<std::string> plugin_libs = {
       "nav2_compute_path_to_pose_action_bt_node",
       "nav2_compute_path_through_poses_action_bt_node",
+      "nav2_smooth_path_action_bt_node",
       "nav2_follow_path_action_bt_node",
-      "nav2_back_up_action_bt_node",
       "nav2_spin_action_bt_node",
       "nav2_wait_action_bt_node",
+      "nav2_assisted_teleop_action_bt_node",
+      "nav2_back_up_action_bt_node",
+      "nav2_drive_on_heading_bt_node",
       "nav2_clear_costmap_service_bt_node",
       "nav2_is_stuck_condition_bt_node",
       "nav2_goal_reached_condition_bt_node",
       "nav2_initial_pose_received_condition_bt_node",
       "nav2_goal_updated_condition_bt_node",
+      "nav2_globally_updated_goal_condition_bt_node",
+      "nav2_is_path_valid_condition_bt_node",
       "nav2_reinitialize_global_localization_service_bt_node",
       "nav2_rate_controller_bt_node",
       "nav2_distance_controller_bt_node",
       "nav2_speed_controller_bt_node",
       "nav2_truncate_path_action_bt_node",
+      "nav2_truncate_path_local_action_bt_node",
       "nav2_goal_updater_node_bt_node",
       "nav2_recovery_node_bt_node",
       "nav2_pipeline_sequence_bt_node",
       "nav2_round_robin_node_bt_node",
       "nav2_transform_available_condition_bt_node",
       "nav2_time_expired_condition_bt_node",
+      "nav2_path_expiring_timer_condition",
       "nav2_distance_traveled_condition_bt_node",
       "nav2_single_trigger_bt_node",
       "nav2_is_battery_low_condition_bt_node",
@@ -83,7 +93,15 @@ public:
       "nav2_remove_passed_goals_action_bt_node",
       "nav2_planner_selector_bt_node",
       "nav2_controller_selector_bt_node",
-      "nav2_goal_checker_selector_bt_node"
+      "nav2_goal_checker_selector_bt_node",
+      "nav2_controller_cancel_bt_node",
+      "nav2_path_longer_on_approach_bt_node",
+      "nav2_assisted_teleop_cancel_bt_node",
+      "nav2_wait_cancel_bt_node",
+      "nav2_spin_cancel_bt_node",
+      "nav2_back_up_cancel_bt_node",
+      "nav2_drive_on_heading_cancel_bt_node",
+      "nav2_goal_updated_controller_bt_node"
     };
     for (const auto & p : plugin_libs) {
       factory_.registerFromPlugin(BT::SharedLibrary::getOSName(p));
@@ -116,6 +134,7 @@ public:
     blackboard->set<std::shared_ptr<tf2_ros::Buffer>>("tf_buffer", tf_);  // NOLINT
     blackboard->set<bool>("initial_pose_received", false);  // NOLINT
     blackboard->set<int>("number_recoveries", 0);  // NOLINT
+    blackboard->set<std::shared_ptr<nav2_util::OdomSmoother>>("odom_smoother", odom_smoother_);  // NOLINT
 
     // set dummy goal on blackboard
     geometry_msgs::msg::PoseStamped goal;
@@ -151,6 +170,8 @@ private:
 
   std::shared_ptr<tf2_ros::Buffer> tf_;
   std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
+
+  std::shared_ptr<nav2_util::OdomSmoother> odom_smoother_;
 
   BT::BehaviorTreeFactory factory_;
 };
@@ -205,6 +226,7 @@ TEST_F(BehaviorTreeTestFixture, TestBTXMLFiles)
   if (boost::filesystem::exists(root) && boost::filesystem::is_directory(root)) {
     for (auto const & entry : boost::filesystem::recursive_directory_iterator(root)) {
       if (boost::filesystem::is_regular_file(entry) && entry.path().extension() == ".xml") {
+        std::cout << entry.path().string() << std::endl;
         EXPECT_EQ(bt_handler->loadBehaviorTree(entry.path().string()), true);
       }
     }

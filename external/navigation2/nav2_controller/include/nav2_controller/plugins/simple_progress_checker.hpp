@@ -16,6 +16,7 @@
 #define NAV2_CONTROLLER__PLUGINS__SIMPLE_PROGRESS_CHECKER_HPP_
 
 #include <string>
+#include <vector>
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "nav2_core/progress_checker.hpp"
@@ -45,12 +46,16 @@ protected:
    * @param pose Current pose of the robot
    * @return true, if movement is greater than radius_, or false
    */
-  bool is_robot_moved_enough(const geometry_msgs::msg::Pose2D & pose);
+  bool isRobotMovedEnough(const geometry_msgs::msg::Pose2D & pose);
   /**
    * @brief Resets baseline pose with the current pose of the robot
    * @param pose Current pose of the robot
    */
-  void reset_baseline_pose(const geometry_msgs::msg::Pose2D & pose);
+  void resetBaselinePose(const geometry_msgs::msg::Pose2D & pose);
+
+  static double pose_distance(
+    const geometry_msgs::msg::Pose2D &,
+    const geometry_msgs::msg::Pose2D &);
 
   rclcpp::Clock::SharedPtr clock_;
 
@@ -61,16 +66,16 @@ protected:
   rclcpp::Time baseline_time_;
 
   bool baseline_pose_set_{false};
-  // Subscription for parameter change
-  rclcpp::AsyncParametersClient::SharedPtr parameters_client_;
-  rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_event_sub_;
+  // Dynamic parameters handler
+  rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr dyn_params_handler_;
   std::string plugin_name_;
 
   /**
    * @brief Callback executed when a paramter change is detected
-   * @param event ParameterEvent message
+   * @param parameters list of changed parameters
    */
-  void on_parameter_event_callback(const rcl_interfaces::msg::ParameterEvent::SharedPtr event);
+  rcl_interfaces::msg::SetParametersResult
+  dynamicParametersCallback(std::vector<rclcpp::Parameter> parameters);
 };
 }  // namespace nav2_controller
 

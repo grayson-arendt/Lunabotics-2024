@@ -129,7 +129,6 @@ typedef struct _pf_t
 
   // Function used to draw random pose samples
   pf_init_model_fn_t random_pose_fn;
-  void * random_pose_data;
 
   double dist_threshold;  // distance threshold in each axis over which the pf is considered to not
                           // be converged
@@ -141,7 +140,7 @@ typedef struct _pf_t
 pf_t * pf_alloc(
   int min_samples, int max_samples,
   double alpha_slow, double alpha_fast,
-  pf_init_model_fn_t random_pose_fn, void * random_pose_data);
+  pf_init_model_fn_t random_pose_fn);
 
 // Free an existing filter
 void pf_free(pf_t * pf);
@@ -159,10 +158,10 @@ void pf_init_model(pf_t * pf, pf_init_model_fn_t init_fn, void * init_data);
 void pf_update_sensor(pf_t * pf, pf_sensor_model_fn_t sensor_fn, void * sensor_data);
 
 // Resample the distribution
-void pf_update_resample(pf_t * pf);
+void pf_update_resample(pf_t * pf, void * random_pose_data);
 
 // Compute the CEP statistics (mean and variance).
-void pf_get_cep_stats(pf_t * pf, pf_vector_t * mean, double * var);
+// void pf_get_cep_stats(pf_t * pf, pf_vector_t * mean, double * var);
 
 // Compute the statistics for a particular cluster.  Returns 0 if
 // there is no such cluster.
@@ -181,7 +180,7 @@ void pf_draw_samples(pf_t * pf, struct _rtk_fig_t * fig, int max_samples);
 void pf_draw_hist(pf_t * pf, struct _rtk_fig_t * fig);
 
 // Draw the CEP statistics
-void pf_draw_cep_stats(pf_t * pf, struct _rtk_fig_t * fig);
+// void pf_draw_cep_stats(pf_t * pf, struct _rtk_fig_t * fig);
 
 // Draw the cluster statistics
 void pf_draw_cluster_stats(pf_t * pf, struct _rtk_fig_t * fig);

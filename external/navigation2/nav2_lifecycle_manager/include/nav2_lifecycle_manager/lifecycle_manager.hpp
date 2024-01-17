@@ -1,4 +1,5 @@
 // Copyright (c) 2019 Intel Corporation
+// Copyright (c) 2022 Samsung Research America
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,9 +30,12 @@
 #include "nav2_msgs/srv/manage_lifecycle_nodes.hpp"
 #include "std_srvs/srv/trigger.hpp"
 #include "bondcpp/bond.hpp"
+#include "diagnostic_updater/diagnostic_updater.hpp"
+
 
 namespace nav2_lifecycle_manager
 {
+using namespace std::chrono_literals;  // NOLINT
 
 using nav2_msgs::srv::ManageLifecycleNodes;
 /**
@@ -45,8 +49,9 @@ class LifecycleManager : public rclcpp::Node
 public:
   /**
    * @brief A constructor for nav2_lifecycle_manager::LifecycleManager
+   * @param options Additional options to control creation of the node.
    */
-  LifecycleManager();
+  explicit LifecycleManager(const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
   /**
    * @brief A destructor for nav2_lifecycle_manager::LifecycleManager
    */
@@ -97,7 +102,7 @@ protected:
    * @brief Reset all the managed nodes.
    * @return true or false
    */
-  bool reset();
+  bool reset(bool hard_reset = false);
   /**
    * @brief Pause all the managed nodes.
    * @return true or false
@@ -108,6 +113,13 @@ protected:
    * @return true or false
    */
   bool resume();
+
+  /**
+   * @brief Perform preshutdown activities before our Context is shutdown.
+   * Note that this is related to our Context's shutdown sequence, not the
+   * lifecycle node state machine or shutdown().
+   */
+  void onRclPreshutdown();
 
   // Support function for creating service clients
   /**
@@ -150,6 +162,13 @@ protected:
    */
   void checkBondConnections();
 
+  // Support function for checking if bond connections come back after respawn
+  /**
+   * @ brief Support function for checking on bond connections
+   * will bring back the system if something goes from non-responsive to responsive
+   */
+  void checkBondRespawnConnection();
+
   /**
    * @brief For a node, transition to the new target state
    */
@@ -160,7 +179,7 @@ protected:
   /**
    * @brief For each node in the map, transition to the new target state
    */
-  bool changeStateForAllNodes(std::uint8_t transition);
+  bool changeStateForAllNodes(std::uint8_t transition, bool hard_change = false);
 
   // Convenience function to highlight the output on the console
   /**
@@ -168,9 +187,24 @@ protected:
    */
   void message(const std::string & msg);
 
+  // Diagnostics functions
+  /**
+   * @brief function to check if the Nav2 system is active
+   */
+  void CreateActiveDiagnostic(diagnostic_updater::DiagnosticStatusWrapper & stat);
+
+  /**
+   * Register our preshutdown callback for this Node's rcl Context.
+   * The callback fires before this Node's Context is shutdown.
+   * Note this is not directly related to the lifecycle state machine or the
+   * shutdown() instance function.
+   */
+  void registerRclPreshutdownCallback();
+
   // Timer thread to look at bond connections
   rclcpp::TimerBase::SharedPtr init_timer_;
   rclcpp::TimerBase::SharedPtr bond_timer_;
+  rclcpp::TimerBase::SharedPtr bond_respawn_timer_;
   std::chrono::milliseconds bond_timeout_;
 
   // A map of all nodes to check bond connection
@@ -189,8 +223,13 @@ protected:
 
   // Whether to automatically start up the system
   bool autostart_;
+  bool attempt_respawn_reconnection_;
 
   bool system_active_{false};
+  diagnostic_updater::Updater diagnostics_updater_;
+
+  rclcpp::Time bond_respawn_start_time_{0};
+  rclcpp::Duration bond_respawn_max_duration_{10s};
 };
 
 }  // namespace nav2_lifecycle_manager

@@ -25,19 +25,23 @@
 #include <utility>
 
 #include "builtin_interfaces/msg/duration.hpp"
+#include "lifecycle_msgs/msg/state.hpp"
 #include "nav2_util/costmap.hpp"
 #include "nav2_util/node_utils.hpp"
+#include "nav2_util/geometry_utils.hpp"
 #include "nav2_costmap_2d/cost_values.hpp"
 
 #include "nav2_planner/planner_server.hpp"
 
 using namespace std::chrono_literals;
+using rcl_interfaces::msg::ParameterType;
+using std::placeholders::_1;
 
 namespace nav2_planner
 {
 
-PlannerServer::PlannerServer()
-: nav2_util::LifecycleNode("nav2_planner", "", true),
+PlannerServer::PlannerServer(const rclcpp::NodeOptions & options)
+: nav2_util::LifecycleNode("planner_server", "", options),
   gp_loader_("nav2_core", "nav2_core::GlobalPlanner"),
   default_ids_{"GridBased"},
   default_types_{"nav2_navfn_planner/NavfnPlanner"},
@@ -59,24 +63,28 @@ PlannerServer::PlannerServer()
   // Setup the global costmap
   costmap_ros_ = std::make_shared<nav2_costmap_2d::Costmap2DROS>(
     "global_costmap", std::string{get_namespace()}, "global_costmap");
-
-  // Launch a thread to run the costmap node
-  costmap_thread_ = std::make_unique<nav2_util::NodeThread>(costmap_ros_);
 }
 
 PlannerServer::~PlannerServer()
 {
+  /*
+   * Backstop ensuring this state is destroyed, even if deactivate/cleanup are
+   * never called.
+   */
   planners_.clear();
   costmap_thread_.reset();
 }
 
 nav2_util::CallbackReturn
-PlannerServer::on_configure(const rclcpp_lifecycle::State & state)
+PlannerServer::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
 
-  costmap_ros_->on_configure(state);
+  costmap_ros_->configure();
   costmap_ = costmap_ros_->getCostmap();
+
+  // Launch a thread to run the costmap node
+  costmap_thread_ = std::make_unique<nav2_util::NodeThread>(costmap_ros_);
 
   RCLCPP_DEBUG(
     get_logger(), "Costmap size: %d,%d",
@@ -132,32 +140,50 @@ PlannerServer::on_configure(const rclcpp_lifecycle::State & state)
 
   // Create the action servers for path planning to a pose and through poses
   action_server_pose_ = std::make_unique<ActionServerToPose>(
-    rclcpp_node_,
+    shared_from_this(),
     "compute_path_to_pose",
-    std::bind(&PlannerServer::computePlan, this));
+    std::bind(&PlannerServer::computePlan, this),
+    nullptr,
+    std::chrono::milliseconds(500),
+    true);
 
   action_server_poses_ = std::make_unique<ActionServerThroughPoses>(
-    rclcpp_node_,
+    shared_from_this(),
     "compute_path_through_poses",
-    std::bind(&PlannerServer::computePlanThroughPoses, this));
+    std::bind(&PlannerServer::computePlanThroughPoses, this),
+    nullptr,
+    std::chrono::milliseconds(500),
+    true);
 
   return nav2_util::CallbackReturn::SUCCESS;
 }
 
 nav2_util::CallbackReturn
-PlannerServer::on_activate(const rclcpp_lifecycle::State & state)
+PlannerServer::on_activate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Activating");
 
   plan_publisher_->on_activate();
   action_server_pose_->activate();
   action_server_poses_->activate();
-  costmap_ros_->on_activate(state);
+  costmap_ros_->activate();
 
   PlannerMap::iterator it;
   for (it = planners_.begin(); it != planners_.end(); ++it) {
     it->second->activate();
   }
+
+  auto node = shared_from_this();
+
+  is_path_valid_service_ = node->create_service<nav2_msgs::srv::IsPathValid>(
+    "is_path_valid",
+    std::bind(
+      &PlannerServer::isPathValid, this,
+      std::placeholders::_1, std::placeholders::_2));
+
+  // Add callback for dynamic parameters
+  dyn_params_handler_ = node->add_on_set_parameters_callback(
+    std::bind(&PlannerServer::dynamicParametersCallback, this, _1));
 
   // create bond connection
   createBond();
@@ -166,19 +192,33 @@ PlannerServer::on_activate(const rclcpp_lifecycle::State & state)
 }
 
 nav2_util::CallbackReturn
-PlannerServer::on_deactivate(const rclcpp_lifecycle::State & state)
+PlannerServer::on_deactivate(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Deactivating");
 
   action_server_pose_->deactivate();
   action_server_poses_->deactivate();
   plan_publisher_->on_deactivate();
-  costmap_ros_->on_deactivate(state);
+
+  /*
+   * The costmap is also a lifecycle node, so it may have already fired on_deactivate
+   * via rcl preshutdown cb. Despite the rclcpp docs saying on_shutdown callbacks fire
+   * in the order added, the preshutdown callbacks clearly don't per se, due to using an
+   * unordered_set iteration. Once this issue is resolved, we can maybe make a stronger
+   * ordering assumption: https://github.com/ros2/rclcpp/issues/2096
+   */
+  if (costmap_ros_->get_current_state().id() ==
+    lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE)
+  {
+    costmap_ros_->deactivate();
+  }
 
   PlannerMap::iterator it;
   for (it = planners_.begin(); it != planners_.end(); ++it) {
     it->second->deactivate();
   }
+
+  dyn_params_handler_.reset();
 
   // destroy bond connection
   destroyBond();
@@ -187,7 +227,7 @@ PlannerServer::on_deactivate(const rclcpp_lifecycle::State & state)
 }
 
 nav2_util::CallbackReturn
-PlannerServer::on_cleanup(const rclcpp_lifecycle::State & state)
+PlannerServer::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up");
 
@@ -195,15 +235,25 @@ PlannerServer::on_cleanup(const rclcpp_lifecycle::State & state)
   action_server_poses_.reset();
   plan_publisher_.reset();
   tf_.reset();
-  costmap_ros_->on_cleanup(state);
+
+  /*
+   * Double check whether something else transitioned it to INACTIVE
+   * already, e.g. the rcl preshutdown callback.
+   */
+  if (costmap_ros_->get_current_state().id() ==
+    lifecycle_msgs::msg::State::PRIMARY_STATE_INACTIVE)
+  {
+    costmap_ros_->cleanup();
+  }
 
   PlannerMap::iterator it;
   for (it = planners_.begin(); it != planners_.end(); ++it) {
     it->second->cleanup();
   }
-  planners_.clear();
-  costmap_ = nullptr;
 
+  planners_.clear();
+  costmap_thread_.reset();
+  costmap_ = nullptr;
   return nav2_util::CallbackReturn::SUCCESS;
 }
 
@@ -310,7 +360,7 @@ bool PlannerServer::validatePath(
 
   RCLCPP_DEBUG(
     get_logger(),
-    "Found valid path of size %lu to (%.2f, %.2f)",
+    "Found valid path of size %zu to (%.2f, %.2f)",
     path.poses.size(), goal.pose.position.x,
     goal.pose.position.y);
 
@@ -320,6 +370,8 @@ bool PlannerServer::validatePath(
 void
 PlannerServer::computePlanThroughPoses()
 {
+  std::lock_guard<std::mutex> lock(dynamic_params_lock_);
+
   auto start_time = steady_clock_.now();
 
   // Initialize the ComputePathToPose goal and result
@@ -398,7 +450,7 @@ PlannerServer::computePlanThroughPoses()
   } catch (std::exception & ex) {
     RCLCPP_WARN(
       get_logger(),
-      "%s plugin failed to plan through %li points with final goal (%.2f, %.2f): \"%s\"",
+      "%s plugin failed to plan through %zu points with final goal (%.2f, %.2f): \"%s\"",
       goal->planner_id.c_str(), goal->goals.size(), goal->goals.back().pose.position.x,
       goal->goals.back().pose.position.y, ex.what());
     action_server_poses_->terminate_current();
@@ -408,6 +460,8 @@ PlannerServer::computePlanThroughPoses()
 void
 PlannerServer::computePlan()
 {
+  std::lock_guard<std::mutex> lock(dynamic_params_lock_);
+
   auto start_time = steady_clock_.now();
 
   // Initialize the ComputePathToPose goal and result
@@ -504,4 +558,92 @@ PlannerServer::publishPlan(const nav_msgs::msg::Path & path)
   }
 }
 
+void PlannerServer::isPathValid(
+  const std::shared_ptr<nav2_msgs::srv::IsPathValid::Request> request,
+  std::shared_ptr<nav2_msgs::srv::IsPathValid::Response> response)
+{
+  response->is_valid = true;
+
+  if (request->path.poses.empty()) {
+    response->is_valid = false;
+    return;
+  }
+
+  geometry_msgs::msg::PoseStamped current_pose;
+  unsigned int closest_point_index = 0;
+  if (costmap_ros_->getRobotPose(current_pose)) {
+    float current_distance = std::numeric_limits<float>::max();
+    float closest_distance = current_distance;
+    geometry_msgs::msg::Point current_point = current_pose.pose.position;
+    for (unsigned int i = 0; i < request->path.poses.size(); ++i) {
+      geometry_msgs::msg::Point path_point = request->path.poses[i].pose.position;
+
+      current_distance = nav2_util::geometry_utils::euclidean_distance(
+        current_point,
+        path_point);
+
+      if (current_distance < closest_distance) {
+        closest_point_index = i;
+        closest_distance = current_distance;
+      }
+    }
+
+    /**
+     * The lethal check starts at the closest point to avoid points that have already been passed
+     * and may have become occupied
+     */
+    std::unique_lock<nav2_costmap_2d::Costmap2D::mutex_t> lock(*(costmap_->getMutex()));
+    unsigned int mx = 0;
+    unsigned int my = 0;
+    for (unsigned int i = closest_point_index; i < request->path.poses.size(); ++i) {
+      costmap_->worldToMap(
+        request->path.poses[i].pose.position.x,
+        request->path.poses[i].pose.position.y, mx, my);
+      unsigned int cost = costmap_->getCost(mx, my);
+
+      if (cost == nav2_costmap_2d::LETHAL_OBSTACLE ||
+        cost == nav2_costmap_2d::INSCRIBED_INFLATED_OBSTACLE)
+      {
+        response->is_valid = false;
+      }
+    }
+  }
+}
+
+rcl_interfaces::msg::SetParametersResult
+PlannerServer::dynamicParametersCallback(std::vector<rclcpp::Parameter> parameters)
+{
+  std::lock_guard<std::mutex> lock(dynamic_params_lock_);
+  rcl_interfaces::msg::SetParametersResult result;
+
+  for (auto parameter : parameters) {
+    const auto & type = parameter.get_type();
+    const auto & name = parameter.get_name();
+
+    if (type == ParameterType::PARAMETER_DOUBLE) {
+      if (name == "expected_planner_frequency") {
+        if (parameter.as_double() > 0) {
+          max_planner_duration_ = 1 / parameter.as_double();
+        } else {
+          RCLCPP_WARN(
+            get_logger(),
+            "The expected planner frequency parameter is %.4f Hz. The value should to be greater"
+            " than 0.0 to turn on duration overrrun warning messages", parameter.as_double());
+          max_planner_duration_ = 0.0;
+        }
+      }
+    }
+  }
+
+  result.successful = true;
+  return result;
+}
+
 }  // namespace nav2_planner
+
+#include "rclcpp_components/register_node_macro.hpp"
+
+// Register the component with class_loader.
+// This acts as a sort of entry point, allowing the component to be discoverable when its library
+// is being loaded into a running process.
+RCLCPP_COMPONENTS_REGISTER_NODE(nav2_planner::PlannerServer)

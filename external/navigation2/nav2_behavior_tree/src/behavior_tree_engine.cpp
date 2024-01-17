@@ -55,7 +55,12 @@ BehaviorTreeEngine::run(
 
       onLoop();
 
-      loopRate.sleep();
+      if (!loopRate.sleep()) {
+        RCLCPP_WARN(
+          rclcpp::get_logger("BehaviorTreeEngine"),
+          "Behavior Tree tick rate %0.2f was exceeded!",
+          1.0 / (loopRate.period().count() * 1.0e-9));
+      }
     }
   } catch (const std::exception & ex) {
     RCLCPP_ERROR(
@@ -83,27 +88,6 @@ BehaviorTreeEngine::createTreeFromFile(
   return factory_.createTreeFromFile(file_path, blackboard);
 }
 
-void
-BehaviorTreeEngine::addGrootMonitoring(
-  BT::Tree * tree,
-  uint16_t publisher_port,
-  uint16_t server_port,
-  uint16_t max_msg_per_second)
-{
-  // This logger publish status changes using ZeroMQ. Used by Groot
-  groot_monitor_ = std::make_unique<BT::PublisherZMQ>(
-    *tree, max_msg_per_second, publisher_port,
-    server_port);
-}
-
-void
-BehaviorTreeEngine::resetGrootMonitor()
-{
-  if (groot_monitor_) {
-    groot_monitor_.reset();
-  }
-}
-
 // In order to re-run a Behavior Tree, we must be able to reset all nodes to the initial state
 void
 BehaviorTreeEngine::haltAllActions(BT::TreeNode * root_node)
@@ -111,7 +95,7 @@ BehaviorTreeEngine::haltAllActions(BT::TreeNode * root_node)
   if (!root_node) {
     return;
   }
-  
+
   // this halt signal should propagate through the entire tree.
   root_node->halt();
 

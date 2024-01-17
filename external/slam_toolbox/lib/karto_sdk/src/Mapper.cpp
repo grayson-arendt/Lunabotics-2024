@@ -770,7 +770,7 @@ kt_double ScanMatcher::CorrelateScan(
   m_nAngles = nAngles;
   m_searchAngleResolution = searchAngleResolution;
   m_doPenalize = doPenalize;
-  tbb::parallel_do(m_yPoses, (*this) );
+  tbb::parallel_for_each(m_yPoses, (*this));
 
   // find value of best response (in [0; 1])
   kt_double bestResponse = -1;
@@ -1473,7 +1473,7 @@ void MapperGraph::AddEdges(LocalizedRangeScan * pScan, const Matrix3 & rCovarian
         pScan,
         pSensorManager->GetScans(rCandidateSensorName),
         bestPose, covariance);
-      LinkScans(pScan, pSensorManager->GetScan(rCandidateSensorName, 0), bestPose, covariance);
+      LinkScans(pSensorManager->GetScan(rCandidateSensorName, 0), pScan, bestPose, covariance);
 
       // only add to means and covariances if response was high "enough"
       if (response > m_pMapper->m_pLinkMatchMinimumResponseFine->GetValue()) {

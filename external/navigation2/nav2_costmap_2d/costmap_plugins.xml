@@ -15,6 +15,9 @@
     <class type="nav2_costmap_2d::RangeSensorLayer" base_class_type="nav2_costmap_2d::Layer">
       <description>A range-sensor (sonar, IR) based obstacle layer for costmap_2d</description>
     </class>
+    <class type="nav2_costmap_2d::DenoiseLayer" base_class_type="nav2_costmap_2d::Layer">
+      <description>Filters noise-induced freestanding obstacles or small obstacles groups</description>
+    </class>
   </library>
 
   <library path="filters">
@@ -23,6 +26,9 @@
     </class>
     <class type="nav2_costmap_2d::SpeedFilter"     base_class_type="nav2_costmap_2d::Layer">
       <description>Restricts maximum speed of robot in speed-limit zones marked on map.</description>
+    </class>
+    <class type="nav2_costmap_2d::BinaryFilter"    base_class_type="nav2_costmap_2d::Layer">
+      <description>Binary flip filter.</description>
     </class>
   </library>
 </class_libraries>

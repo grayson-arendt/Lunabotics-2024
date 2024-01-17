@@ -36,8 +36,8 @@
 #include "tf2_ros/create_timer_ros.h"
 #include "tf2_ros/message_filter.h"
 #include "tf2/LinearMath/Matrix3x3.h"
-#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
-#include "tf2_sensor_msgs/tf2_sensor_msgs.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
+#include "tf2_sensor_msgs/tf2_sensor_msgs.hpp"
 
 #include "pluginlib/class_loader.hpp"
 
@@ -142,9 +142,10 @@ protected:
 
   // Storage for ROS parameters
   std::string odom_frame_, map_frame_, base_frame_, map_name_, scan_topic_;
+  bool use_map_saver_;
   rclcpp::Duration transform_timeout_, minimum_time_interval_;
   std_msgs::msg::Header scan_header;
-  int throttle_scans_;
+  int throttle_scans_, scan_queue_size_;
 
   double resolution_;
   double position_covariance_scale_;

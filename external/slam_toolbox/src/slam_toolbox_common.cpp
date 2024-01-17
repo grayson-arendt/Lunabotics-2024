@@ -61,8 +61,10 @@ void SlamToolbox::configure()
   pose_helper_ = std::make_unique<pose_utils::GetPoseHelper>(
     tf_.get(), base_frame_, odom_frame_);
   scan_holder_ = std::make_unique<laser_utils::ScanHolder>(lasers_);
-  map_saver_ = std::make_unique<map_saver::MapSaver>(shared_from_this(),
-      map_name_);
+  if (use_map_saver_) {
+    map_saver_ = std::make_unique<map_saver::MapSaver>(shared_from_this(),
+        map_name_);
+  }
   closure_assistant_ =
     std::make_unique<loop_closure_assistant::LoopClosureAssistant>(
     shared_from_this(), smapper_->getMapper(), scan_holder_.get(),
@@ -135,16 +137,32 @@ void SlamToolbox::setParams()
 
   resolution_ = 0.05;
   resolution_ = this->declare_parameter("resolution", resolution_);
-
+  if (resolution_ <= 0.0) {
+    RCLCPP_WARN(this->get_logger(),
+      "You've set resolution of map to be zero or negative,"
+      "this isn't allowed so it will be set to default value 0.05.");
+    resolution_ = 0.05;
+  }
   map_name_ = std::string("/map");
   map_name_ = this->declare_parameter("map_name", map_name_);
+
+  use_map_saver_ = true;
+  use_map_saver_ = this->declare_parameter("use_map_saver", use_map_saver_);
 
   scan_topic_ = std::string("/scan");
   scan_topic_ = this->declare_parameter("scan_topic", scan_topic_);
 
+  scan_queue_size_ = 1.0;
+  scan_queue_size_ = this->declare_parameter("scan_queue_size", scan_queue_size_);
+
   throttle_scans_ = 1;
   throttle_scans_ = this->declare_parameter("throttle_scans", throttle_scans_);
-
+  if (throttle_scans_ == 0) {
+    RCLCPP_WARN(this->get_logger(),
+      "You've set throttle_scans to be zero,"
+      "this isn't allowed so it will be set to default value 1.");
+    throttle_scans_ = 1;
+  }
   position_covariance_scale_ = 1.0;
   position_covariance_scale_ = this->declare_parameter("position_covariance_scale", position_covariance_scale_);
 
@@ -169,7 +187,7 @@ void SlamToolbox::setParams()
   }
 
   smapper_->configure(shared_from_this());
-  this->declare_parameter("paused_new_measurements");
+  this->declare_parameter("paused_new_measurements",rclcpp::ParameterType::PARAMETER_BOOL);
   this->set_parameter({"paused_new_measurements", false});
 }
 
@@ -217,7 +235,8 @@ void SlamToolbox::setROSInterfaces()
     shared_from_this().get(), scan_topic_, rmw_qos_profile_sensor_data);
   scan_filter_ =
     std::make_unique<tf2_ros::MessageFilter<sensor_msgs::msg::LaserScan>>(
-    *scan_filter_sub_, *tf_, odom_frame_, 1, shared_from_this());
+    *scan_filter_sub_, *tf_, odom_frame_, scan_queue_size_, shared_from_this(),
+    tf2::durationFromSec(transform_timeout_.seconds()));
   scan_filter_->registerCallback(
     std::bind(&SlamToolbox::laserCallback, this, std::placeholders::_1));
 }
@@ -314,8 +333,8 @@ bool SlamToolbox::shouldStartWithPoseGraph(
 {
   // if given a map to load at run time, do it.
   this->declare_parameter("map_file_name", std::string(""));
-  auto map_start_pose = this->declare_parameter("map_start_pose");
-  auto map_start_at_dock = this->declare_parameter("map_start_at_dock");
+  auto map_start_pose = this->declare_parameter("map_start_pose",rclcpp::ParameterType::PARAMETER_DOUBLE_ARRAY);
+  auto map_start_at_dock = this->declare_parameter("map_start_at_dock",rclcpp::ParameterType::PARAMETER_BOOL);
   filename = this->get_parameter("map_file_name").as_string();
   if (!filename.empty()) {
     std::vector<double> read_pose;
@@ -682,8 +701,12 @@ bool SlamToolbox::serializePoseGraphCallback(
   }
 
   boost::mutex::scoped_lock lock(smapper_mutex_);
-  serialization::write(filename, *smapper_->getMapper(),
-    *dataset_, shared_from_this());
+  if (serialization::write(filename, *smapper_->getMapper(), *dataset_, shared_from_this())) {
+    resp->result = resp->RESULT_SUCCESS;
+  } else {
+    resp->result = resp->RESULT_FAILED_TO_WRITE_FILE;
+  }
+
   return true;
 }
 
@@ -723,6 +746,8 @@ void SlamToolbox::loadSerializedPoseGraph(
   smapper_->setMapper(mapper.release());
   smapper_->configure(shared_from_this());
   dataset_.reset(dataset.release());
+
+  closure_assistant_->setMapper(smapper_->getMapper());
 
   if (!smapper_->getMapper()) {
     RCLCPP_FATAL(get_logger(),

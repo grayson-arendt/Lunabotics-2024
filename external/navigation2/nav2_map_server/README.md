@@ -1,15 +1,9 @@
 # Map Server
 
 The `Map Server` provides maps to the rest of the Nav2 system using both topic and
-service interfaces.
+service interfaces. Map server will expose maps on the node bringup, but can also change maps using a `load_map` service during run-time, as well as save maps using a `save_map` server.
 
-## Changes from ROS1 Navigation Map Server
-
-While the nav2 map server provides the same general function as the nav1 map server, the new
-code has some changes to accomodate ROS2 as well as some architectural improvements.
-
-In addition, there is now two new "load_map" and "save_map" services which can be used to
-dynamically load and save a map.
+See its [Configuration Guide Page](https://navigation.ros.org/configuration/packages/configuring-map-server.html) for additional parameter descriptions.
 
 ### Architecture
 
@@ -24,7 +18,7 @@ Currently map server divides into tree parts:
 - `map_io` library
 
 `map_server` is responsible for loading the map from a file through command-line interface
-or by using serice requests.
+or by using service requests.
 
 `map_saver` saves the map into a file. Like `map_server`, it has an ability to save the map from
 command-line or by calling a service.
@@ -33,7 +27,7 @@ command-line or by calling a service.
 in order to allow easily save/load map from external code just by calling necessary function.
 This library is also used by `map_loader` and `map_saver` to work. Currently it contains
 OccupancyGrid saving/loading functions moved from the rest part of map server code.
-It is designed to be replaceble for a new IO library (e.g. for library with new map encoding
+It is designed to be replaceable for a new IO library (e.g. for library with new map encoding
 method or any other library supporting costmaps, multifloor maps, etc...).
 
 ### CLI-usage
@@ -99,6 +93,11 @@ Then, one would invoke this process with the params file that contains the param
 ```
 $ process_with_multiple_map_servers __params:=combined_params.yaml
 ```
+
+
+The parameter for the initial map (yaml_filename) has to be set, but an empty string can be used if no initial map should be loaded. In this case, no map is loaded during
+on_configure or published during on_activate. The _load_map_-service should the be used to load and publish a map. 
+
 
 #### Map Saver
 

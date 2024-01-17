@@ -35,8 +35,8 @@
  * Author: Alexey Merzlyakov
  *********************************************************************/
 
-#ifndef NAV2_COSTMAP_2D__FILTER_VALUES_HPP_
-#define NAV2_COSTMAP_2D__FILTER_VALUES_HPP_
+#ifndef NAV2_COSTMAP_2D__COSTMAP_FILTERS__FILTER_VALUES_HPP_
+#define NAV2_COSTMAP_2D__COSTMAP_FILTERS__FILTER_VALUES_HPP_
 
 /** Provides constants used in costmap filters */
 
@@ -47,6 +47,7 @@ namespace nav2_costmap_2d
 static constexpr uint8_t KEEPOUT_FILTER = 0;
 static constexpr uint8_t SPEED_FILTER_PERCENT = 1;
 static constexpr uint8_t SPEED_FILTER_ABSOLUTE = 2;
+static constexpr uint8_t BINARY_FILTER = 3;
 
 /** Default values for base and multiplier */
 static constexpr double BASE_DEFAULT = 0.0;
@@ -59,4 +60,4 @@ static constexpr double NO_SPEED_LIMIT = 0.0;
 
 }  // namespace nav2_costmap_2d
 
-#endif  // NAV2_COSTMAP_2D__FILTER_VALUES_HPP_
+#endif  // NAV2_COSTMAP_2D__COSTMAP_FILTERS__FILTER_VALUES_HPP_

@@ -30,15 +30,9 @@ namespace nav2_util
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
-// The following is a temporary wrapper for rclcpp_lifecycle::LifecycleNode. This class
-// adds the optional creation of an rclcpp::Node that can be used by derived classes
-// to interface to classes, such as MessageFilter and TransformListener, that don't yet
-// support lifecycle nodes. Once we get the fixes into ROS2, this class will be removed.
-
 /**
  * @class nav2_util::LifecycleNode
- * @brief A lifecycle node wrapper to enable common Nav2 needs such as background node threads
- * and manipulating parameters
+ * @brief A lifecycle node wrapper to enable common Nav2 needs such as manipulating parameters
  */
 class LifecycleNode : public rclcpp_lifecycle::LifecycleNode
 {
@@ -47,13 +41,11 @@ public:
    * @brief A lifecycle node constructor
    * @param node_name Name for the node
    * @param namespace Namespace for the node, if any
-   * @param use_rclcpp_node Whether to create an internal client node
    * @param options Node options
    */
   LifecycleNode(
     const std::string & node_name,
     const std::string & ns = "",
-    bool use_rclcpp_node = false,
     const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
   virtual ~LifecycleNode();
 
@@ -176,6 +168,13 @@ public:
   }
 
   /**
+   * @brief Perform preshutdown activities before our Context is shutdown.
+   * Note that this is related to our Context's shutdown sequence, not the
+   * lifecycle node state machine.
+   */
+  virtual void on_rcl_preshutdown();
+
+  /**
    * @brief Create bond connection to lifecycle manager
    */
   void createBond();
@@ -189,17 +188,20 @@ protected:
   /**
    * @brief Print notifications for lifecycle node
    */
-  void print_lifecycle_node_notification();
+  void printLifecycleNodeNotification();
 
-  // Whether or not to create a local rclcpp::Node which can be used for ROS2 classes that don't
-  // yet support lifecycle nodes
-  bool use_rclcpp_node_;
+  /**
+   * Register our preshutdown callback for this Node's rcl Context.
+   * The callback fires before this Node's Context is shutdown.
+   * Note this is not directly related to the lifecycle state machine.
+   */
+  void register_rcl_preshutdown_callback();
+  std::unique_ptr<rclcpp::PreShutdownCallbackHandle> rcl_preshutdown_cb_handle_{nullptr};
 
-  // The local node
-  rclcpp::Node::SharedPtr rclcpp_node_;
-
-  // When creating a local node, this class will launch a separate thread created to spin the node
-  std::unique_ptr<NodeThread> rclcpp_thread_;
+  /**
+   * Run some common cleanup steps shared between rcl preshutdown and destruction.
+   */
+  void runCleanups();
 
   // Connection to tell that server is still up
   std::unique_ptr<bond::Bond> bond_{nullptr};

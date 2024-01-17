@@ -38,6 +38,7 @@
 #ifndef NAV2_COSTMAP_2D__COSTMAP_2D_ROS_HPP_
 #define NAV2_COSTMAP_2D__COSTMAP_2D_ROS_HPP_
 
+#include <atomic>
 #include <memory>
 #include <string>
 #include <vector>
@@ -303,8 +304,6 @@ public:
   double getRobotRadius() {return robot_radius_;}
 
 protected:
-  rclcpp::Node::SharedPtr client_node_;
-
   // Publishers and subscribers
   rclcpp_lifecycle::LifecyclePublisher<geometry_msgs::msg::PolygonStamped>::SharedPtr
     footprint_pub_;
@@ -312,6 +311,11 @@ protected:
 
   rclcpp::Subscription<geometry_msgs::msg::Polygon>::SharedPtr footprint_sub_;
   rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_sub_;
+
+  // Dedicated callback group and executor for tf timer_interface and message fillter
+  rclcpp::CallbackGroup::SharedPtr callback_group_;
+  rclcpp::executors::SingleThreadedExecutor::SharedPtr executor_;
+  std::unique_ptr<nav2_util::NodeThread> executor_thread_;
 
   // Transform listener
   std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
@@ -326,10 +330,10 @@ protected:
    */
   void mapUpdateLoop(double frequency);
   bool map_update_thread_shutdown_{false};
-  bool stop_updates_{false};
-  bool initialized_{false};
-  bool stopped_{true};
-  std::thread * map_update_thread_{nullptr};  ///< @brief A thread for updating the map
+  std::atomic<bool> stop_updates_{false};
+  std::atomic<bool> initialized_{false};
+  std::atomic<bool> stopped_{true};
+  std::unique_ptr<std::thread> map_update_thread_;  ///< @brief A thread for updating the map
   rclcpp::Time last_publish_{0, 0, RCL_ROS_TIME};
   rclcpp::Duration publish_cycle_{1, 0};
   pluginlib::ClassLoader<Layer> plugin_loader_{"nav2_costmap_2d", "nav2_costmap_2d::Layer"};
@@ -367,6 +371,16 @@ protected:
   std::vector<geometry_msgs::msg::Point> padded_footprint_;
 
   std::unique_ptr<ClearCostmapService> clear_costmap_service_;
+
+  // Dynamic parameters handler
+  OnSetParametersCallbackHandle::SharedPtr dyn_params_handler;
+
+  /**
+   * @brief Callback executed when a paramter change is detected
+   * @param parameters list of changed parameters
+   */
+  rcl_interfaces::msg::SetParametersResult
+  dynamicParametersCallback(std::vector<rclcpp::Parameter> parameters);
 };
 
 }  // namespace nav2_costmap_2d

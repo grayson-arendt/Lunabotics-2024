@@ -10,7 +10,11 @@ This was built by [Steve Macenski](https://www.linkedin.com/in/steve-macenski-41
 
 ## API
 
+See its [API Guide Page](https://navigation.ros.org/commander_api/index.html) for additional parameter descriptions.
+
 The methods provided by the basic navigator are shown below, with inputs and expected returns. If a server fails, it may throw an exception or return a `None` object, so please be sure to properly wrap your navigation calls in try/catch and check results for `None` type.
+
+New as of September 2023: the simple navigator constructor will accept a `namespace` field to support multi-robot applications or namespaced Nav2 launches.
 
 | Robot Navigator Method            | Description                                                                |
 | --------------------------------- | -------------------------------------------------------------------------- |
@@ -27,6 +31,7 @@ The methods provided by the basic navigator are shown below, with inputs and exp
 | getResult()				        | Gets final result of task, to be called after `isTaskComplete` returns `True`. Returns action server result object. |
 | getPath(start, goal, planner_id='', use_start=False) | Gets a path from a starting to a goal `PoseStamped`, `nav_msgs/Path`.      |
 | getPathThroughPoses(start, goals, planner_id='', use_start=False) | Gets a path through a starting to a set of goals, a list of `PoseStamped`, `nav_msgs/Path`. |
+| smoothPath(path, smoother_id='', max_duration=2.0, check_for_collision=False) | Smooths a given `nav_msgs/msg/Path` path. |
 | changeMap(map_filepath)           | Requests a change from the current map to `map_filepath`'s yaml.           |
 | clearAllCostmaps()                | Clears both the global and local costmaps.                                 |
 | clearLocalCostmap()               | Clears the local costmap.                                                  |
@@ -51,6 +56,9 @@ nav = BasicNavigator()
 ...
 nav.setInitialPose(init_pose)
 nav.waitUntilNav2Active() # if autostarted, else use `lifecycleStartup()`
+...
+path = nav.getPath(init_pose, goal_pose)
+smoothed_path = nav.smoothPath(path)
 ...
 nav.goToPose(goal_pose)
 while not nav.isTaskComplete():
@@ -79,14 +87,14 @@ The main benefit of this is automatically showing the above demonstrations in a 
 
 ``` bash
 # Launch the launch file for the demo / example
-ros2 launch nav2_simple_commander demo_security_launch.py
+ros2 launch nav2_simple_commander  security_demo_launch.py
 ```
 
 This will bring up the robot in the AWS Warehouse in a reasonable position, launch the autonomy script, and complete some task to demonstrate the `nav2_simple_commander` API.
 
 ### Manually
 
-The main benefit of this is to be able to launch alternative robot models or different navigation configurations than the default for a specific technology demonstation. As long as Nav2 and the simulation (or physical robot) is running, the simple python commander examples / demos don't care what the robot is or how it got there. Since the examples / demos do contain hard-programmed item locations or routes, you should still utilize the AWS Warehouse. Obviously these are easy to update if you wish to adapt these examples / demos to another environment.
+The main benefit of this is to be able to launch alternative robot models or different navigation configurations than the default for a specific technology demonstration. As long as Nav2 and the simulation (or physical robot) is running, the simple python commander examples / demos don't care what the robot is or how it got there. Since the examples / demos do contain hard-programmed item locations or routes, you should still utilize the AWS Warehouse. Obviously these are easy to update if you wish to adapt these examples / demos to another environment.
 
 ``` bash
 # Terminal 1: launch your robot navigation and simulation (or physical robot). For example
@@ -105,7 +113,7 @@ The `nav2_simple_commander` has a few examples to highlight the API functions av
 - `example_nav_to_pose.py` - Demonstrates the navigate to pose capabilities of the navigator, as well as a number of auxiliary methods.
 - `example_nav_through_poses.py` - Demonstrates the navigate through poses capabilities of the navigator, as well as a number of auxiliary methods.
 - `example_waypoint_follower.py` - Demonstrates the waypoint following capabilities of the navigator, as well as a number of auxiliary methods.
-- `example_follow_path.py` - Demonstrates the path following capabilities of the navigator, as well as a number of auxiliary methods.
+- `example_follow_path.py` - Demonstrates the path following capabilities of the navigator, as well as a number of auxiliary methods such as path smoothing.
 ## Demos
 
 The `nav2_simple_commander` has a few demonstrations to highlight a couple of simple autonomy applications you can build using the `nav2_simple_commander` API:

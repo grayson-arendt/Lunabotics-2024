@@ -17,6 +17,7 @@
 
 #include <memory>
 #include <string>
+#include <chrono>
 
 #include "behaviortree_cpp_v3/action_node.h"
 #include "nav2_util/node_utils.hpp"
@@ -25,6 +26,8 @@
 
 namespace nav2_behavior_tree
 {
+
+using namespace std::chrono_literals;  // NOLINT
 
 /**
  * @brief Abstract class representing an action based BT node
@@ -44,7 +47,7 @@ public:
     const std::string & xml_tag_name,
     const std::string & action_name,
     const BT::NodeConfiguration & conf)
-  : BT::ActionNodeBase(xml_tag_name, conf), action_name_(action_name)
+  : BT::ActionNodeBase(xml_tag_name, conf), action_name_(action_name), should_send_goal_(true)
   {
     node_ = config().blackboard->template get<rclcpp::Node::SharedPtr>("node");
     callback_group_ = node_->create_callback_group(
@@ -90,7 +93,14 @@ public:
 
     // Make sure the server is actually there before continuing
     RCLCPP_DEBUG(node_->get_logger(), "Waiting for \"%s\" action server", action_name.c_str());
-    action_client_->wait_for_action_server();
+    if (!action_client_->wait_for_action_server(1s)) {
+      RCLCPP_ERROR(
+        node_->get_logger(), "\"%s\" action server not available after waiting for 1 s",
+        action_name.c_str());
+      throw std::runtime_error(
+              std::string("Action server ") + action_name +
+              std::string(" not available"));
+    }
   }
 
   /**
@@ -132,9 +142,12 @@ public:
 
   /**
    * @brief Function to perform some user-defined operation after a timeout
-   * waiting for a result that hasn't been received yet
+   * waiting for a result that hasn't been received yet. Also provides access to
+   * the latest feedback message from the action server. Feedback will be nullptr
+   * in subsequent calls to this function if no new feedback is received while waiting for a result.
+   * @param feedback shared_ptr to latest feedback message, nullptr if no new feedback was received
    */
-  virtual void on_wait_for_result()
+  virtual void on_wait_for_result(std::shared_ptr<const typename ActionT::Feedback>/*feedback*/)
   {
   }
 
@@ -177,9 +190,15 @@ public:
       // setting the status to RUNNING to notify the BT Loggers (if any)
       setStatus(BT::NodeStatus::RUNNING);
 
-      // user defined callback
+      // reset the flag to send the goal or not, allowing the user the option to set it in on_tick
+      should_send_goal_ = true;
+
+      // user defined callback, may modify "should_send_goal_".
       on_tick();
 
+      if (!should_send_goal_) {
+        return BT::NodeStatus::FAILURE;
+      }
       send_new_goal();
     }
 
@@ -206,7 +225,10 @@ public:
       // The following code corresponds to the "RUNNING" loop
       if (rclcpp::ok() && !goal_result_available_) {
         // user defined callback. May modify the value of "goal_updated_"
-        on_wait_for_result();
+        on_wait_for_result(feedback_);
+
+        // reset feedback to avoid stale information
+        feedback_.reset();
 
         auto goal_status = goal_handle_->get_status();
         if (goal_updated_ && (goal_status == action_msgs::msg::GoalStatus::STATUS_EXECUTING ||
@@ -340,6 +362,11 @@ protected:
           result_ = result;
         }
       };
+    send_goal_options.feedback_callback =
+      [this](typename rclcpp_action::ClientGoalHandle<ActionT>::SharedPtr,
+        const std::shared_ptr<const typename ActionT::Feedback> feedback) {
+        feedback_ = feedback;
+      };
 
     future_goal_handle_ = std::make_shared<
       std::shared_future<typename rclcpp_action::ClientGoalHandle<ActionT>::SharedPtr>>(
@@ -406,6 +433,9 @@ protected:
   typename rclcpp_action::ClientGoalHandle<ActionT>::SharedPtr goal_handle_;
   typename rclcpp_action::ClientGoalHandle<ActionT>::WrappedResult result_;
 
+  // To handle feedback from action server
+  std::shared_ptr<const typename ActionT::Feedback> feedback_;
+
   // The node that will be used for any ROS operations
   rclcpp::Node::SharedPtr node_;
   rclcpp::CallbackGroup::SharedPtr callback_group_;
@@ -422,6 +452,9 @@ protected:
   std::shared_ptr<std::shared_future<typename rclcpp_action::ClientGoalHandle<ActionT>::SharedPtr>>
   future_goal_handle_;
   rclcpp::Time time_goal_sent_;
+  
+  // Can be set in on_tick or on_wait_for_result to indicate if a goal should be sent.
+  bool should_send_goal_;
 };
 
 }  // namespace nav2_behavior_tree
