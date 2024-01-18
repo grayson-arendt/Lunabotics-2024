@@ -117,14 +117,10 @@ def generate_launch_description():
         executable="wheel_odom_publisher"
     )
 
-    filtered_odom_transform = Node(
+    odom_transform = Node(
         package="localization_pkg",
-        executable="filtered_odom_transform"
+        executable="odom_transform"
     )
-
-    # removed
-    # base_link_to_laser_tf,
-    #   base_link_to_odom_tf,
 
     return LaunchDescription([
         robot_state_publisher_node,
@@ -132,7 +128,7 @@ def generate_launch_description():
         motor_controller_node,
         robot_localization_node,
         wheel_odom_publisher,
-        filtered_odom_transform,
+        odom_transform,
         map_to_odom_tf,
         sync_camera,
         imu_filter,
