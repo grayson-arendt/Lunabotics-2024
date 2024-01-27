@@ -14,6 +14,7 @@ def generate_launch_description():
                     {'do_bias_estimation': True},
                     {'do_adaptive_gain': True},
                     {'use_mag': False},
+                    {'publish_tf': True},
                     {'gain_acc': 0.01},
                     {'gain_mag': 0.01},
                 ],

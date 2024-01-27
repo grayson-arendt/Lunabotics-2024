@@ -143,7 +143,7 @@ void SlamToolbox::setParams()
       "this isn't allowed so it will be set to default value 0.05.");
     resolution_ = 0.05;
   }
-  map_name_ = std::string("/map");
+  map_name_ = std::string("slam_toolbox/map");
   map_name_ = this->declare_parameter("map_name", map_name_);
 
   use_map_saver_ = true;

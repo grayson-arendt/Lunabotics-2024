@@ -69,7 +69,7 @@ ComplementaryFilterROS::ComplementaryFilterROS()
     }
 
     // Register IMU raw data subscriber.
-    imu_subscriber_.reset(new ImuSubscriber(this, "/imu/data_raw"));
+    imu_subscriber_.reset(new ImuSubscriber(this, "rotated_imu"));
 
     // Register magnetic data subscriber.
     if (use_mag_)

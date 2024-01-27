@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+
+<robot name="test_bot"
+	xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<xacro:include filename="common_properties.xacro" />
+
+	<link name="base_link">
+		<visual>
+			<geometry>
+				<mesh filename="package://test_bot_description/meshes/base_link.stl" />
+			</geometry>
+			<origin xyz="0 0 0"
+				rpy="0 0 0" />
+			<material name="light_grey" />
+		</visual>
+	</link>
+
+	<link name="ebox_link">
+		<visual>
+			<geometry>
+				<mesh filename="package://test_bot_description/meshes/ebox_link.stl" />
+			</geometry>
+			<origin xyz="0 0 0"
+				rpy="0 0 0" />
+			<material name="white" />
+		</visual>
+	</link>
+
+	<link name="front_right_wheel_link">
+		<visual>
+			<geometry>
+				<mesh filename="package://test_bot_description/meshes/wheel_link.stl" />
+			</geometry>
+			<origin xyz="0 0 0"
+				rpy="${pi / 2.0} 0 0" />
+			<material name="black" />
+		</visual>
+	</link>
+
+	<link name="front_left_wheel_link">
+		<visual>
+			<geometry>
+				<mesh filename="package://test_bot_description/meshes/wheel_link.stl" />
+			</geometry>
+			<origin xyz="0 0 0"
+				rpy="${pi / 2.0} 0 0" />
+			<material name="black" />
+		</visual>
+	</link>
+
+	<link name="rear_right_wheel_link">
+		<visual>
+			<geometry>
+				<mesh filename="package://test_bot_description/meshes/wheel_link.stl" />
+			</geometry>
+			<origin xyz="0 0 0"
+				rpy="${pi / 2.0} 0 0" />
+			<material name="black" />
+		</visual>
+	</link>
+
+	<link name="rear_left_wheel_link">
+		<visual>
+			<geometry>
+				<mesh filename="package://test_bot_description/meshes/wheel_link.stl" />
+			</geometry>
+			<origin xyz="0 0 0"
+				rpy="${pi / 2.0} 0 0" />
+			<material name="black" />
+		</visual>
+	</link>
+
+	<link name="lidar_link">
+		<visual>
+			<geometry>
+				<mesh filename="package://test_bot_description/meshes/lidar_link.stl" />
+			</geometry>
+			<origin xyz="0 0 0"
+				rpy="0 0 0" />
+			<material name="black" />
+		</visual>
+	</link>
+
+	<link name="camera_link">
+		<visual>
+			<geometry>
+				<mesh filename="package://test_bot_description/meshes/camera_link.stl" />
+			</geometry>
+			<origin xyz="0 0 0"
+				rpy="0 0 0" />
+			<material name="camera_grey" />
+		</visual>
+	</link>
+
+	<joint name="base_rear_right_wheel_joint"
+		type="fixed">
+		<parent link="base_link" />
+		<child link="rear_right_wheel_link" />
+		<origin xyz="-0.25 -0.2 0"
+			rpy="0 0 0" />
+		<axis xyz="0 1 0" />
+	</joint>
+
+	<joint name="base_rear_left_wheel_joint"
+		type="fixed">
+		<parent link="base_link" />
+		<child link="rear_left_wheel_link" />
+		<origin xyz="-0.25 0.2 0"
+			rpy="0 0 0" />
+		<axis xyz="0 1 0" />
+	</joint>
+
+	<joint name="base_front_right_wheel_joint"
+		type="fixed">
+		<parent link="base_link" />
+		<child link="front_right_wheel_link" />
+		<origin xyz="0.25 -0.2 0"
+			rpy="0 0 0" />
+	</joint>
+
+	<joint name="base_front_left_wheel_joint"
+		type="fixed">
+		<parent link="base_link" />
+		<child link="front_left_wheel_link" />
+		<origin xyz="0.25 0.2 0"
+			rpy="0 0 0" />
+	</joint>
+
+	<joint name="base_lidar_joint"
+		type="fixed">
+		<parent link="base_link" />
+		<child link="lidar_link" />
+		<origin xyz="0 0 0.19" rpy="0 0 3.14" />
+	</joint>
+
+	<joint name="base_ebox_link"
+		type="fixed">
+		<parent link="base_link" />
+		<child link="ebox_link" />
+		<origin xyz="0 0 0.125" rpy="0 0 0" />
+	</joint>
+
+	<joint name="base_camera_joint"
+		type="fixed">
+		<parent link="base_link" />
+		<child link="camera_link" />
+		<origin xyz="0.15 0 0.1"
+			rpy="0 0 0" />
+	</joint>
+	
+</robot>
