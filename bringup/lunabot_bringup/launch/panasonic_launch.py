@@ -185,7 +185,7 @@ def generate_launch_description():
         launch_arguments={
             'rtabmapviz': 'false',
             'frame_id': 'base_link',
-            'args': '-d -Grid/Sensor 1 -Grid/RangeMin 1.0 -Reg/Force3DoF true -Reg/Strategy 0 -Grid/MaxObstacleHeight 0.5 -Grid/RayTracing true',
+            'args': '-d -Grid/Sensor 2 -Grid/RangeMin 1.0 -Reg/Force3DoF true -Reg/Strategy 2 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true',
             'rgb_topic':'/camera/color/image_raw',
             'depth_topic':'/camera/depth/image_rect_raw',
             'camera_info_topic':'/camera/depth/camera_info',
@@ -205,6 +205,7 @@ def generate_launch_description():
         lidar_launch,
         camera_launch,
         sync_camera,
+        rtabmap_launch,
         robot_state_publisher_node,
         joint_state_publisher_node,
         robot_localization_node,
