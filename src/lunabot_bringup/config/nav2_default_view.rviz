@@ -180,7 +180,7 @@ Visualization Manager:
       Channel Name: intensity
       Class: rviz_default_plugins/PointCloud2
       Color: 255; 255; 255
-      Color Transformer: RGB8
+      Color Transformer: ""
       Decay Time: 0
       Enabled: true
       Invert Rainbow: false
@@ -188,18 +188,19 @@ Visualization Manager:
       Max Intensity: 4096
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: Camera Cloud
-      Position Transformer: XYZ
+      Name: Bumper Hit
+      Position Transformer: ""
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.009999999776482582
-      Style: Points
+      Size (m): 0.07999999821186066
+      Style: Spheres
       Topic:
         Depth: 5
         Durability Policy: Volatile
+        Filter size: 10
         History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /rtabmap/cloud_obstacles
+        Reliability Policy: Best Effort
+        Value: /mobile_base/sensors/bumper_pointcloud
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
