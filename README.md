@@ -1,5 +1,4 @@
 ### Running RViz2
-Launch RViz2
 ```bash
 source install/setup.bash
 ros2 launch lunabot_bringup external_launch.py
