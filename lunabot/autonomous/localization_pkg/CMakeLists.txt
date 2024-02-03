@@ -37,10 +37,13 @@ find_package(libfreenect CONFIG PATHS "/usr/local/lib64/cmake/libfreenect")
 find_package(image_transport REQUIRED)
 find_package(depth_image_proc REQUIRED)
 find_package(camera_info_manager REQUIRED)
+find_package(Eigen3 REQUIRED)
+
 
 include_directories(
   include
   ${PCL_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS} /usr/include/opencv4
   ${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp/${PROJECT_NAME}
 )
@@ -57,6 +60,7 @@ include_directories(include)
 
 add_executable(pointcloud_to_laserscan src/pointcloud_to_laserscan.cpp)
 add_executable(imu_rotator src/imu_rotator.cpp)
+add_executable(state_estimation src/state_estimation.cpp)
 add_executable(map_merger src/map_merger.cpp)
 add_executable(camera_calibration src/camera_calibration.cpp)
 add_executable(sync_camera src/sync_camera.cpp)
@@ -73,6 +77,7 @@ ament_target_dependencies(pointcloud_to_laserscan rclcpp sensor_msgs)
 ament_target_dependencies(initial_pose_publisher rclcpp geometry_msgs std_msgs sensor_msgs tf2 tf2_ros cv_bridge OpenCV)
 ament_target_dependencies(pose_publisher rclcpp nav_msgs geometry_msgs)
 ament_target_dependencies(sync_camera rclcpp sensor_msgs message_filters)
+ament_target_dependencies(state_estimation rclcpp nav_msgs geometry_msgs tf2 tf2_ros)
 ament_target_dependencies(wheel_odom_publisher rclcpp nav_msgs std_msgs geometry_msgs tf2 tf2_ros sensor_msgs autonomous_msgs)
 ament_target_dependencies(odom_transform rclcpp nav_msgs geometry_msgs tf2 tf2_ros)
 ament_target_dependencies(kinect_publisher rclcpp sensor_msgs std_msgs cv_bridge camera_info_manager rclcpp_components ament_index_cpp image_transport OpenCV)
@@ -80,6 +85,7 @@ ament_target_dependencies(kinect_publisher rclcpp sensor_msgs std_msgs cv_bridge
 target_link_libraries(kinect_publisher
   freenect
 )
+
 
 install(
   DIRECTORY phoenix_lib/
@@ -93,6 +99,7 @@ install(TARGETS
   kinect_publisher
   initial_pose_publisher
   pose_publisher
+  state_estimation
   wheel_odom_publisher
   pointcloud_to_laserscan
   odom_transform

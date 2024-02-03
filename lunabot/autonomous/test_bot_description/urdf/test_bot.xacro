@@ -7,7 +7,7 @@
 	<link name="base_link">
 		<visual>
 			<geometry>
-				<mesh filename="package://test_bot_description/meshes/base_link.stl" />
+				<mesh filename="file://$(find test_bot_description)/meshes/base_link.STL" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="0 0 0" />
@@ -18,7 +18,7 @@
 	<link name="ebox_link">
 		<visual>
 			<geometry>
-				<mesh filename="package://test_bot_description/meshes/ebox_link.stl" />
+				<mesh filename="file://$(find test_bot_description)/meshes/ebox_link.STL" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="0 0 0" />
@@ -29,7 +29,7 @@
 	<link name="front_right_wheel_link">
 		<visual>
 			<geometry>
-				<mesh filename="package://test_bot_description/meshes/wheel_link.stl" />
+				<mesh filename="file://$(find test_bot_description)/meshes/wheel_link.STL" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="${pi / 2.0} 0 0" />
@@ -40,7 +40,7 @@
 	<link name="front_left_wheel_link">
 		<visual>
 			<geometry>
-				<mesh filename="package://test_bot_description/meshes/wheel_link.stl" />
+				<mesh filename="file://$(find test_bot_description)/meshes/wheel_link.STL" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="${pi / 2.0} 0 0" />
@@ -51,7 +51,7 @@
 	<link name="rear_right_wheel_link">
 		<visual>
 			<geometry>
-				<mesh filename="package://test_bot_description/meshes/wheel_link.stl" />
+				<mesh filename="file://$(find test_bot_description)/meshes/wheel_link.STL" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="${pi / 2.0} 0 0" />
@@ -62,7 +62,7 @@
 	<link name="rear_left_wheel_link">
 		<visual>
 			<geometry>
-				<mesh filename="package://test_bot_description/meshes/wheel_link.stl" />
+				<mesh filename="file://$(find test_bot_description)/meshes/wheel_link.STL" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="${pi / 2.0} 0 0" />
@@ -70,10 +70,21 @@
 		</visual>
 	</link>
 
-	<link name="lidar_link">
+	<link name="lidar1_link">
 		<visual>
 			<geometry>
-				<mesh filename="package://test_bot_description/meshes/lidar_link.stl" />
+				<mesh filename="file://$(find test_bot_description)/meshes/lidar_link.STL" />
+			</geometry>
+			<origin xyz="0 0 0"
+				rpy="0 0 0" />
+			<material name="black" />
+		</visual>
+	</link>
+
+	<link name="lidar2_link">
+		<visual>
+			<geometry>
+				<mesh filename="file://$(find test_bot_description)/meshes/lidar_link.STL" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="0 0 0" />
@@ -84,7 +95,7 @@
 	<link name="camera_link">
 		<visual>
 			<geometry>
-				<mesh filename="package://test_bot_description/meshes/camera_link.stl" />
+				<mesh filename="file://$(find test_bot_description)/meshes/camera_link.STL" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="0 0 0" />
@@ -126,11 +137,18 @@
 			rpy="0 0 0" />
 	</joint>
 
-	<joint name="base_lidar_joint"
+	<joint name="base_lidar1_joint"
 		type="fixed">
 		<parent link="base_link" />
-		<child link="lidar_link" />
+		<child link="lidar1_link" />
 		<origin xyz="0 0 0.19" rpy="0 0 3.14" />
+	</joint>
+
+	<joint name="base_lidar2_joint"
+		type="fixed">
+		<parent link="base_link" />
+		<child link="lidar2_link" />
+		<origin xyz="0.4572 0 0" rpy="0 0 3.14" />
 	</joint>
 
 	<joint name="base_ebox_link"

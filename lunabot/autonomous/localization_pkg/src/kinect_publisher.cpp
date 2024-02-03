@@ -54,7 +54,7 @@ public:
     rgb_pub_ = image_transport::create_camera_publisher(this, "image_raw");
 
     timer_ = create_wall_timer(16ms, std::bind(&KinectPublisher::timer_callback, this));
-    freenect_process_events(f_ctx)
+    freenect_process_events(f_ctx);
     fn_ctx_ = f_ctx;
     fn_dev_ = f_dev;
   }

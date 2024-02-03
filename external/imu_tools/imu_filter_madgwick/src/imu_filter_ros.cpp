@@ -201,7 +201,7 @@ ImuFilterMadgwickRos::ImuFilterMadgwickRos(const rclcpp::NodeOptions &options)
     // connection callback.
     const int queue_size = 5;
     rmw_qos_profile_t qos = rmw_qos_profile_sensor_data;
-    imu_subscriber_.reset(new ImuSubscriber(this, "imu/data_raw", qos));
+    imu_subscriber_.reset(new ImuSubscriber(this, "rotated_imu", qos));
 
     if (use_mag_)
     {

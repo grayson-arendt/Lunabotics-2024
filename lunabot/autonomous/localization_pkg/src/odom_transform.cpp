@@ -16,7 +16,7 @@ public:
         tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
 
         odom_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
-            "wheel_odom", 10,
+            "filtered_odom", 10,
             std::bind(&OdomTransform::transform_odom, this, std::placeholders::_1));
     }
 
