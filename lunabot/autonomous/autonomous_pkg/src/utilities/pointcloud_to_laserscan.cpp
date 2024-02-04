@@ -5,7 +5,7 @@
 
 /**
  * @file pointcloud_to_laserscan.cpp
- * @brief Node for converting a PointCloud2 message into a LaserScan message.
+ * @brief PointCloudToLaserScan class for converting a PointCloud2 message into a LaserScan message.
  * 
  * @author Grayson Arendt
  */

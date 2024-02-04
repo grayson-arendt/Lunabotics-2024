@@ -3,7 +3,7 @@
 
 /**
  * @file map_merger.cpp
- * @brief Node for merging two occupancy grid maps.
+ * @brief MapMerger class for merging two occupancy grid maps.
  * 
  * @author Grayson Arendt
  */

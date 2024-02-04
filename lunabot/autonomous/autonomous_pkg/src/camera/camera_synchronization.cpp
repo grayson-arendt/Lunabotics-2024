@@ -6,7 +6,7 @@
 
 /**
  * @file camera_synchronization.cpp
- * @brief CameraSynchronization class for synchronizing camera topics.
+ * @brief Class for synchronizing camera topics.
  * 
  * This is sometimes necessary for RTABMap or any other program that takes in these camera topics.
  * 
