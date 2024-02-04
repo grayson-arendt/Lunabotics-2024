@@ -2,7 +2,7 @@
 
 /**
  * @file particle_filter.cpp
- * @brief ParticleFilter class for state estimation based off lidar data.
+ * @brief Constructor for ParticleFilter class
  * @details 
  * This class subscribes to lidar1 odometry, lidar2 odometry, and the cmd_vel topic to estimate
  * the robot's pose. It updates the position only if the robot is moving to avoid stationary drift.
