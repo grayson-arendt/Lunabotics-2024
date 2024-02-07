@@ -79,6 +79,7 @@ add_executable(odometry_transform src/odometry/odometry_transform.cpp)
 add_executable(imu_rotator src/utilities/imu_rotator.cpp)
 add_executable(map_merger src/utilities/map_merger.cpp)
 add_executable(pointcloud_to_laserscan src/utilities/pointcloud_to_laserscan.cpp)
+add_executable(laserscan_to_pointcloud_merger src/utilities/laserscan_to_pointcloud_merger.cpp)
 
 ament_target_dependencies(camera_calibration OpenCV)
 ament_target_dependencies(camera_synchronization rclcpp sensor_msgs message_filters)
@@ -91,6 +92,11 @@ ament_target_dependencies(wheel_imu_odometry rclcpp nav_msgs std_msgs geometry_m
 ament_target_dependencies(imu_rotator rclcpp sensor_msgs)
 ament_target_dependencies(map_merger rclcpp nav_msgs)
 ament_target_dependencies(pointcloud_to_laserscan rclcpp sensor_msgs)
+ament_target_dependencies(laserscan_to_pointcloud_merger rclcpp sensor_msgs pcl_conversions)
+
+target_link_libraries(laserscan_to_pointcloud_merger
+  ${PCL_LIBRARIES}
+)
 
 install(
   DIRECTORY phoenix_lib/
@@ -109,6 +115,7 @@ install(TARGETS
   imu_rotator
   map_merger
   pointcloud_to_laserscan
+  laserscan_to_pointcloud_merger
   DESTINATION lib/${PROJECT_NAME}
 )
 

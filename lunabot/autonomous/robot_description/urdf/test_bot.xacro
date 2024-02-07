@@ -148,7 +148,7 @@
 		type="fixed">
 		<parent link="base_link" />
 		<child link="lidar2_link" />
-		<origin xyz="0.4572 0 0" rpy="0 0 3.14" />
+		<origin xyz="0.508 0 0" rpy="0 0 3.14" />
 	</joint>
 
 	<joint name="base_ebox_link"

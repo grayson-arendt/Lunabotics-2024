@@ -24,8 +24,6 @@ def generate_launch_description():
         Command(['xacro ', urdf_path]), value_type=str
     )
 
-    lidar1_launch_path = os.path.join(get_package_share_path('sllidar_ros2'), 'launch', 'sllidar_a3_launch.py')
-    lidar2_launch_path = os.path.join(get_package_share_path('sllidar_ros2'), 'launch', 'sllidar_a1_launch.py')
     d455_launch_path = os.path.join(get_package_share_path('realsense2_camera'), 'launch', 'rs_launch.py')
     slam_toolbox_launch_file_path = os.path.join(get_package_share_path('slam_toolbox'), 'launch', 'online_async_launch.py')
     rtabmap_launch_path = os.path.join(get_package_share_path('rtabmap_launch'), 'launch', 'rtabmap.launch.py')
@@ -86,6 +84,39 @@ def generate_launch_description():
         executable="odometry_transform"
     )
 
+    laserscan_to_pointcloud_merger = Node(
+        package="autonomous_pkg",
+        executable="laserscan_to_pointcloud_merger"
+    )
+
+    lidar1 = Node(
+            package='sllidar_ros2',
+            executable='sllidar_node',
+            name='sllidar_node',
+            remappings=[('/scan', '/scan1')],
+            parameters=[{'channel_type':'serial',
+                         'serial_port': '/dev/ttyUSB0', 
+                         'serial_baudrate': 256000, 
+                         'frame_id': 'lidar1_link',
+                         'inverted': False, 
+                         'angle_compensate': True,
+                         'scan_mode':'Sensitivity'}],
+            output='screen')
+
+    lidar2 = Node(
+            package='sllidar_ros2',
+            executable='sllidar_node',
+            name='sllidar_node',
+            remappings=[('/scan', '/scan2')],
+            parameters=[{'channel_type':'serial',
+                         'serial_port': '/dev/ttyUSB2', 
+                         'serial_baudrate': 115200, 
+                         'frame_id': 'lidar2_link',
+                         'inverted': False, 
+                         'angle_compensate': True,
+                         'scan_mode':'Boost'}],
+            output='screen')
+  
     lidar1_odom = Node(
                 package='rf2o_laser_odometry',
                 executable='rf2o_laser_odometry_node',
@@ -128,12 +159,6 @@ def generate_launch_description():
             IncludeLaunchDescription(
             PythonLaunchDescriptionSource(slam_toolbox_launch_file_path))])
 
-    lidar1_launch = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(lidar1_launch_path))
-    
-    lidar2_launch = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(lidar2_launch_path))
-
     foxglove_launch = IncludeLaunchDescription(
             XMLLaunchDescriptionSource(foxglove_launch_path))
 
@@ -154,23 +179,25 @@ def generate_launch_description():
             'camera_info_topic':'/camera/depth/camera_info',
             'subscribe_rgb': 'true',
             'subscribe_depth': 'true',
-            'subscribe_scan':'true',
-            'scan_topic':'/scan1',
+            'subscribe_scan':'false',
             'approx_sync': 'true',
             'rviz': 'false',
             'queue_size': '300', 
         }.items(),)])
 
     return LaunchDescription([
+        lidar1,
+        lidar2,
+        lidar1_odom,
+        lidar2_odom,
+        camera_launch,
         robot_state_publisher_node,
         joint_state_publisher_node,
         map_to_odom_tf,
         motor_controller_node,
         wheel_imu_odometry,
-        lidar1_odom,
         particle_filter,
-        lidar1_launch,
+        odometry_transform,
         foxglove_launch,
-        camera_launch,
         rtabmap_launch,
     ])

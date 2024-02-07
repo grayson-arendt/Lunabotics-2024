@@ -134,7 +134,7 @@ void ParticleFilter::lidar1_odometry_callback(const nav_msgs::msg::Odometry::Sha
             y_positions.push_back(y_positions[iteration]);
             yaws.push_back(yaws[iteration]);
         }
-
+        
         current_x = x_positions[iteration + 1];
         current_y = y_positions[iteration + 1];
         current_yaw = yaws[iteration + 1];
@@ -316,9 +316,9 @@ int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
 
-    std::vector<double> std_deviation = {0.02, 0.03, 0.02};
+    std::vector<double> std_deviation = {0.001, 0.001, 0.001};
 
-    auto particleFilter = std::make_shared<ParticleFilter>(50, std_deviation);
+    auto particleFilter = std::make_shared<ParticleFilter>(500, std_deviation);
 
     rclcpp::executors::SingleThreadedExecutor executor;
     executor.add_node(particleFilter);
