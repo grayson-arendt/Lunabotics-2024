@@ -8,7 +8,7 @@
  * @file camera_synchronization.cpp
  * @brief CameraSynchronization class for synchronizing camera topics.
  * 
- * This is sometimes necessary for RTABMap or any other program that takes in these camera topics.
+ * This is sometimes necessary for RTAB-Map or any other program that takes in these camera topics.
  * 
  * @author Grayson Arendt
  */
@@ -71,14 +71,13 @@ private:
         synced_info_publisher_->publish(*synced_info_msg);
     }
 
-    message_filters::Subscriber<sensor_msgs::msg::Image> rgb_subscriber_; /**< Subscriber for raw image topic */
-    message_filters::Subscriber<sensor_msgs::msg::Image> depth_subscriber_; /**< Subscriber for raw depth image topic */
-    message_filters::Subscriber<sensor_msgs::msg::CameraInfo> info_subscriber_; /**< Subscriber for camera_info topic */
-    std::shared_ptr<message_filters::TimeSynchronizer<sensor_msgs::msg::Image, sensor_msgs::msg::Image, sensor_msgs::msg::CameraInfo>> synchronizer_; /**< Time synchronizer for image and camera_info messages */
-    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr synced_rgb_publisher_; /**< Publisher for synchronized image topic */
-    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr synced_depth_publisher_; /**< Publisher for synchronized depth image topic */
-    rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr synced_info_publisher_; /**< Publisher for synchronized camera_info topic */
-};
+    message_filters::Subscriber<sensor_msgs::msg::Image> rgb_subscriber_;
+    message_filters::Subscriber<sensor_msgs::msg::Image> depth_subscriber_;
+    message_filters::Subscriber<sensor_msgs::msg::CameraInfo> info_subscriber_;
+    std::shared_ptr<message_filters::TimeSynchronizer<sensor_msgs::msg::Image, sensor_msgs::msg::Image, sensor_msgs::msg::CameraInfo>> synchronizer_; 
+    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr synced_rgb_publisher_;
+    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr synced_depth_publisher_;
+    rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr synced_info_publisher_;
 
 /**
  * @brief Main function
