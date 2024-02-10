@@ -83,7 +83,7 @@ add_executable(laserscan_to_pointcloud_merger src/utilities/laserscan_to_pointcl
 
 ament_target_dependencies(camera_calibration OpenCV)
 ament_target_dependencies(camera_synchronization rclcpp sensor_msgs message_filters)
-ament_target_dependencies(particle_filter rclcpp nav_msgs geometry_msgs tf2 tf2_ros)
+ament_target_dependencies(particle_filter rclcpp nav_msgs sensor_msgs geometry_msgs tf2 tf2_ros)
 ament_target_dependencies(motor_controller rclcpp geometry_msgs autonomous_msgs)
 ament_target_dependencies(motor_test rclcpp sensor_msgs)
 ament_target_dependencies(navigator_client rclcpp rclcpp_action nav2_msgs geometry_msgs)

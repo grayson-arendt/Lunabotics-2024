@@ -3,10 +3,10 @@
 /**
  * @file particle_filter.cpp
  * @brief Constructor for ParticleFilter class
- * @details 
- * This class subscribes to lidar1 odometry, lidar2 odometry, and the cmd_vel topic to estimate
+ * @details
+ * This class subscribes to lidar odometry, camera odometry, and the cmd_vel topic to estimate
  * the robot's pose. It updates the position only if the robot is moving to avoid stationary drift.
- * It uses lidar1 odometry as the primary source and lidar2 odometry as a secondary influence on robot pose.
+ * It uses lidar odometry as the primary source and camera odometry as a secondary influence on robot pose.
  *
  * @param particles Number of particles.
  * @param deviation Vector containing standard deviations for x, y, and theta.
@@ -14,18 +14,18 @@
  */
 ParticleFilter::ParticleFilter(int particles, std::vector<double> deviation) : Node("particle_filter"), state(FilterState::INIT)
 {
-    lidar1_odometry_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
-        "odom_lidar1", rclcpp::QoS(10).reliable(),
+    lidar_odometry_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
+        "odom_lidar", rclcpp::QoS(10).reliable(),
         [this](const nav_msgs::msg::Odometry::SharedPtr msg)
         {
-            this->lidar1_odometry_callback(msg);
+            this->lidar_odometry_callback(msg);
         });
 
-    lidar2_odometry_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
-        "odom_lidar2", rclcpp::QoS(10).reliable(),
+    camera_odometry_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
+        "rtabmap/odom", rclcpp::QoS(10).reliable(),
         [this](const nav_msgs::msg::Odometry::SharedPtr msg)
         {
-            this->lidar2_odometry_callback(msg);
+            this->camera_odometry_callback(msg);
         });
 
     cmd_vel_subscriber_ = this->create_subscription<geometry_msgs::msg::Twist>(
@@ -34,6 +34,14 @@ ParticleFilter::ParticleFilter(int particles, std::vector<double> deviation) : N
         {
             this->cmd_vel_callback(msg);
         });
+
+    imu_subscriber_ = this->create_subscription<sensor_msgs::msg::Imu>(
+        "imu/data", rclcpp::QoS(10).reliable(),
+        [this](const sensor_msgs::msg::Imu::SharedPtr msg)
+        {
+            this->imu_callback(msg);
+        });
+
 
     odometry_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("filtered_odom", 10);
 
@@ -63,31 +71,48 @@ void ParticleFilter::cmd_vel_callback(const geometry_msgs::msg::Twist::SharedPtr
 }
 
 /**
- * @brief Callback for the lidar2 odometry subscription.
- * @param odometry Received Odometry message.
+ * @brief Callback for the IMU subscription.
+ * @param cmd_vel Received IMU message.
  */
-void ParticleFilter::lidar2_odometry_callback(const nav_msgs::msg::Odometry::SharedPtr odometry)
+void ParticleFilter::imu_callback(const sensor_msgs::msg::Imu::SharedPtr imu)
 {
-    lidar2_position_x = odometry->pose.pose.position.x;
-    lidar2_position_y = odometry->pose.pose.position.y;
-    lidar2_orientation_x = odometry->pose.pose.orientation.x;
-    lidar2_orientation_y = odometry->pose.pose.orientation.y;
-    lidar2_orientation_z = odometry->pose.pose.orientation.z;
-    lidar2_orientation_w = odometry->pose.pose.orientation.w;
+    imu_orientation_x = imu->orientation.x;
+    imu_orientation_y = imu->orientation.y;
+    imu_orientation_z = imu->orientation.z;
+    imu_orientation_w = imu->orientation.w;
 
-    // Convert lidar2 orientation to yaw
-    tf2::Quaternion lidar2_quaternion(lidar2_orientation_x, lidar2_orientation_y, lidar2_orientation_z, lidar2_orientation_w);
-    lidar2_quaternion.normalize();
+    tf2::Quaternion imu_quaternion(imu_orientation_x, imu_orientation_y, imu_orientation_z, imu_orientation_w);
+    tf2::Matrix3x3 imu_euler(imu_quaternion);
 
-    tf2::Matrix3x3 lidar2_euler(lidar2_quaternion);
-    lidar2_euler.getRPY(lidar2_roll, lidar2_pitch, lidar2_yaw);
+    imu_euler.getRPY(imu_roll, imu_pitch, imu_yaw);
 }
 
 /**
- * @brief Callback for the lidar1 odometry subscription.
+ * @brief Callback for the camera odometry subscription.
  * @param odometry Received Odometry message.
  */
-void ParticleFilter::lidar1_odometry_callback(const nav_msgs::msg::Odometry::SharedPtr odometry)
+void ParticleFilter::camera_odometry_callback(const nav_msgs::msg::Odometry::SharedPtr odometry)
+{
+    camera_position_x = odometry->pose.pose.position.x;
+    camera_position_y = odometry->pose.pose.position.y;
+    camera_orientation_x = odometry->pose.pose.orientation.x;
+    camera_orientation_y = odometry->pose.pose.orientation.y;
+    camera_orientation_z = odometry->pose.pose.orientation.z;
+    camera_orientation_w = odometry->pose.pose.orientation.w;
+
+    // Convert camera orientation to yaw
+    tf2::Quaternion camera_quaternion(camera_orientation_x, camera_orientation_y, camera_orientation_z, camera_orientation_w);
+    camera_quaternion.normalize();
+
+    tf2::Matrix3x3 camera_euler(camera_quaternion);
+    camera_euler.getRPY(camera_roll, camera_pitch, camera_yaw);
+}
+
+/**
+ * @brief Callback for the lidar odometry subscription.
+ * @param odometry Received Odometry message.
+ */
+void ParticleFilter::lidar_odometry_callback(const nav_msgs::msg::Odometry::SharedPtr odometry)
 {
     if (state == FilterState::INIT)
     {
@@ -98,26 +123,27 @@ void ParticleFilter::lidar1_odometry_callback(const nav_msgs::msg::Odometry::Sha
     else
     {
         // Predict using odometry values
-        lidar1_position_x = odometry->pose.pose.position.x;
-        lidar1_position_y = odometry->pose.pose.position.y;
-        lidar1_orientation_x = odometry->pose.pose.orientation.x;
-        lidar1_orientation_y = odometry->pose.pose.orientation.y;
-        lidar1_orientation_z = odometry->pose.pose.orientation.z;
-        lidar1_orientation_w = odometry->pose.pose.orientation.w;
+        lidar_position_x = odometry->pose.pose.position.x;
+        lidar_position_y = odometry->pose.pose.position.y;
+        lidar_orientation_x = odometry->pose.pose.orientation.x;
+        lidar_orientation_y = odometry->pose.pose.orientation.y;
+        lidar_orientation_z = odometry->pose.pose.orientation.z;
+        lidar_orientation_w = odometry->pose.pose.orientation.w;
 
-        // Convert lidar1 orientation to yaw
-        tf2::Quaternion lidar1_quaternion(lidar1_orientation_x, lidar1_orientation_y, lidar1_orientation_z, lidar1_orientation_w);
-        lidar1_quaternion.normalize();
+        // Convert lidar orientation to yaw
+        tf2::Quaternion lidar_quaternion(lidar_orientation_x, lidar_orientation_y, lidar_orientation_z, lidar_orientation_w);
+        lidar_quaternion.normalize();
 
-        tf2::Matrix3x3 lidar1_euler(lidar1_quaternion);
-        lidar1_euler.getRPY(lidar1_roll, lidar1_pitch, lidar1_yaw);
+        tf2::Matrix3x3 lidar_euler(lidar_quaternion);
+        lidar_euler.getRPY(lidar_roll, lidar_pitch, lidar_yaw);
 
+        /*
         // Update odometry values with new values if moving
         if (is_moving)
         {
-            // Predict particles based on lidar1 odometry, then update weights based on how close it is to lidar2 odometry
-            this->predict(lidar1_position_x, lidar1_position_y, lidar1_yaw);
-            this->updateWeight(lidar2_position_x, lidar2_position_y, lidar2_yaw);
+            // Predict particles based on lidar odometry, then update weights based on how close it is to camera odometry
+            this->predict(lidar_position_x, lidar_position_y, lidar_yaw);
+            this->updateWeight(camera_position_x, camera_position_y, camera_yaw);
             this->resample();
 
             updated_particles = this->getParticles();
@@ -134,7 +160,19 @@ void ParticleFilter::lidar1_odometry_callback(const nav_msgs::msg::Odometry::Sha
             y_positions.push_back(y_positions[iteration]);
             yaws.push_back(yaws[iteration]);
         }
-        
+        */
+
+        this->predict(lidar_position_x, lidar_position_y, lidar_yaw);
+        this->updateWeight(camera_position_x, camera_position_y, camera_yaw, imu_yaw);
+        this->resample();
+
+        updated_particles = this->getParticles();
+        prime_id = this->getPrimeParticle();
+
+        x_positions.push_back(updated_particles[prime_id].x);
+        y_positions.push_back(updated_particles[prime_id].y);
+        yaws.push_back(updated_particles[prime_id].theta);
+
         current_x = x_positions[iteration + 1];
         current_y = y_positions[iteration + 1];
         current_yaw = yaws[iteration + 1];
@@ -183,12 +221,12 @@ void ParticleFilter::initialize(double initial_x, double initial_y, double initi
 }
 
 /**
- * @brief Creates a prediction of possible robot states via particles based off of lidar1 odometry.
- * @param lidar1_position_x Lidar1 x position.
- * @param lidar1_position_y Lidar1 y position.
- * @param lidar1_orientation_yaw Lidar1 yaw orientation.
+ * @brief Creates a prediction of possible robot states via particles based off of lidar odometry.
+ * @param lidar_position_x lidar x position.
+ * @param lidar_position_y lidar y position.
+ * @param lidar_yaw Lidar yaw orientation.
  */
-void ParticleFilter::predict(double lidar1_position_x, double lidar1_position_y, double lidar1_orientation_yaw)
+void ParticleFilter::predict(double lidar_position_x, double lidar_position_y, double lidar_yaw)
 {
     std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
 
@@ -198,9 +236,9 @@ void ParticleFilter::predict(double lidar1_position_x, double lidar1_position_y,
 
     for (int i = 0; i < num_particles; i++)
     {
-        std::normal_distribution<double> dist_x(lidar1_position_x, std_x);
-        std::normal_distribution<double> dist_y(lidar1_position_y, std_y);
-        std::normal_distribution<double> dist_theta(lidar1_orientation_yaw, std_yaw);
+        std::normal_distribution<double> dist_x(lidar_position_x, std_x);
+        std::normal_distribution<double> dist_y(lidar_position_y, std_y);
+        std::normal_distribution<double> dist_theta(lidar_yaw, std_yaw);
 
         particles[i].x = dist_x(generator);
         particles[i].y = dist_y(generator);
@@ -209,48 +247,57 @@ void ParticleFilter::predict(double lidar1_position_x, double lidar1_position_y,
 }
 
 /**
- * @brief Calculates the weight of a particle based on lidar1 and lidar2 values.
- * @param lidar1_position_x Lidar1 x position.
- * @param lidar1_position_y Lidar1 y position.
- * @param lidar1_orientation_yaw Lidar1 yaw orientation.
- * @param lidar2_position_x Lidar2 x position.
- * @param lidar2_position_y Lidar2 y position.
- * @param lidar2_orientation_yaw Lidar2 yaw orientation.
+ * @brief Calculates the weight of a particle based on lidar and camera values.
+ * @param lidar_position_x Lidar x position.
+ * @param lidar_position_y Lidar y position.
+ * @param lidar_yaw Lidar yaw orientation.
+ * @param camera_position_x Camera x position.
+ * @param camera_position_y Camera y position.
+ * @param camera_yaw Camera yaw orientation.
+ * @param imu_yaw IMU yaw orientation.
  * @return Logarithmic weight of the particle.
  */
-double ParticleFilter::calculateWeight(double lidar1_position_x, double lidar1_position_y, double lidar1_orientation_yaw, 
-                                       double lidar2_position_x, double lidar2_position_y, double lidar2_orientation_yaw)
+double ParticleFilter::calculateWeight(double lidar_position_x, double lidar_position_y, double lidar_yaw,
+                                       double camera_position_x, double camera_position_y, double camera_yaw,
+                                       double imu_yaw)
 {
-    double dx = lidar2_position_x - lidar1_position_x;
-    double dy = lidar2_position_y - lidar1_position_y;
-    double dtheta = lidar2_orientation_yaw - lidar1_orientation_yaw;
+    // Calculate differences between camera and lidar positions and orientations
+    double dx = camera_position_x - lidar_position_x;
+    double dy = camera_position_y - lidar_position_y;
+    double dtheta_camera = camera_yaw - lidar_yaw;
+    double dtheta_imu = imu_yaw - lidar_yaw;
 
+    // Calculate the components of the log weights
     double exponent_x = -(dx * dx) / (2 * std_deviation[0] * std_deviation[0]);
     double exponent_y = -(dy * dy) / (2 * std_deviation[1] * std_deviation[1]);
-    double exponent_theta = -(dtheta * dtheta) / (2 * std_deviation[2] * std_deviation[2]);
+    double exponent_theta_camera = -(dtheta_camera * dtheta_camera) / (2 * std_deviation[2] * std_deviation[2]);
+    double exponent_theta_imu = -(dtheta_imu * dtheta_imu) / (2 * std_deviation[2] * std_deviation[2]);
 
+    // Calculate log weights for each dimension
     double log_weight_x = exponent_x - 0.5 * log(2 * M_PI * std_deviation[0] * std_deviation[0]);
     double log_weight_y = exponent_y - 0.5 * log(2 * M_PI * std_deviation[1] * std_deviation[1]);
-    double log_weight_theta = exponent_theta - 0.5 * log(2 * M_PI * std_deviation[2] * std_deviation[2]);
+    double log_weight_theta_camera = exponent_theta_camera - 0.5 * log(2 * M_PI * std_deviation[2] * std_deviation[2]);
+    double log_weight_theta_imu = exponent_theta_imu - 0.5 * log(2 * M_PI * std_deviation[2] * std_deviation[2]);
 
-    double log_weight = log_weight_x + log_weight_y + log_weight_theta;
+    // Sum up the log weights
+    double log_weight = log_weight_x + log_weight_y + log_weight_theta_camera + log_weight_theta_imu;
 
     return log_weight;
 }
 
 /**
  * @brief Updates the weights of all particles based off calculated weights.
- * @param lidar2_position_x Lidar2 x position.
- * @param lidar2_position_y Lidar2 y position.
- * @param lidar2_orientation_yaw Lidar2 yaw orientation.
+ * @param camera_position_x Camera x position.
+ * @param camera_position_y Camera y position.
+ * @param camera_yaw Camera yaw orientation.
  */
-void ParticleFilter::updateWeight(double lidar2_position_x, double lidar2_position_y, double lidar2_orientation_yaw)
+void ParticleFilter::updateWeight(double camera_position_x, double camera_position_y, double camera_yaw, double imu_yaw)
 {
     for (int i = 0; i < num_particles; i++)
     {
         double newWeight = calculateWeight(
-            particles[i].theta, particles[i].x, particles[i].y,
-            lidar2_position_x, lidar2_position_y, lidar2_orientation_yaw);
+            particles[i].x, particles[i].y, particles[i].theta,
+            camera_position_x, camera_position_y, camera_yaw, imu_yaw);
 
         particles[i].weight = newWeight;
         weights[i] = newWeight;
@@ -309,14 +356,14 @@ int ParticleFilter::getPrimeParticle() const
 
 /**
  * @brief Main function.
- * 
+ *
  * Initializes and spins the ParticleFilter node.
  */
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
 
-    std::vector<double> std_deviation = {0.001, 0.001, 0.001};
+    std::vector<double> std_deviation = {0.05, 0.05, 0.1};
 
     auto particleFilter = std::make_shared<ParticleFilter>(500, std_deviation);
 

@@ -21,6 +21,7 @@
 #include "rclcpp/logging.hpp"
 #include "rclcpp/clock.hpp"
 #include "nav_msgs/msg/odometry.hpp"
+#include "sensor_msgs/msg/imu.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include "tf2/LinearMath/Quaternion.h"
 #include "tf2/LinearMath/Matrix3x3.h"
@@ -68,16 +69,22 @@ public:
     ParticleFilter(int particles, std::vector<double> deviation);
 
     /**
-     * @brief Callback function for lidar1 odometry messages.
-     * @param odometry Lidar1 odometry message.
+     * @brief Callback function for lidar odometry messages.
+     * @param odometry Lidar odometry message.
      */
-    void lidar1_odometry_callback(const nav_msgs::msg::Odometry::SharedPtr odometry);
+    void lidar_odometry_callback(const nav_msgs::msg::Odometry::SharedPtr odometry);
 
     /**
-     * @brief Callback function for lidar2 odometry messages.
-     * @param odometry Lidar2 odometry message.
+     * @brief Callback function for camera odometry messages.
+     * @param odometry Camera odometry message.
      */
-    void lidar2_odometry_callback(const nav_msgs::msg::Odometry::SharedPtr odometry);
+    void camera_odometry_callback(const nav_msgs::msg::Odometry::SharedPtr odometry);
+
+    /**
+     * @brief Callback function for IMU messages.
+     * @param imu IMU message.
+     */
+    void imu_callback(const sensor_msgs::msg::Imu::SharedPtr imu);
 
     /**
      * @brief Callback function for cmd_vel messages.
@@ -94,33 +101,34 @@ public:
     void initialize(double initial_x, double initial_y, double initial_theta);
 
     /**
-     * @brief Predicts the next state of the particles based on lidar1 odometry.
-     * @param lidar1_position_x X position of lidar1.
-     * @param lidar1_position_y Y position of lidar1.
-     * @param lidar1_orientation_yaw Yaw orientation of lidar1.
+     * @brief Predicts the next state of the particles based on lidar odometry.
+     * @param lidar_position_x X position of lidar.
+     * @param lidar_position_y Y position of lidar.
+     * @param lidar_yaw Yaw orientation of lidar.
      */
-    void predict(double lidar1_position_x, double lidar1_position_y, double lidar1_orientation_yaw);
+    void predict(double lidar_position_x, double lidar_position_y, double lidar_yaw);
 
     /**
-     * @brief Calculates the weight of particles based on lidar1 and lidar2 data.
-     * @param lidar1_position_x X position of lidar1.
-     * @param lidar1_position_y Y position of lidar1.
-     * @param lidar1_orientation_yaw Yaw orientation of lidar1.
-     * @param lidar2_position_x X position of lidar2.
-     * @param lidar2_position_y Y position of lidar2.
-     * @param lidar2_orientation_yaw Yaw orientation of lidar2.
+     * @brief Calculates the weight of particles based on lidar and camera data.
+     * @param lidar_position_x X position of lidar.
+     * @param lidar_position_y Y position of lidar.
+     * @param lidar_yaw Yaw orientation of lidar.
+     * @param camera_position_x X position of camera.
+     * @param camera_position_y Y position of camera.
+     * @param camera_yaw Yaw orientation of camera.
+     * @param imu_yaw Yaw orientation from IMU.
      * @return Weight of particles.
      */
-    double calculateWeight(double lidar1_position_x, double lidar1_position_y, double lidar1_orientation_yaw,
-                            double lidar2_position_x, double lidar2_position_y, double lidar2_orientation_yaw);
+    double calculateWeight(double lidar_position_x, double lidar_position_y, double lidar_yaw,
+                           double camera_position_x, double camera_position_y, double camera_yaw, double imu_yaw);
 
     /**
-     * @brief Updates the weights of particles based on lidar2 data.
-     * @param lidar2_position_x x position of lidar2.
-     * @param lidar2_position__y y position of lidar2.
-     * @param lidar2_position_yaw Yaw orientation of lidar2.
+     * @brief Updates the weights of particles based on camera data.
+     * @param camera_position_x x position of camera.
+     * @param camera_position__y y position of camera.
+     * @param camera_position_yaw Yaw orientation of camera.
      */
-    void updateWeight(double lidar2_position_x, double lidar2_position__y, double lidar2_position_yaw);
+    void updateWeight(double camera_position_x, double camera_position__y, double camera_position_yaw, double imu_yaw);
 
     /**
      * @brief Resamples particles based on their weights.
@@ -151,25 +159,27 @@ private:
     std::vector<double> weights;
 
     FilterState state;
-    tf2::Quaternion current_quaternion, lidar1_quaternion, lidar2_quaternion;
-    tf2::Matrix3x3 lidar1_euler, lidar2_euler;
+    tf2::Quaternion current_quaternion, lidar_quaternion, camera_quaternion, imu_quaternion;
+    tf2::Matrix3x3 lidar_euler, camera_euler, imu_euler;
     bool is_moving;
     int iteration;
     int prime_id;
+    double imu_orientation_x, imu_orientation_y, imu_orientation_z, imu_orientation_w;
+    double imu_roll, imu_pitch, imu_yaw;
     double current_x, current_y, current_yaw;
-    double lidar1_position_x, lidar1_position_y;
-    double lidar1_orientation_x, lidar1_orientation_y, lidar1_orientation_z, lidar1_orientation_w;
-    double lidar1_roll, lidar1_pitch, lidar1_yaw;
-    double lidar2_position_x, lidar2_position_y;
-    double lidar2_orientation_x, lidar2_orientation_y, lidar2_orientation_z, lidar2_orientation_w;
-    double lidar2_roll, lidar2_pitch, lidar2_yaw;
+    double lidar_position_x, lidar_position_y;
+    double lidar_orientation_x, lidar_orientation_y, lidar_orientation_z, lidar_orientation_w;
+    double lidar_roll, lidar_pitch, lidar_yaw;
+    double camera_position_x, camera_position_y;
+    double camera_orientation_x, camera_orientation_y, camera_orientation_z, camera_orientation_w;
+    double camera_roll, camera_pitch, camera_yaw;
     std::vector<double> x_positions, y_positions, yaws, init_values;
     std::vector<Particle> updated_particles;
-    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr lidar1_odometry_subscriber_;
-    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr lidar2_odometry_subscriber_;
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr lidar_odometry_subscriber_;
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr camera_odometry_subscriber_;
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_subscriber_;
+    rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr imu_subscriber_;
     rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odometry_publisher_;
-
 };
 
 #endif // PARTICLE_FILTER_H

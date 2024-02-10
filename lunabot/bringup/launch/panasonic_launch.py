@@ -90,55 +90,55 @@ def generate_launch_description():
     )
 
     lidar1 = Node(
-            package='sllidar_ros2',
-            executable='sllidar_node',
-            name='sllidar_node',
-            remappings=[('/scan', '/scan1')],
-            parameters=[{'channel_type':'serial',
+        package='sllidar_ros2',
+        executable='sllidar_node',
+        name='sllidar_node',
+        remappings=[('/scan', '/scan1')],
+        parameters=[{'channel_type':'serial',
                          'serial_port': '/dev/ttyUSB0', 
                          'serial_baudrate': 256000, 
                          'frame_id': 'lidar1_link',
                          'inverted': False, 
                          'angle_compensate': True,
                          'scan_mode':'Sensitivity'}],
-            output='screen')
+        output='screen')
 
     lidar2 = Node(
-            package='sllidar_ros2',
-            executable='sllidar_node',
-            name='sllidar_node',
-            remappings=[('/scan', '/scan2')],
-            parameters=[{'channel_type':'serial',
+        package='sllidar_ros2',
+        executable='sllidar_node',
+        name='sllidar_node',
+        remappings=[('/scan', '/scan2')],
+        parameters=[{'channel_type':'serial',
                          'serial_port': '/dev/ttyUSB2', 
                          'serial_baudrate': 115200, 
                          'frame_id': 'lidar2_link',
                          'inverted': False, 
                          'angle_compensate': True,
                          'scan_mode':'Boost'}],
-            output='screen')
+        output='screen')
   
     lidar1_odom = Node(
-                package='rf2o_laser_odometry',
-                executable='rf2o_laser_odometry_node',
-                name='rf2o_laser_odometry',
-                output='screen',
-                parameters=[{
+        package='rf2o_laser_odometry',
+        executable='rf2o_laser_odometry_node',
+        name='rf2o_laser_odometry',
+        output='screen',
+        parameters=[{
                     'laser_scan_topic' : '/scan1',
                     'odom_topic' : '/odom_lidar1',
                     'publish_tf' : False,
                     'base_frame_id' : 'base_link',
                     'odom_frame_id' : 'odom',
                     'init_pose_from_topic' : '',
-                    'freq' : 20.0}],
+                    'freq' : 30.0}],
     )
 
       
     lidar2_odom = Node(
-                package='rf2o_laser_odometry',
-                executable='rf2o_laser_odometry_node',
-                name='rf2o_laser_odometry',
-                output='screen',
-                parameters=[{
+        package='rf2o_laser_odometry',
+        executable='rf2o_laser_odometry_node',
+        name='rf2o_laser_odometry',
+        output='screen',
+        parameters=[{
                     'laser_scan_topic' : '/scan2',
                     'odom_topic' : '/odom_lidar2',
                     'publish_tf' : False,
@@ -146,6 +146,28 @@ def generate_launch_description():
                     'odom_frame_id' : 'odom',
                     'init_pose_from_topic' : '',
                     'freq' : 20.0}],
+    )
+
+    kiss_icp = Node(
+        package="kiss_icp",
+        executable="odometry_node",
+        name="odometry_node",
+        output="screen",
+        remappings=[("pointcloud_topic", '/rtabmap/cloud_obstacles')],
+        parameters=[
+                    {
+                        "odom_frame": 'odom',
+                        "base_frame": 'base_link',
+                        "max_range": 100.0,
+                        "min_range": 0.5,
+                        "deskew": False,
+                        "max_points_per_voxel": 20,
+                        "initial_threshold": 2.0,
+                        "min_motion_th": 0.1,
+                        "publish_odom_tf": False,
+                        "visualize": False,
+                    }
+                ],
     )
 
 
@@ -173,13 +195,14 @@ def generate_launch_description():
         launch_arguments={
             'rtabmapviz': 'false',
             'frame_id': 'base_link',
-            'args': '-d -Grid/Sensor 1 -Grid/RangeMin 1.0 -Reg/Force3DoF true -Reg/Strategy 1 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true',
+            'args': '-d -Optimizer/Robust true -Grid/Sensor 2 -Grid/RangeMin 0.5 -Reg/Force3DoF true -Reg/Strategy 1 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true',
             'rgb_topic':'/camera/color/image_raw',
             'depth_topic':'/camera/depth/image_rect_raw',
             'camera_info_topic':'/camera/depth/camera_info',
             'subscribe_rgb': 'true',
             'subscribe_depth': 'true',
-            'subscribe_scan':'false',
+            'subscribe_scan':'true',
+	    'scan_topic':'/scan1',
             'approx_sync': 'true',
             'rviz': 'false',
             'queue_size': '300', 
@@ -187,10 +210,10 @@ def generate_launch_description():
 
     return LaunchDescription([
         lidar1,
-        lidar2,
         lidar1_odom,
-        lidar2_odom,
         camera_launch,
+        imu_filter,
+        imu_rotator,
         robot_state_publisher_node,
         joint_state_publisher_node,
         map_to_odom_tf,

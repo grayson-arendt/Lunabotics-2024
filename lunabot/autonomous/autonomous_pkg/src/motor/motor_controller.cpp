@@ -109,7 +109,7 @@ private:
         velocity_left_cmd = (linear_velocity - (angular_velocity * (0.2)));
         velocity_right_cmd = (linear_velocity + (angular_velocity * (0.2)));
 
-        RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", velocity_right_cmd, velocity_left_cmd);
+        //RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", velocity_right_cmd, velocity_left_cmd);
 
         left_wheel_motor.Set(ControlMode::PercentOutput, velocity_left_cmd);
         right_wheel_motor.Set(ControlMode::PercentOutput, velocity_right_cmd);
