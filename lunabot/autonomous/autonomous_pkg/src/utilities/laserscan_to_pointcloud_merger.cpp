@@ -8,11 +8,11 @@
 
 /**
  * @brief Converts two LaserScan messages into one PointCloud2 message.
- * 
- * @details This class subscribes to two LaserScan topics, converts each LaserScan message 
- * to a PCL PointCloud, merges the PointClouds, and publishes the merged PointCloud 
+ *
+ * @details This class subscribes to two LaserScan topics, converts each LaserScan message
+ * to a PCL PointCloud, merges the PointClouds, and publishes the merged PointCloud
  * as a PointCloud2 message.
- * 
+ *
  * @author Grayson Arendt
  */
 class LaserScanToPointCloudMerger : public rclcpp::Node
@@ -26,10 +26,10 @@ public:
         // Subscribe to LaserScan topics
         scan1_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>("scan1", 10, std::bind(&LaserScanToPointCloudMerger::scan1_callback, this, std::placeholders::_1));
         scan2_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>("scan2", 10, std::bind(&LaserScanToPointCloudMerger::scan2_callback, this, std::placeholders::_1));
-        
+
         // Create publisher for PointCloud2 messages
         cloud_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("cloud_in", 10);
-        
+
         // Create timer to publish merged PointCloud periodically
         timer_ = this->create_wall_timer(std::chrono::milliseconds(100), std::bind(&LaserScanToPointCloudMerger::publish_merged_pointcloud, this));
     }
@@ -37,8 +37,8 @@ public:
 private:
     /**
      * @brief Callback function for processing messages from scan1 topic.
-     * 
-     * @param msg Pointer to the received LaserScan message.
+     *
+     * @param msg The received LaserScan message.
      */
     void scan1_callback(const sensor_msgs::msg::LaserScan::SharedPtr msg)
     {
@@ -47,8 +47,8 @@ private:
 
     /**
      * @brief Callback function for processing messages from scan2 topic.
-     * 
-     * @param msg Pointer to the received LaserScan message.
+     *
+     * @param msg The received LaserScan message.
      */
     void scan2_callback(const sensor_msgs::msg::LaserScan::SharedPtr msg)
     {
@@ -57,9 +57,9 @@ private:
 
     /**
      * @brief Converts LaserScan message to PCL PointCloud.
-     * 
-     * @param msg Pointer to the received LaserScan message.
-     * @return Pointer to the converted PCL PointCloud.
+     *
+     * @param msg The received LaserScan message.
+     * @return The converted PCL PointCloud.
      */
     pcl::PointCloud<pcl::PointXYZ>::Ptr convert_scan_to_pointcloud(const sensor_msgs::msg::LaserScan::SharedPtr msg)
     {

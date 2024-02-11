@@ -21,7 +21,7 @@
 
 /**
  * @brief Detects AprilTags and estimates pose.
- * 
+ *
  * @author Grayson Arendt
  */
 class AprilTag

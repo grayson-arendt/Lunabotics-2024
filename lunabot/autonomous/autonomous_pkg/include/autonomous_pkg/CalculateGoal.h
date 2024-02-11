@@ -10,7 +10,7 @@
  *
  * @details This class calculates the goal position based on the distance from two AprilTags.
  * It outputs a vector pointing from the robot to the goal.
- * 
+ *
  * @author Zayd Khan
  */
 class CalculateGoal

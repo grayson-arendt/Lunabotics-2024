@@ -3,7 +3,7 @@
 
 /**
  * @brief Merges two occupancy grid maps.
- * 
+ *
  * @author Grayson Arendt
  */
 class MapMerger : public rclcpp::Node
@@ -31,7 +31,7 @@ private:
   /**
    * @brief Callback function for processing occupancy_grid1 messages.
    *
-   * @param msg The received occupancy_grid1 message.
+   * @param msg The received OccupancyGrid message.
    */
   void occupancyGrid1Callback(const nav_msgs::msg::OccupancyGrid::SharedPtr msg)
   {
@@ -52,7 +52,7 @@ private:
   /**
    * @brief Callback function for processing occupancy_grid2 messages.
    *
-   * @param msg The received occupancy_grid2 message.
+   * @param msg The received OccupancyGrid message.
    */
   void occupancyGrid2Callback(const nav_msgs::msg::OccupancyGrid::SharedPtr msg)
   {

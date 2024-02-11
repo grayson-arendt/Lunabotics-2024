@@ -22,7 +22,7 @@ TalonFX right_wheel_motor(3);
 /**
  * @brief Converts velocity commands into percent output for motors.
  * @details It also creates an array of encoder values and publishes the previous and current encoder values to a custom Encoder.msg.
- * 
+ *
  * @author Anthony Baran
  * @author Grayson Arendt
  */
@@ -95,7 +95,7 @@ private:
     /**
      * @brief Callback function for cmd_vel topic.
      *
-     * @param cmd_vel The received Twist message containing linear and angular velocities.
+     * @param cmd_vel The received Twist message.
      */
     void callbackMotors(const geometry_msgs::msg::Twist::SharedPtr cmd_vel)
     {
@@ -108,17 +108,16 @@ private:
         velocity_left_cmd = 0.75 * (linear_velocity - (angular_velocity * (0.2)));
         velocity_right_cmd = 0.75 * (linear_velocity + (angular_velocity * (0.2)));
 
-        //RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", velocity_right_cmd, velocity_left_cmd);
+        // RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", velocity_right_cmd, velocity_left_cmd);
 
         left_wheel_motor.Set(ControlMode::PercentOutput, velocity_left_cmd);
         right_wheel_motor.Set(ControlMode::PercentOutput, velocity_right_cmd);
     }
 
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr motor_controller_subscriber;
-    rclcpp::Publisher<autonomous_msgs::msg::Encoder>::SharedPtr encoder_publisher_; 
+    rclcpp::Publisher<autonomous_msgs::msg::Encoder>::SharedPtr encoder_publisher_;
     rclcpp::TimerBase::SharedPtr timer_;
 };
-
 
 /**
  * @brief Main function.

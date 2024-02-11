@@ -4,7 +4,7 @@
 /**
  * @brief Rotates linear acceleration and angular velocity in an IMU message.
  * @details The D455 orientation is non-standard and does not work correctly with external packages.
- * 
+ *
  * @author Grayson Arendt
  */
 class IMURotator : public rclcpp::Node

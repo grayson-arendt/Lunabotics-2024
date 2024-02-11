@@ -1,23 +1,30 @@
 #pragma once
+
 #include <cmath>
 #include <array>
 #include <algorithm>
 
-/*
-Author: Anthony Baran
-
-Differential drive class. The constructor takes in an x and y value, converts it to polar,
-adjusts theta, and limits the percent output.
-Calculate_wheel_percentOutput calculates what the left and right wheels should output.
-*/
-
+/**
+ * @brief Calculates percent output for differential drive based off joystick values.
+ * @details The constructor takes in an x and y value, converts it to polar,
+ * adjusts theta, and limits the percent output.
+ * calculate_wheel_percentOutput calculates what the left and right wheels should output.
+ *
+ * @author Anthony Baran
+ */
 class DifferentialDrive
 {
 public:
+    /**
+     * @brief Constructor for DifferentialDrive class.
+     *
+     * @param X X-coordinate.
+     * @param Y Y-coordinate.
+     * @param R Percent output.
+     */
     DifferentialDrive(double X, double Y, double R)
-    : // percent_output(std::sqrt(X * X + Y * Y)),
-      percent_output(R),
-      theta(std::atan2(Y, X))
+        : percent_output(R),
+          theta(std::atan2(Y, X))
     {
         // Scale theta to the turning radius output range
         double radiusScaleFactor = 5.0;
@@ -33,15 +40,25 @@ public:
             turning_radius = static_cast<double>(radiusScaleFactor * (abstheta - (2 * (abstheta - 1.57))));
         }
 
-        // limit the percent output
+        // Limit the percent output
         percent_output = std::clamp(percent_output, 0.0, 0.5000);
     }
-    
+
+    /**
+     * @brief Get the value of theta.
+     *
+     * @return Theta value.
+     */
     double gettheta()
     {
         return theta;
     }
 
+    /**
+     * @brief Calculate the percent output for the left and right wheels.
+     *
+     * @return Array containing the percent output for the left and right wheels.
+     */
     std::array<double, 2> calculate_wheel_percentOutput()
     {
         // Buffer for extreme values
@@ -50,55 +67,55 @@ public:
             wheelPercentOutput[0] = -(percent_output / 2.5) * (2.5 - (robot_width / 2));
             wheelPercentOutput[1] = (percent_output / 2.5) * (2.5 + (robot_width / 2));
         }
-        // turning right
+        // Turning right
         else if (theta <= 1.45 && theta >= 0.14)
         {
             wheelPercentOutput[0] = (percent_output / turning_radius) * (turning_radius - (robot_width / 2));
             wheelPercentOutput[1] = (percent_output / turning_radius) * (turning_radius + (robot_width / 2));
         }
-        // going straight
+        // Going straight
         else if (theta > 1.50 && theta < 1.64)
         {
             wheelPercentOutput[0] = percent_output;
             wheelPercentOutput[1] = percent_output;
         }
-        // turning left
+        // Turning left
         else if (theta >= 1.69 && theta <= 3.00)
         {
             wheelPercentOutput[0] = (percent_output / turning_radius) * (turning_radius + (robot_width / 2));
             wheelPercentOutput[1] = (percent_output / turning_radius) * (turning_radius - (robot_width / 2));
         }
-        // buffer for extreme values
+        // Buffer for extreme values
         else if (theta > 3.00)
         {
             wheelPercentOutput[0] = (percent_output / 2.5) * (2.5 + (robot_width / 2));
             wheelPercentOutput[1] = -(percent_output / 2.5) * (2.5 - (robot_width / 2));
         }
-        // buffer for extreme values
+        // Buffer for extreme values
         else if (theta < -3.00)
         {
             wheelPercentOutput[0] = (percent_output / 2.5) * (2.5 + (robot_width / 2));
-            wheelPercentOutput[1] = -(percent_output / 2.5) * (2.5 - (robot_width / 2));            
+            wheelPercentOutput[1] = -(percent_output / 2.5) * (2.5 - (robot_width / 2));
         }
-        // turning left while going backwards
+        // Turning left while going backwards
         else if (theta >= -3.00 && theta <= -1.69)
         {
             wheelPercentOutput[0] = -(percent_output / turning_radius) * (turning_radius + (robot_width / 2));
             wheelPercentOutput[1] = -(percent_output / turning_radius) * (turning_radius - (robot_width / 2));
         }
-        // going straight backwards
+        // Going straight backwards
         else if (theta < -1.50 && theta > -1.64)
         {
             wheelPercentOutput[0] = -percent_output;
             wheelPercentOutput[1] = -percent_output;
         }
-        // turning right while going backwards
+        // Turning right while going backwards
         else if (theta >= -1.45 && theta <= -0.14)
         {
             wheelPercentOutput[0] = -(percent_output / turning_radius) * (turning_radius - (robot_width / 2));
             wheelPercentOutput[1] = -(percent_output / turning_radius) * (turning_radius + (robot_width / 2));
         }
-        // buffer for extreme values
+        // Buffer for extreme values
         else if (theta > -0.14 && theta < 0)
         {
             wheelPercentOutput[0] = -(percent_output / 2.5) * (2.5 - (robot_width / 2));
@@ -113,5 +130,5 @@ private:
     double theta;
     double turning_radius;
     double robot_width = 2.0;
-    std::array<double, 2> wheelPercentOutput; // Element 0 is right and 1 is left
+    std::array<double, 2> wheelPercentOutput; // Element 0 is right and 1 is left.
 };

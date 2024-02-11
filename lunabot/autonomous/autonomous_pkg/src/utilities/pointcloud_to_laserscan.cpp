@@ -5,7 +5,7 @@
 
 /**
  * @brief Converts a PointCloud2 message into a LaserScan message.
- * 
+ *
  * @author Grayson Arendt
  */
 class PointCloudToLaserScan : public rclcpp::Node

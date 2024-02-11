@@ -48,7 +48,7 @@ private:
         tf_broadcaster_->sendTransform(odometry_transform);
     }
 
-    std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_; 
+    std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
     rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odometry_subscriber_;
 };
 

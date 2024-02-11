@@ -46,7 +46,7 @@ enum class FilterState
 
 /**
  * @brief Sensor fusion using a particle filter.
- * 
+ *
  * @author Grayson Arendt
  */
 class ParticleFilter : public rclcpp::Node

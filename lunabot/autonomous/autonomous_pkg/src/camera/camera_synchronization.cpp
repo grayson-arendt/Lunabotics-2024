@@ -7,7 +7,7 @@
 /**
  * @brief Synchronizes camera topics.
  * @details This is sometimes necessary for RTAB-Map or any other program that takes in these camera topics.
- * 
+ *
  * @author Grayson Arendt
  */
 class CameraSynchronization : public rclcpp::Node
@@ -38,8 +38,8 @@ private:
     /**
      * @brief Callback function for synchronized messages
      *
-     * @param rgb_msg       Synchronized image message
-     * @param depth_msg       Synchronized depth message
+     * @param rgb_msg Synchronized image message
+     * @param depth_msg Synchronized depth message
      * @param info_msg Synchronized camera_info message
      */
     void synchronizedCallback(const sensor_msgs::msg::Image::ConstSharedPtr &rgb_msg, const sensor_msgs::msg::Image::ConstSharedPtr &depth_msg, const sensor_msgs::msg::CameraInfo::ConstSharedPtr &info_msg)
@@ -72,7 +72,7 @@ private:
     message_filters::Subscriber<sensor_msgs::msg::Image> rgb_subscriber_;
     message_filters::Subscriber<sensor_msgs::msg::Image> depth_subscriber_;
     message_filters::Subscriber<sensor_msgs::msg::CameraInfo> info_subscriber_;
-    std::shared_ptr<message_filters::TimeSynchronizer<sensor_msgs::msg::Image, sensor_msgs::msg::Image, sensor_msgs::msg::CameraInfo>> synchronizer_; 
+    std::shared_ptr<message_filters::TimeSynchronizer<sensor_msgs::msg::Image, sensor_msgs::msg::Image, sensor_msgs::msg::CameraInfo>> synchronizer_;
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr synced_rgb_publisher_;
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr synced_depth_publisher_;
     rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr synced_info_publisher_;

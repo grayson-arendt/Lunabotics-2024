@@ -41,7 +41,6 @@ ParticleFilter::ParticleFilter(int particles, std::vector<double> deviation) : N
             this->imu_callback(msg);
         });
 
-
     odometry_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("filtered_odom", 10);
 
     // Initial pose
