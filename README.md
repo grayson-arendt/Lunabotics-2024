@@ -11,6 +11,8 @@ To use this project, you need to have the following packages installed:
 - `rtabmap`
 - `rtabmap_ros`
 
+For each dependency, use `sudo apt install ros-humble-<package_name>`. Make sure the underscores in some of the names are replaced by dashes when using this command.
+
 ## Installation
 ```bash
 cd <ros_workspace>/src
