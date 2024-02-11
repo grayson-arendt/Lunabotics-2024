@@ -18,7 +18,7 @@ To use this project, you need to have the following packages installed:
 - `rtabmap`
 - `rtabmap_ros`
 
-## Install
+## Installation
 ```bash
 cd <ros_workspace>/src
 git clone -b panasonic-dev https://github.com/grayson-arendt/Lunabotics-2024.git
@@ -51,7 +51,7 @@ ros2 launch bringup external_launch.py
 rviz2
 ```
 
-#### 4. Startup sensors, motors, and RTAB-map:
+#### 4. Startup sensors, motors, and RTAB-Map:
 
 ```bash
 ros2 launch bringup panasonic_launch.py
