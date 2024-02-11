@@ -20,7 +20,7 @@ find_package(ament_cmake REQUIRED)
 
 
 install(
-  DIRECTORY launch gazebo_worlds params
+  DIRECTORY launch params
   DESTINATION share/${PROJECT_NAME}/
 )
 

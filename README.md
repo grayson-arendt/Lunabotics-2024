@@ -10,7 +10,12 @@ To use this project, you need to have the following packages installed:
 - `joint_state_publisher`
 - `tf2_ros`
 - `imu_complementary_filter`
+- `librealsense2`
 - `realsense2_camera`
+- `realsense2_camera_dbgsym`
+- `realsense2_camera_msgs`
+- `realsense2_camera_msgs_dbgsym`
+- `realsense2_description`
 - `foxglove_bridge`
 - `rtabmap`
 - `rtabmap_ros`
@@ -31,7 +36,7 @@ If you would like to see RViz2 on your host computer without cloning this branch
 
 Each launch file should be ran in a new terminal window. 
 
-#### 1. Navigate to ROS 2 workspace and install:
+#### 1. Navigate to ROS 2 workspace and install (repeat on each new terminal before launches):
 ```bash
 cd <ros_workspace>
 source install/setup.bash
@@ -39,6 +44,7 @@ source install/setup.bash
 
 #### 2. Initialize SocketCAN communication (note: the canableStart.sh script will only need to be ran once each time the robot computer boots up).
 ```bash
+cd <ros_workspace>/src/Lunabotics-2024
 chmod +x canableStart.sh # make script executable
 ./canableStart.sh
 ```
@@ -82,7 +88,6 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
       - ctre (CTRE Phoenix C++ API for using Falcon 500 motors)
       - **src**
         - **camera**
-          - camera_calibration.cpp (Camera calibration for AprilTag pose detection)
           - camera_synchronization.cpp (Synchronizes RGB, depth, and camera info messages to have same timestamp)
         - **filter**
           - particle_filter.cpp (Particle filter to fuse lidar, camera, and IMU data)

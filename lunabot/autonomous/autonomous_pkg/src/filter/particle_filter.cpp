@@ -3,9 +3,12 @@
 /**
  * @brief Constructor for ParticleFilter class.
  * @details
- * This class subscribes to lidar odometry, camera odometry, and the cmd_vel topic to estimate
- * the robot's pose. It updates the position only if the robot is moving to avoid stationary drift.
- * It uses lidar odometry as the primary source and camera odometry as a secondary influence on robot pose.
+ * This class subscribes to lidar odometry, camera odometry, and IMU data to estimate
+ * the robot's pose. It uses lidar odometry as the primary source, camera odometry 
+ * as a secondary influence on robot pose, and IMU as a third influence.
+ * 
+ * If camera odometry is lost (may happen if too close to a wall), then only lidar
+ * odometry and IMU data will be used as an influence on robot pose.
  *
  * @param particles Number of particles.
  * @param deviation Vector containing standard deviations for x, y, and theta.
@@ -27,18 +30,23 @@ ParticleFilter::ParticleFilter(int particles, std::vector<double> deviation) : N
             this->camera_odometry_callback(msg);
         });
 
-    cmd_vel_subscriber_ = this->create_subscription<geometry_msgs::msg::Twist>(
-        "cmd_vel", rclcpp::QoS(10).reliable(),
-        [this](const geometry_msgs::msg::Twist::SharedPtr msg)
-        {
-            this->cmd_vel_callback(msg);
-        });
-
     imu_subscriber_ = this->create_subscription<sensor_msgs::msg::Imu>(
         "imu/data", rclcpp::QoS(10).reliable(),
         [this](const sensor_msgs::msg::Imu::SharedPtr msg)
         {
             this->imu_callback(msg);
+        });
+
+    // Set up a timer to check for liveliness
+    camera_odometry_timer_ = create_wall_timer(std::chrono::seconds(1),
+        [this]()
+        {
+            RCLCPP_WARN(get_logger(), "\033[0;36mCAMERA ODOMETRY:\033[0m \033[1;31mLOST\033[0m");
+            // Create placeholder values for camera
+            camera_position_x = 0.0;
+            camera_position_y = 0.0;
+            camera_yaw = 0.0;
+            odometry_lost = true;
         });
 
     odometry_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("filtered_odom", 10);
@@ -52,25 +60,15 @@ ParticleFilter::ParticleFilter(int particles, std::vector<double> deviation) : N
     num_particles = particles;
 }
 
-/**
- * @brief Callback for the cmd_vel subscription.
- * @param cmd_vel Received Twist message.
- */
-void ParticleFilter::cmd_vel_callback(const geometry_msgs::msg::Twist::SharedPtr cmd_vel)
+void ParticleFilter::resetTimer()
 {
-    if (cmd_vel->linear.x != 0.0 || cmd_vel->angular.z != 0.0)
-    {
-        is_moving = true;
-    }
-    else
-    {
-        is_moving = false;
-    }
+    camera_odometry_timer_->reset();
+    odometry_lost = false;
 }
 
 /**
  * @brief Callback for the IMU subscription.
- * @param cmd_vel Received IMU message.
+ * @param imu Received IMU message.
  */
 void ParticleFilter::imu_callback(const sensor_msgs::msg::Imu::SharedPtr imu)
 {
@@ -104,6 +102,8 @@ void ParticleFilter::camera_odometry_callback(const nav_msgs::msg::Odometry::Sha
 
     tf2::Matrix3x3 camera_euler(camera_quaternion);
     camera_euler.getRPY(camera_roll, camera_pitch, camera_yaw);
+
+    resetTimer();
 }
 
 /**
@@ -134,31 +134,6 @@ void ParticleFilter::lidar_odometry_callback(const nav_msgs::msg::Odometry::Shar
 
         tf2::Matrix3x3 lidar_euler(lidar_quaternion);
         lidar_euler.getRPY(lidar_roll, lidar_pitch, lidar_yaw);
-
-        /*
-        // Update odometry values with new values if moving
-        if (is_moving)
-        {
-            // Predict particles based on lidar odometry, then update weights based on how close it is to camera odometry
-            this->predict(lidar_position_x, lidar_position_y, lidar_yaw);
-            this->updateWeight(camera_position_x, camera_position_y, camera_yaw);
-            this->resample();
-
-            updated_particles = this->getParticles();
-            prime_id = this->getPrimeParticle();
-
-            x_positions.push_back(updated_particles[prime_id].x);
-            y_positions.push_back(updated_particles[prime_id].y);
-            yaws.push_back(updated_particles[prime_id].theta);
-        }
-        else
-        {
-            // Take the last odometry value and put it back in the array, since nothing has changed while stationary
-            x_positions.push_back(x_positions[iteration]);
-            y_positions.push_back(y_positions[iteration]);
-            yaws.push_back(yaws[iteration]);
-        }
-        */
 
         this->predict(lidar_position_x, lidar_position_y, lidar_yaw);
         this->updateWeight(camera_position_x, camera_position_y, camera_yaw, imu_yaw);
@@ -278,7 +253,15 @@ double ParticleFilter::calculateWeight(double lidar_position_x, double lidar_pos
     double log_weight_theta_imu = 1.5 * exponent_theta_imu - 0.5 * log(2 * M_PI * std_deviation[2] * std_deviation[2]);
 
     // Sum up the log weights
-    double log_weight = log_weight_x + log_weight_y + log_weight_theta_camera + log_weight_theta_imu;
+
+    if (odometry_lost)
+    {
+        log_weight = log_weight_theta_imu;
+    }
+    else
+    {
+        log_weight = log_weight_x + log_weight_y + log_weight_theta_camera + log_weight_theta_imu;
+    }
 
     return log_weight;
 }
@@ -361,7 +344,7 @@ int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
 
-    std::vector<double> std_deviation = {0.02, 0.02, 0.1};
+    std::vector<double> std_deviation = {0.01, 0.01, 0.1};
 
     auto particleFilter = std::make_shared<ParticleFilter>(500, std_deviation);
 

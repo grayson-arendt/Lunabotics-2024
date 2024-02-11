@@ -58,7 +58,6 @@ add_definitions(
 include_directories(include)
 
 # Camera
-add_executable(camera_calibration src/camera/camera_calibration.cpp)
 add_executable(camera_synchronization src/camera/camera_synchronization.cpp)
 
 # Filter
@@ -81,7 +80,6 @@ add_executable(map_merger src/utilities/map_merger.cpp)
 add_executable(pointcloud_to_laserscan src/utilities/pointcloud_to_laserscan.cpp)
 add_executable(laserscan_to_pointcloud_merger src/utilities/laserscan_to_pointcloud_merger.cpp)
 
-ament_target_dependencies(camera_calibration OpenCV)
 ament_target_dependencies(camera_synchronization rclcpp sensor_msgs message_filters)
 ament_target_dependencies(particle_filter rclcpp nav_msgs sensor_msgs geometry_msgs tf2 tf2_ros)
 ament_target_dependencies(motor_controller rclcpp geometry_msgs autonomous_msgs)
@@ -104,7 +102,6 @@ install(
 )
 
 install(TARGETS
-  camera_calibration
   camera_synchronization
   particle_filter
   motor_controller

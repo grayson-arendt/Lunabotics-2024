@@ -83,10 +83,9 @@ public:
     void imu_callback(const sensor_msgs::msg::Imu::SharedPtr imu);
 
     /**
-     * @brief Callback function for cmd_vel messages.
-     * @param cmd_vel Twist message for velocity control.
+     * @brief Resets camera odometry timer.
      */
-    void cmd_vel_callback(const geometry_msgs::msg::Twist::SharedPtr cmd_vel);
+    void resetTimer();
 
     /**
      * @brief Initializes the particle filter with given initial pose.
@@ -148,6 +147,7 @@ private:
     double weight_sum{};
     int max_weight_index{};
     double max_weight = std::numeric_limits<double>::lowest();
+    double log_weight;
 
     std::unique_ptr<ParticleFilter> pf;
     std::vector<Particle> particles;
@@ -157,9 +157,9 @@ private:
     FilterState state;
     tf2::Quaternion current_quaternion, lidar_quaternion, camera_quaternion, imu_quaternion;
     tf2::Matrix3x3 lidar_euler, camera_euler, imu_euler;
-    bool is_moving;
-    int iteration;
+    bool odometry_lost;
     int prime_id;
+    int iteration;
     double imu_orientation_x, imu_orientation_y, imu_orientation_z, imu_orientation_w;
     double imu_roll, imu_pitch, imu_yaw;
     double current_x, current_y, current_yaw;
@@ -171,9 +171,9 @@ private:
     double camera_roll, camera_pitch, camera_yaw;
     std::vector<double> x_positions, y_positions, yaws, init_values;
     std::vector<Particle> updated_particles;
+    rclcpp::TimerBase::SharedPtr camera_odometry_timer_;
     rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr lidar_odometry_subscriber_;
     rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr camera_odometry_subscriber_;
-    rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_subscriber_;
     rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr imu_subscriber_;
     rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odometry_publisher_;
 };

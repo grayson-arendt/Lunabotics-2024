@@ -19,7 +19,7 @@ public:
     subscriber_ = this->create_subscription<sensor_msgs::msg::Imu>(
         "camera/imu", 10, std::bind(&IMURotator::imu_callback, this, std::placeholders::_1));
 
-    publisher_ = this->create_publisher<sensor_msgs::msg::Imu>("rotated_imu", 10);
+    publisher_ = this->create_publisher<sensor_msgs::msg::Imu>("imu/data_raw", 10);
   }
 
 private:

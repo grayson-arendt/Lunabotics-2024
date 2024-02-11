@@ -173,7 +173,7 @@ def generate_launch_description():
             'subscribe_rgb': 'true',
             'subscribe_depth': 'true',
             'subscribe_scan':'true',
-	    'scan_topic':'/scan1',
+	        'scan_topic':'/scan1',
             'approx_sync': 'true',
             'rviz': 'false',
             'queue_size': '300', 
