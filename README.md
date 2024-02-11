@@ -29,7 +29,7 @@ ros2 launch bringup panasonic_launch.py
       - ctre (CTRE Phoenix C++ API for using Falcon 500 motors)
       - **src**
         - **camera**
-          - camera_calibration.cpp (Camera calibration for OpenCV (for AprilTag pose detection)
+          - camera_calibration.cpp (Camera calibration for AprilTag pose detection)
           - camera_synchronization.cpp (Synchronizes RGB, depth, and camera info messages to have same timestamp)
         - **filter**
           - particle_filter.cpp (Particle filter to fuse lidar, camera, and IMU data)
