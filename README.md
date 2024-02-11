@@ -6,11 +6,8 @@ To use this project, you need to have the following packages installed:
 - `joint_state_publisher`
 - `tf2_ros`
 - `imu_complementary_filter`
-- `sllidar_ros2`
-- `rf2o_laser_odometry`
 - `realsense2_camera`
 - `foxglove_bridge`
-- `autonomous_pkg`
 - `rtabmap`
 - `rtabmap_ros`
 
