@@ -1,7 +1,3 @@
-## Overview
-
-This repository contains code made by the College of DuPage team for the NASA Lunabotics competition. It is made for ROS 2 Humble on Ubuntu 22.04. 
-
 ## Dependencies
 
 To use this project, you need to have the following packages installed:
@@ -10,15 +6,14 @@ To use this project, you need to have the following packages installed:
 - `joint_state_publisher`
 - `tf2_ros`
 - `imu_complementary_filter`
-- `sllidar_ros2`
-- `rf2o_laser_odometry`
 - `realsense2_camera`
 - `foxglove_bridge`
-- `autonomous_pkg`
 - `rtabmap`
 - `rtabmap_ros`
 
-## Install
+For each dependency, use `sudo apt install ros-humble-<package_name>`. Make sure the underscores in some of the names are replaced by dashes when using this command.
+
+## Installation
 ```bash
 cd <ros_workspace>/src
 git clone -b panasonic-dev https://github.com/grayson-arendt/Lunabotics-2024.git
@@ -51,7 +46,7 @@ ros2 launch bringup external_launch.py
 rviz2
 ```
 
-#### 4. Startup sensors, motors, and RTAB-map:
+#### 4. Startup sensors, motors, and RTAB-Map:
 
 ```bash
 ros2 launch bringup panasonic_launch.py
