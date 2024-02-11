@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(lunabot_bringup)
+project(bringup)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -20,7 +20,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 
 install(
-  DIRECTORY launch gazebo_worlds config
+  DIRECTORY launch config
   DESTINATION share/${PROJECT_NAME}/
 )
 

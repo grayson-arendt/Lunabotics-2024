@@ -1,7 +1,4 @@
-# ignore vscode
 **/.vscode/
-
-# ignore build 
 **/build/
-src/sllidar_ros2
-.DS_Store
+**/install/
+**/log/

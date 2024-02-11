@@ -1,11 +1,9 @@
-### Running RViz2
-```bash
-source install/setup.bash
-ros2 launch lunabot_bringup external_launch.py
-```
+## Overview
 
-### Running robot code (when connected via SSH)
-```bash
-source install/setup.bash
-ros2 launch lunabot_bringup panasonic_launch.py
-```
+This branch contains a simple bringup package for running RViz2 on host computer.
+
+## Dependencies
+
+To use this project, you need to have the following packages installed:
+
+- `nav2_bringup`
