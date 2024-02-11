@@ -1,11 +1,6 @@
 #ifndef PARTICLE_FILTER_H
 #define PARTICLE_FILTER_H
 
-/**
- * @file ParticleFilter.h
- * @brief ParticleFilter class definition for implementing a particle filter localization algorithm.
- */
-
 #pragma once
 
 #include <random>
@@ -50,8 +45,9 @@ enum class FilterState
 };
 
 /**
- * @class ParticleFilter
- * @brief Implements a particle filter for localization using sensor data.
+ * @brief Class for sensor fusion using a particle filter.
+ * 
+ * @author Grayson Arendt
  */
 class ParticleFilter : public rclcpp::Node
 {

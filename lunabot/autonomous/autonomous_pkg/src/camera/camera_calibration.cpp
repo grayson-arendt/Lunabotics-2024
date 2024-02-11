@@ -2,9 +2,8 @@
 #include <vector>
 
 /**
- * @brief Sample code for camera calibration using OpenCV
- * 
- * This program demonstrates camera calibration using a checkerboard pattern.
+ * @brief Sample code for camera calibration using OpenCV.
+ * @details This program demonstrates camera calibration using a checkerboard pattern.
  * It reads images, finds checkerboard corners, and performs camera calibration
  * using the cv::calibrateCamera function. The cameraMatrix and distortionCoeffs
  * obtained from this calibration can be used for pose estimation.

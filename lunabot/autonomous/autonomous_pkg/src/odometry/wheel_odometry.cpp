@@ -10,7 +10,7 @@
 #include "tf2/LinearMath/Quaternion.h"
 
 /**
- * @brief WheelOdometry class for calculating position and orientation using encoder data.
+ * @brief Class for calculating position and orientation using encoder data.
  *
  * @author Anthony Baran
  * @author Grayson Arendt

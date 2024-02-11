@@ -2,7 +2,7 @@
 #include "sensor_msgs/msg/imu.hpp"
 
 /**
- * @brief IMURotator class for rotating linear acceleration and angular velocity in an IMU message.
+ * @brief Class for rotating linear acceleration and angular velocity in an IMU message.
  * 
  * @author Grayson Arendt
  */
@@ -10,7 +10,7 @@ class IMURotator : public rclcpp::Node
 {
 public:
   /**
-   * @brief Constructor for IMURotator
+   * @brief Constructor for IMURotator.
    */
   IMURotator() : Node("imu_rotator")
   {
