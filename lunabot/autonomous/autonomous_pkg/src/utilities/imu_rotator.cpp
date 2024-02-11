@@ -2,7 +2,8 @@
 #include "sensor_msgs/msg/imu.hpp"
 
 /**
- * @brief Class for rotating linear acceleration and angular velocity in an IMU message.
+ * @brief Rotates linear acceleration and angular velocity in an IMU message.
+ * @details The D455 orientation is non-standard and does not work correctly with external packages.
  * 
  * @author Grayson Arendt
  */

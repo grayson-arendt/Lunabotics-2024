@@ -20,7 +20,7 @@ TalonFX left_wheel_motor(2, interface);
 TalonFX right_wheel_motor(3);
 
 /**
- * @brief Class for converting velocity commands into percent output for motors.
+ * @brief Converts velocity commands into percent output for motors.
  * @details It also creates an array of encoder values and publishes the previous and current encoder values to a custom Encoder.msg.
  * 
  * @author Anthony Baran

@@ -7,7 +7,7 @@
 #include "pcl/point_types.h"
 
 /**
- * @brief Class for converting two LaserScan messages into one PointCloud2 message.
+ * @brief Converts two LaserScan messages into one PointCloud2 message.
  * 
  * @details This class subscribes to two LaserScan topics, converts each LaserScan message 
  * to a PCL PointCloud, merges the PointClouds, and publishes the merged PointCloud 

@@ -20,7 +20,7 @@
 #include <cv_bridge/cv_bridge.h>
 
 /**
- * @brief Class for detecting AprilTags in an image and estimating their pose.
+ * @brief Detects AprilTags and estimates pose.
  * 
  * @author Grayson Arendt
  */

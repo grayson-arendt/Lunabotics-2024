@@ -5,7 +5,7 @@
 #include <message_filters/time_synchronizer.h>
 
 /**
- * @brief Class for synchronizing camera topics.
+ * @brief Synchronizes camera topics.
  * @details This is sometimes necessary for RTAB-Map or any other program that takes in these camera topics.
  * 
  * @author Grayson Arendt

@@ -2,7 +2,7 @@
 #include "nav_msgs/msg/occupancy_grid.hpp"
 
 /**
- * @brief Class for merging two occupancy grid maps.
+ * @brief Merges two occupancy grid maps.
  * 
  * @author Grayson Arendt
  */

@@ -11,7 +11,7 @@
 #include "tf2/LinearMath/Matrix3x3.h"
 
 /**
- * @brief Class for combining encoder and IMU data to calculate wheel odometry
+ * @brief Combines encoder and IMU data to calculate odometry.
  *
  * @author Grayson Arendt
  */

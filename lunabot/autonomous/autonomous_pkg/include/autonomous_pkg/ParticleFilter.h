@@ -45,7 +45,7 @@ enum class FilterState
 };
 
 /**
- * @brief Class for sensor fusion using a particle filter.
+ * @brief Sensor fusion using a particle filter.
  * 
  * @author Grayson Arendt
  */

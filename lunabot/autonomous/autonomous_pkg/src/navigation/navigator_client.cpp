@@ -5,7 +5,7 @@
 #include "geometry_msgs/msg/pose_stamped.hpp"
 
 /**
- * @brief Class for acting as an action client for the Navigation2 navigate_to_pose action server.
+ * @brief Action client for the Navigation2 navigate_to_pose action server.
  *
  * @author Grayson Arendt
  */
