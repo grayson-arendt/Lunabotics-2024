@@ -273,11 +273,11 @@ double ParticleFilter::calculateWeight(double lidar_position_x, double lidar_pos
     double exponent_theta_camera = -(dtheta_camera * dtheta_camera) / (2 * std_deviation[2] * std_deviation[2]);
     double exponent_theta_imu = -(dtheta_imu * dtheta_imu) / (2 * std_deviation[2] * std_deviation[2]);
 
-    // Calculate log weights for each dimension
+    // Calculate log weights for each dimension (extra weight scale for IMU, since it is more accurate angle-wise)
     double log_weight_x = exponent_x - 0.5 * log(2 * M_PI * std_deviation[0] * std_deviation[0]);
     double log_weight_y = exponent_y - 0.5 * log(2 * M_PI * std_deviation[1] * std_deviation[1]);
     double log_weight_theta_camera = exponent_theta_camera - 0.5 * log(2 * M_PI * std_deviation[2] * std_deviation[2]);
-    double log_weight_theta_imu = exponent_theta_imu - 0.5 * log(2 * M_PI * std_deviation[2] * std_deviation[2]);
+    double log_weight_theta_imu = 1.5 * exponent_theta_imu - 0.5 * log(2 * M_PI * std_deviation[2] * std_deviation[2]);
 
     // Sum up the log weights
     double log_weight = log_weight_x + log_weight_y + log_weight_theta_camera + log_weight_theta_imu;
@@ -363,7 +363,7 @@ int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
 
-    std::vector<double> std_deviation = {0.05, 0.05, 0.1};
+    std::vector<double> std_deviation = {0.02, 0.02, 0.1};
 
     auto particleFilter = std::make_shared<ParticleFilter>(500, std_deviation);
 

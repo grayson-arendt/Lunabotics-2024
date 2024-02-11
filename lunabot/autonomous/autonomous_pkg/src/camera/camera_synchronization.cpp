@@ -78,6 +78,7 @@ private:
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr synced_rgb_publisher_;
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr synced_depth_publisher_;
     rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr synced_info_publisher_;
+};
 
 /**
  * @brief Main function

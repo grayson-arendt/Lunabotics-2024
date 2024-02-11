@@ -148,29 +148,6 @@ def generate_launch_description():
                     'freq' : 20.0}],
     )
 
-    kiss_icp = Node(
-        package="kiss_icp",
-        executable="odometry_node",
-        name="odometry_node",
-        output="screen",
-        remappings=[("pointcloud_topic", '/rtabmap/cloud_obstacles')],
-        parameters=[
-                    {
-                        "odom_frame": 'odom',
-                        "base_frame": 'base_link',
-                        "max_range": 100.0,
-                        "min_range": 0.5,
-                        "deskew": False,
-                        "max_points_per_voxel": 20,
-                        "initial_threshold": 2.0,
-                        "min_motion_th": 0.1,
-                        "publish_odom_tf": False,
-                        "visualize": False,
-                    }
-                ],
-    )
-
-
     particle_filter = Node(
                 package="autonomous_pkg",
                 executable="particle_filter",
@@ -195,7 +172,7 @@ def generate_launch_description():
         launch_arguments={
             'rtabmapviz': 'false',
             'frame_id': 'base_link',
-            'args': '-d -Optimizer/Robust true -Grid/Sensor 2 -Grid/RangeMin 0.5 -Reg/Force3DoF true -Reg/Strategy 1 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true',
+            'args': '-d -Rtabmap/DetectionRate 10 -Optimizer/Robust true -Grid/Sensor 2 -Grid/RangeMin 0.5 -Reg/Force3DoF true -Reg/Strategy 0 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true',
             'rgb_topic':'/camera/color/image_raw',
             'depth_topic':'/camera/depth/image_rect_raw',
             'camera_info_topic':'/camera/depth/camera_info',
