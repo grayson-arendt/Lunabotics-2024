@@ -20,7 +20,6 @@ TalonFX left_wheel_motor(2, interface);
 TalonFX right_wheel_motor(3);
 
 /**
- * @file motor_controller.cpp
  * @brief MotorController class for converting velocity commands into percent output for motors.
  * 
  * It also creates an array of encoder values and publishes the previous and current encoder values to a custom Encoder.msg.

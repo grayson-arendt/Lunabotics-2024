@@ -5,7 +5,6 @@
 #include <message_filters/time_synchronizer.h>
 
 /**
- * @file camera_synchronization.cpp
  * @brief CameraSynchronization class for synchronizing camera topics.
  * 
  * This is sometimes necessary for RTAB-Map or any other program that takes in these camera topics.

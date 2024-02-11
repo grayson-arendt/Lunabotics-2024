@@ -17,7 +17,6 @@ std::string interface = "can0";
 TalonFX left_wheel_motor(2, interface);
 
 /**
- * @file motor_test.cpp
  * @brief MotorTest class for testing motors.
  * 
  * This uses a DualShock4 controller.

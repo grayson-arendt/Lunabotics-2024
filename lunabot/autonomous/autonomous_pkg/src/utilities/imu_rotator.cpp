@@ -2,7 +2,6 @@
 #include "sensor_msgs/msg/imu.hpp"
 
 /**
- * @file imu_rotator.cpp
  * @brief IMURotator class for rotating linear acceleration and angular velocity in an IMU message.
  * 
  * @author Grayson Arendt

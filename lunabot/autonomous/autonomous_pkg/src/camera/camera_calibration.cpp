@@ -2,7 +2,6 @@
 #include <vector>
 
 /**
- * @file camera_calibration.cpp
  * @brief Sample code for camera calibration using OpenCV
  * 
  * This program demonstrates camera calibration using a checkerboard pattern.

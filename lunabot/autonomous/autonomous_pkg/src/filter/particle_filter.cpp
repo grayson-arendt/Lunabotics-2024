@@ -1,7 +1,6 @@
 #include "autonomous_pkg/ParticleFilter.h"
 
 /**
- * @file particle_filter.cpp
  * @brief Constructor for ParticleFilter class
  * @details
  * This class subscribes to lidar odometry, camera odometry, and the cmd_vel topic to estimate

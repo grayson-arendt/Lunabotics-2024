@@ -4,7 +4,6 @@
 #include "tf2_ros/transform_broadcaster.h"
 
 /**
- * @file odometry_transform.cpp
  * @brief OdometryTransform class for transforming odometry and broadcasting the odometry to base_link transform.
  *
  * @author Grayson Arendt

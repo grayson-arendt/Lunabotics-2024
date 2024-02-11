@@ -4,7 +4,6 @@
 #include <sensor_msgs/point_cloud2_iterator.hpp>
 
 /**
- * @file pointcloud_to_laserscan.cpp
  * @brief PointCloudToLaserScan class for converting a PointCloud2 message into a LaserScan message.
  * 
  * @author Grayson Arendt
