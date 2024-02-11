@@ -25,7 +25,6 @@ def generate_launch_description():
     )
 
     d455_launch_path = os.path.join(get_package_share_path('realsense2_camera'), 'launch', 'rs_launch.py')
-    slam_toolbox_launch_file_path = os.path.join(get_package_share_path('slam_toolbox'), 'launch', 'online_async_launch.py')
     rtabmap_launch_path = os.path.join(get_package_share_path('rtabmap_launch'), 'launch', 'rtabmap.launch.py')
     foxglove_launch_path = os.path.join(get_package_share_path('foxglove_bridge'), 'launch', 'foxglove_bridge_launch.xml')
  
@@ -152,11 +151,6 @@ def generate_launch_description():
                 package="autonomous_pkg",
                 executable="particle_filter",
     )
-
-    slam_toolbox_launch = GroupAction(actions=[
-            SetRemap(src='/map',dst='/slam_toolbox/map'),
-            IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(slam_toolbox_launch_file_path))])
 
     foxglove_launch = IncludeLaunchDescription(
             XMLLaunchDescriptionSource(foxglove_launch_path))
