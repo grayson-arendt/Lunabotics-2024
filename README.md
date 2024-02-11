@@ -1,7 +1,3 @@
-## Overview
-
-This repository contains code made by the College of DuPage team for the NASA Lunabotics competition. It is made for ROS 2 Humble on Ubuntu 22.04. 
-
 ## Dependencies
 
 To use this project, you need to have the following packages installed:
