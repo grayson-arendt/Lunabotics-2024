@@ -30,20 +30,22 @@ private:
    */
   void imu_callback(const sensor_msgs::msg::Imu::SharedPtr msg)
   {
-
+    // Copy the received message
     auto rotated_msg = std::make_shared<sensor_msgs::msg::Imu>(*msg);
 
-    rotated_msg->linear_acceleration.x = msg->linear_acceleration.z;
-    rotated_msg->linear_acceleration.y = msg->linear_acceleration.x;
-    rotated_msg->linear_acceleration.z = -msg->linear_acceleration.y;
+    // Transform linear acceleration
+    rotated_msg->linear_acceleration.y = msg->linear_acceleration.x;  // X -> Y
+    rotated_msg->linear_acceleration.x = msg->linear_acceleration.y;  // Y -> X
+    rotated_msg->linear_acceleration.z = -msg->linear_acceleration.z; // Invert Z
 
-    rotated_msg->angular_velocity.x = msg->angular_velocity.z;
-    rotated_msg->angular_velocity.y = msg->angular_velocity.x;
-    rotated_msg->angular_velocity.z = -msg->angular_velocity.y;
+    // Transform angular velocity
+    rotated_msg->angular_velocity.y = msg->angular_velocity.x;  // X -> Y
+    rotated_msg->angular_velocity.x = msg->angular_velocity.y;  // Y -> X
+    rotated_msg->angular_velocity.z = -msg->angular_velocity.z; // Invert Z
 
+    // Publish the transformed message
     publisher_->publish(*rotated_msg);
   }
-
   rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr subscriber_;
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr publisher_;
 };

@@ -9,7 +9,7 @@ To use this project, you need to have the following packages installed:
 - `robot_state_publisher`
 - `joint_state_publisher`
 - `tf2_ros`
-- `imu_complementary_filter`
+- `robot_localization`
 - `librealsense2`
 - `realsense2_camera`
 - `realsense2_camera_dbgsym`
@@ -84,13 +84,10 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
         - autonomous_pkg
           - AprilTag.h (Header for AprilTag detection)
           - CalculateGoal.h (Header for calculating goal based off AprilTag positions)
-          - ParticleFilter.h (Header for particle filter implementation)
       - ctre (CTRE Phoenix C++ API for using Falcon 500 motors)
       - **src**
         - **camera**
           - camera_synchronization.cpp (Synchronizes RGB, depth, and camera info messages to have same timestamp)
-        - **filter**
-          - particle_filter.cpp (Particle filter to fuse lidar, camera, and IMU data)
         - **motor**
           - motor_controller.cpp (Sends percent output commands to motors based off /cmd_vel topic)
           - motor_test.cpp (Simple node for testing motors)

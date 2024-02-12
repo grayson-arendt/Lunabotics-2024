@@ -104,9 +104,8 @@ private:
         double linear_velocity = cmd_vel->linear.x;
         double angular_velocity = cmd_vel->angular.z;
 
-        // Reduced to 75%, was too fast
-        velocity_left_cmd = 0.75 * (linear_velocity - (angular_velocity * (0.2)));
-        velocity_right_cmd = 0.75 * (linear_velocity + (angular_velocity * (0.2)));
+        velocity_left_cmd = linear_velocity - (angular_velocity * (0.2));
+        velocity_right_cmd = linear_velocity + (angular_velocity * (0.2));
 
         // RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", velocity_right_cmd, velocity_left_cmd);
 

@@ -47,21 +47,6 @@ def generate_launch_description():
             output='screen',
             name='static_transform_publisher',
     )
-    
-    imu_filter = Node(
-                package='imu_complementary_filter',
-                executable='complementary_filter_node',
-                name='complementary_filter_gain_node',
-                output='screen',
-                parameters=[
-                    {'fixed_frame': 'odom'},
-                    {'do_bias_estimation': True},
-                    {'do_adaptive_gain': True},
-                    {'use_mag': False},
-                    {'gain_acc': 0.01},
-                    {'publish_tf': True},
-                ],
-    )
 
     imu_rotator = Node(
         package='autonomous_pkg',
@@ -115,6 +100,14 @@ def generate_launch_description():
                          'angle_compensate': True,
                          'scan_mode':'Boost'}],
         output='screen')
+
+    ukf_node = Node(
+            package='robot_localization',
+            executable='ukf_node',
+            name='ukf_filter_node',
+            output='screen',
+            parameters=[os.path.join(get_package_share_directory("bringup"), 'params', 'ukf.yaml')],
+    )
   
     lidar1_odom = Node(
         package='rf2o_laser_odometry',
@@ -123,33 +116,12 @@ def generate_launch_description():
         output='screen',
         parameters=[{
                     'laser_scan_topic' : '/scan1',
-                    'odom_topic' : '/odom_lidar1',
+                    'odom_topic' : '/odom_lidar',
                     'publish_tf' : False,
                     'base_frame_id' : 'base_link',
                     'odom_frame_id' : 'odom',
                     'init_pose_from_topic' : '',
                     'freq' : 30.0}],
-    )
-
-      
-    lidar2_odom = Node(
-        package='rf2o_laser_odometry',
-        executable='rf2o_laser_odometry_node',
-        name='rf2o_laser_odometry',
-        output='screen',
-        parameters=[{
-                    'laser_scan_topic' : '/scan2',
-                    'odom_topic' : '/odom_lidar2',
-                    'publish_tf' : False,
-                    'base_frame_id' : 'base_link',
-                    'odom_frame_id' : 'odom',
-                    'init_pose_from_topic' : '',
-                    'freq' : 20.0}],
-    )
-
-    particle_filter = Node(
-                package="autonomous_pkg",
-                executable="particle_filter",
     )
 
     foxglove_launch = IncludeLaunchDescription(
@@ -183,14 +155,12 @@ def generate_launch_description():
         lidar1,
         lidar1_odom,
         camera_launch,
-        imu_filter,
         imu_rotator,
         robot_state_publisher_node,
         joint_state_publisher_node,
         map_to_odom_tf,
         motor_controller_node,
-        wheel_imu_odometry,
-        particle_filter,
+        ukf_node,
         odometry_transform,
         foxglove_launch,
         rtabmap_launch,

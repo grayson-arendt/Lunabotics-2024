@@ -60,9 +60,6 @@ include_directories(include)
 # Camera
 add_executable(camera_synchronization src/camera/camera_synchronization.cpp)
 
-# Filter
-add_executable(particle_filter src/filter/particle_filter.cpp)
-
 # Motor
 add_executable(motor_controller src/motor/motor_controller.cpp)
 add_executable(motor_test src/motor/motor_test.cpp)
@@ -81,7 +78,6 @@ add_executable(pointcloud_to_laserscan src/utilities/pointcloud_to_laserscan.cpp
 add_executable(laserscan_to_pointcloud_merger src/utilities/laserscan_to_pointcloud_merger.cpp)
 
 ament_target_dependencies(camera_synchronization rclcpp sensor_msgs message_filters)
-ament_target_dependencies(particle_filter rclcpp nav_msgs sensor_msgs geometry_msgs tf2 tf2_ros)
 ament_target_dependencies(motor_controller rclcpp geometry_msgs autonomous_msgs)
 ament_target_dependencies(motor_test rclcpp sensor_msgs)
 ament_target_dependencies(navigator_client rclcpp rclcpp_action nav2_msgs geometry_msgs)
@@ -103,7 +99,6 @@ install(
 
 install(TARGETS
   camera_synchronization
-  particle_filter
   motor_controller
   motor_test
   navigator_client
