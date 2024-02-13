@@ -1,14 +1,14 @@
+#include "autonomous_msgs/msg/encoder.hpp"
+#include "geometry_msgs/msg/twist.hpp"
+#include "rclcpp/rclcpp.hpp"
 #include <algorithm>
 #include <vector>
-#include "rclcpp/rclcpp.hpp"
-#include "geometry_msgs/msg/twist.hpp"
-#include "autonomous_msgs/msg/encoder.hpp"
 
 #define Phoenix_No_WPI
 #include "ctre/Phoenix.h"
+#include "ctre/phoenix/cci/Unmanaged_CCI.h"
 #include "ctre/phoenix/platform/Platform.hpp"
 #include "ctre/phoenix/unmanaged/Unmanaged.h"
-#include "ctre/phoenix/cci/Unmanaged_CCI.h"
 
 using namespace ctre::phoenix;
 using namespace ctre::phoenix::platform;
@@ -21,7 +21,8 @@ TalonFX right_wheel_motor(3);
 
 /**
  * @brief Converts velocity commands into percent output for motors.
- * @details It also creates an array of encoder values and publishes the previous and current encoder values to a custom Encoder.msg.
+ * @details It also creates an array of encoder values and publishes the previous and current encoder values to a custom
+ * Encoder.msg.
  *
  * @author Anthony Baran
  * @author Grayson Arendt
@@ -29,7 +30,7 @@ TalonFX right_wheel_motor(3);
 class MotorController : public rclcpp::Node
 {
 
-public:
+  public:
     /**
      * @brief Constructor for MotorController.
      */
@@ -49,12 +50,12 @@ public:
         right_encoder_values.push_back(0.0);
 
         motor_controller_subscriber = this->create_subscription<geometry_msgs::msg::Twist>(
-            "cmd_vel", 10,
-            std::bind(&MotorController::callbackMotors, this, std::placeholders::_1));
+            "cmd_vel", 10, std::bind(&MotorController::callbackMotors, this, std::placeholders::_1));
 
         encoder_publisher_ = this->create_publisher<autonomous_msgs::msg::Encoder>("encoders", 10);
 
-        timer_ = this->create_wall_timer(std::chrono::milliseconds(100), std::bind(&MotorController::encoders_callback, this));
+        timer_ = this->create_wall_timer(std::chrono::milliseconds(100),
+                                         std::bind(&MotorController::encoders_callback, this));
 
         RCLCPP_INFO(this->get_logger(), "Motor control started.");
         iteration = 0;
@@ -70,7 +71,7 @@ public:
     std::vector<double> left_encoder_values;
     std::vector<double> right_encoder_values;
 
-private:
+  private:
     /**
      * @brief Callback function for the encoders timer.
      */
@@ -107,7 +108,8 @@ private:
         velocity_left_cmd = linear_velocity - (angular_velocity * (0.2));
         velocity_right_cmd = linear_velocity + (angular_velocity * (0.2));
 
-        // RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", velocity_right_cmd, velocity_left_cmd);
+        // RCLCPP_INFO(this->get_logger(), "right_wheel = %0.4f left_wheel = %0.4f", velocity_right_cmd,
+        // velocity_left_cmd);
 
         left_wheel_motor.Set(ControlMode::PercentOutput, velocity_left_cmd);
         right_wheel_motor.Set(ControlMode::PercentOutput, velocity_right_cmd);

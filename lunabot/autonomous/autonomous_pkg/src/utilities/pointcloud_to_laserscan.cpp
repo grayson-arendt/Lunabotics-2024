@@ -1,6 +1,6 @@
 #include <rclcpp/rclcpp.hpp>
-#include <sensor_msgs/msg/point_cloud2.hpp>
 #include <sensor_msgs/msg/laser_scan.hpp>
+#include <sensor_msgs/msg/point_cloud2.hpp>
 #include <sensor_msgs/point_cloud2_iterator.hpp>
 
 /**
@@ -11,17 +11,19 @@
 class PointCloudToLaserScan : public rclcpp::Node
 {
 
-public:
+  public:
     /**
      * @brief Constructor for PointCloudToLaserScan.
      */
     PointCloudToLaserScan() : Node("pointcloud_to_laserscan")
     {
-        cloud_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>("rtabmap/cloud_obstacles", 10, std::bind(&PointCloudToLaserScan::cloudCallback, this, std::placeholders::_1));
+        cloud_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
+            "rtabmap/cloud_obstacles", 10,
+            std::bind(&PointCloudToLaserScan::cloudCallback, this, std::placeholders::_1));
         scan_pub_ = this->create_publisher<sensor_msgs::msg::LaserScan>("cloud_scan", 10);
     }
 
-private:
+  private:
     /**
      * @brief Callback function for processing PointCloud2 messages and publishing LaserScan messages.
      *

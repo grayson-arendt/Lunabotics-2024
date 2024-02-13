@@ -1,12 +1,12 @@
-#include <algorithm>
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/joy.hpp"
+#include <algorithm>
 
 #define Phoenix_No_WPI
 #include "ctre/Phoenix.h"
+#include "ctre/phoenix/cci/Unmanaged_CCI.h"
 #include "ctre/phoenix/platform/Platform.hpp"
 #include "ctre/phoenix/unmanaged/Unmanaged.h"
-#include "ctre/phoenix/cci/Unmanaged_CCI.h"
 
 using namespace ctre::phoenix;
 using namespace ctre::phoenix::platform;
@@ -25,21 +25,21 @@ TalonFX left_wheel_motor(2, interface);
 class MotorTest : public rclcpp::Node
 {
 
-public:
+  public:
     /**
      * @brief Constructor for MotorTest.
      */
     MotorTest() : Node("motor_test")
     {
-        controller_subscriber = this->create_subscription<sensor_msgs::msg::Joy>("joy", 10,
-                                                                                 std::bind(&MotorTest::callbackMotors, this, std::placeholders::_1));
+        controller_subscriber = this->create_subscription<sensor_msgs::msg::Joy>(
+            "joy", 10, std::bind(&MotorTest::callbackMotors, this, std::placeholders::_1));
 
         left_wheel_motor.ConfigFactoryDefault();
         left_wheel_motor.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, 0, 10);
         left_wheel_motor.SetSelectedSensorPosition(0, 0, 10);
     }
 
-private:
+  private:
     /**
      * @brief Callback function for processing controller input and controlling the motor.
      *

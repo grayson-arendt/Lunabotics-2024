@@ -1,14 +1,14 @@
-#include <cmath>
-#include <chrono>
-#include <thread>
-#include "rclcpp/rclcpp.hpp"
-#include "sensor_msgs/msg/joint_state.hpp"
-#include "sensor_msgs/msg/imu.hpp"
-#include "nav_msgs/msg/odometry.hpp"
-#include "geometry_msgs/msg/transform_stamped.hpp"
 #include "autonomous_msgs/msg/encoder.hpp"
-#include "tf2/LinearMath/Quaternion.h"
+#include "geometry_msgs/msg/transform_stamped.hpp"
+#include "nav_msgs/msg/odometry.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/imu.hpp"
+#include "sensor_msgs/msg/joint_state.hpp"
 #include "tf2/LinearMath/Matrix3x3.h"
+#include "tf2/LinearMath/Quaternion.h"
+#include <chrono>
+#include <cmath>
+#include <thread>
 
 /**
  * @brief Combines encoder and IMU data to calculate odometry.
@@ -18,7 +18,7 @@
 class WheelIMUOdometry : public rclcpp::Node
 {
 
-public:
+  public:
     /**
      * @brief Constructor for WheelIMUOdometry.
      */
@@ -30,15 +30,13 @@ public:
         odometry_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("wheel_odometry", 10);
 
         encoder_subscriber_ = this->create_subscription<autonomous_msgs::msg::Encoder>(
-            "encoders", 10,
-            std::bind(&WheelIMUOdometry::publish_odom_tf_joints, this, std::placeholders::_1));
+            "encoders", 10, std::bind(&WheelIMUOdometry::publish_odom_tf_joints, this, std::placeholders::_1));
 
         imu_subscriber_ = this->create_subscription<sensor_msgs::msg::Imu>(
-            "imu/data", 10,
-            std::bind(&WheelIMUOdometry::imu_callback, this, std::placeholders::_1));
+            "imu/data", 10, std::bind(&WheelIMUOdometry::imu_callback, this, std::placeholders::_1));
     }
 
-private:
+  private:
     /**
      * @brief Callback function for IMU data.
      *
@@ -60,7 +58,8 @@ private:
         tf2::Matrix3x3 current_euler(current_quaternion);
         current_euler.getRPY(current_roll, current_pitch, current_yaw);
 
-        // RCLCPP_INFO(this->get_logger(), "Current roll: %.2f Current pitch: %.2f Current yaw: %.2f", current_roll, current_pitch, current_yaw);
+        // RCLCPP_INFO(this->get_logger(), "Current roll: %.2f Current pitch: %.2f Current yaw: %.2f", current_roll,
+        // current_pitch, current_yaw);
     }
 
     /**

@@ -1,8 +1,8 @@
-#include "rclcpp/rclcpp.hpp"
-#include "rclcpp_action/rclcpp_action.hpp"
-#include "nav2_msgs/action/navigate_to_pose.hpp"
 #include "geometry_msgs/msg/pose.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
+#include "nav2_msgs/action/navigate_to_pose.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "rclcpp_action/rclcpp_action.hpp"
 
 /**
  * @brief Action client for the Navigation2 navigate_to_pose action server.
@@ -12,7 +12,7 @@
 class NavigatorClient : public rclcpp::Node
 {
 
-public:
+  public:
     using NavigateToPose = nav2_msgs::action::NavigateToPose;
     using GoalHandleNavigate = rclcpp_action::ClientGoalHandle<NavigateToPose>;
 
@@ -23,7 +23,8 @@ public:
     {
         // Create action client and timer
         this->nav_to_pose_client_ = rclcpp_action::create_client<NavigateToPose>(this, "navigate_to_pose");
-        this->timer_ = this->create_wall_timer(std::chrono::milliseconds(500), std::bind(&NavigatorClient::send_goal, this));
+        this->timer_ =
+            this->create_wall_timer(std::chrono::milliseconds(500), std::bind(&NavigatorClient::send_goal, this));
     }
 
     /**
@@ -42,7 +43,8 @@ public:
 
         // Setting up callbacks and then sending goal to server.
         auto send_goal_options = rclcpp_action::Client<NavigateToPose>::SendGoalOptions();
-        send_goal_options.feedback_callback = std::bind(&NavigatorClient::feedback_callback, this, std::placeholders::_1, std::placeholders::_2);
+        send_goal_options.feedback_callback =
+            std::bind(&NavigatorClient::feedback_callback, this, std::placeholders::_1, std::placeholders::_2);
         send_goal_options.result_callback = std::bind(&NavigatorClient::result_callback, this, std::placeholders::_1);
 
         // Setting target pose.
@@ -67,14 +69,15 @@ public:
         this->nav_to_pose_client_->async_send_goal(goal_msg, send_goal_options);
     }
 
-private:
+  private:
     /**
      * @brief Callback for processing feedback from the action server.
      *
      * @param goal_handle The handle to the goal.
      * @param feedback The received feedback.
      */
-    void feedback_callback(GoalHandleNavigate::SharedPtr goal_handle, const std::shared_ptr<const NavigateToPose::Feedback> feedback)
+    void feedback_callback(GoalHandleNavigate::SharedPtr goal_handle,
+                           const std::shared_ptr<const NavigateToPose::Feedback> feedback)
     {
         // Update the feedback_callback with correct format strings
         RCLCPP_INFO(this->get_logger(), "Current pose: %f", feedback->navigation_time);

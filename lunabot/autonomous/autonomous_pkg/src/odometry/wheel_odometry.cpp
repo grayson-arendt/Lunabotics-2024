@@ -1,13 +1,13 @@
-#include <math.h>
-#include <cmath>
-#include <chrono>
-#include <thread>
-#include "rclcpp/rclcpp.hpp"
-#include "nav_msgs/msg/odometry.hpp"
-#include "sensor_msgs/msg/joint_state.hpp"
-#include "geometry_msgs/msg/transform_stamped.hpp"
 #include "autonomous_msgs/msg/encoder.hpp"
+#include "geometry_msgs/msg/transform_stamped.hpp"
+#include "nav_msgs/msg/odometry.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/joint_state.hpp"
 #include "tf2/LinearMath/Quaternion.h"
+#include <chrono>
+#include <cmath>
+#include <math.h>
+#include <thread>
 
 /**
  * @brief Uses only encoder data to calculate odometry.
@@ -18,7 +18,7 @@
 class WheelOdometry : public rclcpp::Node
 {
 
-public:
+  public:
     /**
      * @brief Constructor for WheelOdometry.
      */
@@ -30,11 +30,10 @@ public:
         odometry_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("wheel_odometry", 10);
 
         encoder_subscriber_ = this->create_subscription<autonomous_msgs::msg::Encoder>(
-            "encoders", 10,
-            std::bind(&WheelOdometry::publish_odom_tf_joints, this, std::placeholders::_1));
+            "encoders", 10, std::bind(&WheelOdometry::publish_odom_tf_joints, this, std::placeholders::_1));
     }
 
-private:
+  private:
     /**
      * @brief Callback function for encoder data and publishes odometry and joint states.
      *

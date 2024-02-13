@@ -3,58 +3,46 @@
 /**
  * @brief Constructor for ParticleFilter class.
  * @details
- * This class subscribes to lidar odometry, camera odometry, and IMU data to estimate
- * the robot's pose. It uses lidar odometry as the primary source, camera odometry
- * as a secondary influence on robot pose, and IMU as a third influence.
+ * This class subscribes to lidar odometry, camera odometry, and IMU data to
+ * estimate the robot's pose. It uses lidar odometry as the primary source,
+ * camera odometry as a secondary influence on robot pose, and IMU as a third
+ * influence.
  *
- * If camera odometry is lost (may happen if too close to a wall), then only lidar
- * odometry and IMU data will be used as an influence on robot pose.
+ * If camera odometry is lost (may happen if too close to a wall), then only
+ * lidar odometry and IMU data will be used as an influence on robot pose.
  *
  * @param particles Number of particles.
  * @param deviation Vector containing standard deviations for x, y, and yaw.
  * @author Grayson Arendt
  */
-ParticleFilter::ParticleFilter(int particles, std::vector<double> deviation) : Node("particle_filter"), state(FilterState::INIT)
+ParticleFilter::ParticleFilter(int particles, std::vector<double> deviation)
+    : Node("particle_filter"), state(FilterState::INIT)
 {
     lidar_odometry_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
         "odom_lidar", rclcpp::QoS(10).reliable(),
-        [this](const nav_msgs::msg::Odometry::SharedPtr msg)
-        {
-            this->lidar_odometry_callback(msg);
-        });
+        [this](const nav_msgs::msg::Odometry::SharedPtr msg) { this->lidar_odometry_callback(msg); });
 
     camera_odometry_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
         "rtabmap/odom", rclcpp::QoS(10).reliable(),
-        [this](const nav_msgs::msg::Odometry::SharedPtr msg)
-        {
-            this->camera_odometry_callback(msg);
-        });
+        [this](const nav_msgs::msg::Odometry::SharedPtr msg) { this->camera_odometry_callback(msg); });
 
     imu_subscriber_ = this->create_subscription<sensor_msgs::msg::Imu>(
         "imu/data", rclcpp::QoS(10).reliable(),
-        [this](const sensor_msgs::msg::Imu::SharedPtr msg)
-        {
-            this->imu_callback(msg);
-        });
+        [this](const sensor_msgs::msg::Imu::SharedPtr msg) { this->imu_callback(msg); });
 
     odometry_publisher_ = this->create_publisher<nav_msgs::msg::Odometry>("filtered_odom", 10);
 
-    camera_odometry_timer_ = create_wall_timer(std::chrono::seconds(1),
-                                               [this]()
-                                               {
-                                                   RCLCPP_WARN(get_logger(), "\033[0;36mCAMERA ODOMETRY:\033[0m \033[1;31mLOST\033[0m");
-                                                   // Create placeholder values for camera
-                                                   camera_position_x = 0.0;
-                                                   camera_position_y = 0.0;
-                                                   camera_yaw = 0.0;
-                                                   odometry_lost = true;
-                                               });
+    camera_odometry_timer_ = create_wall_timer(std::chrono::seconds(1), [this]() {
+        RCLCPP_WARN(get_logger(), "\033[0;36mCAMERA ODOMETRY:\033[0m \033[1;31mLOST\033[0m");
+        // Create placeholder values for camera
+        camera_position_x = 0.0;
+        camera_position_y = 0.0;
+        camera_yaw = 0.0;
+        odometry_lost = true;
+    });
 
-    odometry_publisher_timer_ = create_wall_timer(std::chrono::milliseconds(100),
-                                                  [this]()
-                                                  {
-                                                      this->publish_odometry();
-                                                  });
+    odometry_publisher_timer_ =
+        create_wall_timer(std::chrono::milliseconds(100), [this]() { this->publish_odometry(); });
 
     // Initial pose
     x_positions.push_back(0.0);
@@ -77,7 +65,6 @@ void ParticleFilter::resetTimer()
  */
 void ParticleFilter::lidar_odometry_callback(const nav_msgs::msg::Odometry::SharedPtr odometry)
 {
-
     lidar_position_x = odometry->pose.pose.position.x;
     lidar_position_y = odometry->pose.pose.position.y;
     lidar_orientation_x = odometry->pose.pose.orientation.x;
@@ -86,7 +73,8 @@ void ParticleFilter::lidar_odometry_callback(const nav_msgs::msg::Odometry::Shar
     lidar_orientation_w = odometry->pose.pose.orientation.w;
 
     // Convert lidar orientation to yaw
-    tf2::Quaternion lidar_quaternion(lidar_orientation_x, lidar_orientation_y, lidar_orientation_z, lidar_orientation_w);
+    tf2::Quaternion lidar_quaternion(lidar_orientation_x, lidar_orientation_y, lidar_orientation_z,
+                                     lidar_orientation_w);
     lidar_quaternion.normalize();
 
     tf2::Matrix3x3 lidar_euler(lidar_quaternion);
@@ -107,7 +95,8 @@ void ParticleFilter::camera_odometry_callback(const nav_msgs::msg::Odometry::Sha
     camera_orientation_w = odometry->pose.pose.orientation.w;
 
     // Convert camera orientation to yaw
-    tf2::Quaternion camera_quaternion(camera_orientation_x, camera_orientation_y, camera_orientation_z, camera_orientation_w);
+    tf2::Quaternion camera_quaternion(camera_orientation_x, camera_orientation_y, camera_orientation_z,
+                                      camera_orientation_w);
     camera_quaternion.normalize();
 
     tf2::Matrix3x3 camera_euler(camera_quaternion);
@@ -212,7 +201,8 @@ void ParticleFilter::initialize(double initial_x, double initial_y, double initi
 }
 
 /**
- * @brief Creates a prediction of possible robot states via particles based off of lidar odometry.
+ * @brief Creates a prediction of possible robot states via particles based off
+ * of lidar odometry.
  * @param lidar_position_x Lidar x position.
  * @param lidar_position_y Lidar y position.
  * @param lidar_yaw Lidar yaw orientation.
@@ -238,7 +228,8 @@ void ParticleFilter::predict(double lidar_position_x, double lidar_position_y, d
 }
 
 /**
- * @brief Calculates the weight of a particle based on lidar, camera, and IMU values.
+ * @brief Calculates the weight of a particle based on lidar, camera, and IMU
+ * values.
  * @param lidar_position_x Lidar x position.
  * @param lidar_position_y Lidar y position.
  * @param lidar_yaw Lidar yaw orientation.
@@ -264,7 +255,8 @@ double ParticleFilter::calculateWeight(double lidar_position_x, double lidar_pos
     double exponent_yaw_camera = -(dyaw_camera * dyaw_camera) / (2 * std_deviation[2] * std_deviation[2]);
     double exponent_yaw_imu = -(dyaw_imu * dyaw_imu) / (2 * std_deviation[2] * std_deviation[2]);
 
-    // Calculate log weights for each dimension (extra weight scale for IMU, since it is more accurate angle-wise)
+    // Calculate log weights for each dimension (extra weight scale for IMU,
+    // since it is more accurate angle-wise)
     double log_weight_x = exponent_x - 0.5 * log(2 * M_PI * std_deviation[0] * std_deviation[0]);
     double log_weight_y = exponent_y - 0.5 * log(2 * M_PI * std_deviation[1] * std_deviation[1]);
     double log_weight_yaw_camera = exponent_yaw_camera - 0.5 * log(2 * M_PI * std_deviation[2] * std_deviation[2]);
@@ -295,9 +287,8 @@ void ParticleFilter::updateWeight(double camera_position_x, double camera_positi
 {
     for (int i = 0; i < num_particles; i++)
     {
-        double newWeight = calculateWeight(
-            particles[i].x, particles[i].y, particles[i].yaw,
-            camera_position_x, camera_position_y, camera_yaw, imu_yaw);
+        double newWeight = calculateWeight(particles[i].x, particles[i].y, particles[i].yaw, camera_position_x,
+                                           camera_position_y, camera_yaw, imu_yaw);
 
         particles[i].weight = newWeight;
         weights[i] = newWeight;
@@ -346,7 +337,8 @@ std::vector<Particle> ParticleFilter::getParticles()
 }
 
 /**
- * @brief Retrieves the index of the particle with the highest weight (prime particle).
+ * @brief Retrieves the index of the particle with the highest weight (prime
+ * particle).
  * @return Index of the prime particle.
  */
 int ParticleFilter::getPrimeParticle() const

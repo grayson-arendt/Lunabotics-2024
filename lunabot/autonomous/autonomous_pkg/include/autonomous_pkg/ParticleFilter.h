@@ -3,23 +3,23 @@
 
 #pragma once
 
-#include <random>
 #include <algorithm>
+#include <chrono>
+#include <cmath>
 #include <iostream>
+#include <limits>
+#include <random>
 #include <utility>
 #include <vector>
-#include <cmath>
-#include <chrono>
-#include <limits>
 
-#include "rclcpp/rclcpp.hpp"
-#include "rclcpp/logging.hpp"
-#include "rclcpp/clock.hpp"
-#include "nav_msgs/msg/odometry.hpp"
-#include "sensor_msgs/msg/imu.hpp"
 #include "geometry_msgs/msg/twist.hpp"
-#include "tf2/LinearMath/Quaternion.h"
+#include "nav_msgs/msg/odometry.hpp"
+#include "rclcpp/clock.hpp"
+#include "rclcpp/logging.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/imu.hpp"
 #include "tf2/LinearMath/Matrix3x3.h"
+#include "tf2/LinearMath/Quaternion.h"
 
 /**
  * @struct Particle
@@ -51,7 +51,7 @@ enum class FilterState
  */
 class ParticleFilter : public rclcpp::Node
 {
-public:
+  public:
     /**
      * @brief Default constructor.
      */
@@ -124,8 +124,8 @@ public:
      * @param imu_yaw Yaw orientation from IMU.
      * @return Weight of particles.
      */
-    double calculateWeight(double lidar_position_x, double lidar_position_y, double lidar_yaw,
-                           double camera_position_x, double camera_position_y, double camera_yaw, double imu_yaw);
+    double calculateWeight(double lidar_position_x, double lidar_position_y, double lidar_yaw, double camera_position_x,
+                           double camera_position_y, double camera_yaw, double imu_yaw);
 
     /**
      * @brief Updates the weights of particles based on camera data.
@@ -152,7 +152,7 @@ public:
      */
     int getPrimeParticle() const;
 
-private:
+  private:
     FilterState state;
     bool odometry_lost;
     int num_particles;

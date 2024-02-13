@@ -1,10 +1,10 @@
+#include "pcl/point_cloud.h"
+#include "pcl/point_types.h"
+#include "pcl_conversions/pcl_conversions.h"
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
 #include "sensor_msgs/point_cloud2_iterator.hpp"
-#include "pcl_conversions/pcl_conversions.h"
-#include "pcl/point_cloud.h"
-#include "pcl/point_types.h"
 
 /**
  * @brief Converts two LaserScan messages into one PointCloud2 message.
@@ -17,24 +17,27 @@
  */
 class LaserScanToPointCloudMerger : public rclcpp::Node
 {
-public:
+  public:
     /**
      * @brief Constructor for the LaserScanToPointCloudMerger class.
      */
     LaserScanToPointCloudMerger() : Node("laserscan_to_pointcloud_merger")
     {
         // Subscribe to LaserScan topics
-        scan1_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>("scan1", 10, std::bind(&LaserScanToPointCloudMerger::scan1_callback, this, std::placeholders::_1));
-        scan2_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>("scan2", 10, std::bind(&LaserScanToPointCloudMerger::scan2_callback, this, std::placeholders::_1));
+        scan1_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
+            "scan1", 10, std::bind(&LaserScanToPointCloudMerger::scan1_callback, this, std::placeholders::_1));
+        scan2_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
+            "scan2", 10, std::bind(&LaserScanToPointCloudMerger::scan2_callback, this, std::placeholders::_1));
 
         // Create publisher for PointCloud2 messages
         cloud_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("cloud_in", 10);
 
         // Create timer to publish merged PointCloud periodically
-        timer_ = this->create_wall_timer(std::chrono::milliseconds(100), std::bind(&LaserScanToPointCloudMerger::publish_merged_pointcloud, this));
+        timer_ = this->create_wall_timer(std::chrono::milliseconds(100),
+                                         std::bind(&LaserScanToPointCloudMerger::publish_merged_pointcloud, this));
     }
 
-private:
+  private:
     /**
      * @brief Callback function for processing messages from scan1 topic.
      *

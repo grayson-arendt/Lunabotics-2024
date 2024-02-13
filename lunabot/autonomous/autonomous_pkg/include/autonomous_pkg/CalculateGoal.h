@@ -1,9 +1,9 @@
 #ifndef CALCULATE_GOAL_H
 #define CALCULATE_GOAL_H
 
-#include <vector>
-#include <cmath>
 #include <array>
+#include <cmath>
+#include <vector>
 
 /**
  * @brief Calculates the goal position based on AprilTag distances.
@@ -15,7 +15,7 @@
  */
 class CalculateGoal
 {
-public:
+  public:
     /**
      * @brief Calculate the possible robot positions based on AprilTag distances.
      *
@@ -26,7 +26,8 @@ public:
      * @param d3 Distance between the two AprilTags.
      * @return An array containing two possible robot positions.
      */
-    std::array<std::vector<float>, 2> robot_position(std::vector<float> code1_pos, std::vector<float> code2_pos, float d1, float d2, float d3)
+    std::array<std::vector<float>, 2> robot_position(std::vector<float> code1_pos, std::vector<float> code2_pos,
+                                                     float d1, float d2, float d3)
     {
         // dx_12 and dy_12 are the horizontal and vertical displacement from
         // QR code 1 to QR code 2.
@@ -55,8 +56,10 @@ public:
         float r_perp[2] = {r_perp_magnitude * dy_12 / d3, -1 * r_perp_magnitude * dx_12 / d3};
 
         // the two possible positions of the robot
-        std::vector<float> robot_pos_1{r_parallel[0] + r_perp[0] + code1_pos[0], r_parallel[1] + r_perp[1] + code1_pos[1]};
-        std::vector<float> robot_pos_2{r_parallel[0] - r_perp[0] + code1_pos[0], r_parallel[1] - r_perp[1] + code1_pos[1]};
+        std::vector<float> robot_pos_1{r_parallel[0] + r_perp[0] + code1_pos[0],
+                                       r_parallel[1] + r_perp[1] + code1_pos[1]};
+        std::vector<float> robot_pos_2{r_parallel[0] - r_perp[0] + code1_pos[0],
+                                       r_parallel[1] - r_perp[1] + code1_pos[1]};
 
         // returned as an array of float vectors
         std::array<std::vector<float>, 2> robot_positions = {robot_pos_1, robot_pos_2};

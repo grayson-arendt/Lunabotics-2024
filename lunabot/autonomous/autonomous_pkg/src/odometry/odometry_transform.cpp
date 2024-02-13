@@ -1,9 +1,9 @@
-#include "rclcpp/rclcpp.hpp"
-#include "nav_msgs/msg/odometry.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
-#include "tf2_ros/transform_broadcaster.h"
-#include "tf2/LinearMath/Quaternion.h"
+#include "nav_msgs/msg/odometry.hpp"
+#include "rclcpp/rclcpp.hpp"
 #include "tf2/LinearMath/Matrix3x3.h"
+#include "tf2/LinearMath/Quaternion.h"
+#include "tf2_ros/transform_broadcaster.h"
 
 /**
  * @brief Broadcasts the odom->base_link transform.
@@ -13,7 +13,7 @@
 class OdometryTransform : public rclcpp::Node
 {
 
-public:
+  public:
     /**
      * @brief Constructor for OdometryTransform.
      */
@@ -22,11 +22,10 @@ public:
         tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
 
         odometry_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
-            "filtered_odom", 10,
-            std::bind(&OdometryTransform::transform_odom, this, std::placeholders::_1));
+            "filtered_odom", 10, std::bind(&OdometryTransform::transform_odom, this, std::placeholders::_1));
     }
 
-private:
+  private:
     /**
      * @brief Callback function to transform odometry and broadcast the odometry to base_link transform.
      *
@@ -43,7 +42,8 @@ private:
         odometry_transform.transform.translation.y = odometry->pose.pose.position.y;
         odometry_transform.transform.translation.z = 0.0;
 
-        tf2::Quaternion quaternion(odometry->pose.pose.orientation.x, odometry->pose.pose.orientation.y, odometry->pose.pose.orientation.z, odometry->pose.pose.orientation.w);
+        tf2::Quaternion quaternion(odometry->pose.pose.orientation.x, odometry->pose.pose.orientation.y,
+                                   odometry->pose.pose.orientation.z, odometry->pose.pose.orientation.w);
         tf2::Matrix3x3 euler(quaternion);
 
         euler.getRPY(roll, pitch, yaw);

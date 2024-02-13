@@ -1,23 +1,23 @@
 #pragma once
 
+#include <array>
 #include <chrono>
 #include <cmath>
 #include <string>
 #include <vector>
-#include <array>
 
-#include "rclcpp/rclcpp.hpp"
 #include "rclcpp/logging.hpp"
+#include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/image.hpp"
 #include "std_msgs/msg/string.hpp"
 
-#include <opencv2/opencv.hpp>
-#include <opencv2/imgproc.hpp>
+#include <cv_bridge/cv_bridge.h>
 #include <opencv2/aruco.hpp>
 #include <opencv2/aruco/dictionary.hpp>
 #include <opencv2/calib3d.hpp>
 #include <opencv2/core/mat.hpp>
-#include <cv_bridge/cv_bridge.h>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/opencv.hpp>
 
 /**
  * @brief Detects AprilTags and estimates pose.
@@ -26,7 +26,7 @@
  */
 class AprilTag
 {
-public:
+  public:
     /**
      * @brief Default constructor.
      *
@@ -55,7 +55,7 @@ public:
      */
     bool getDetected();
 
-private:
+  private:
     /**
      * @brief Calculate the distance from the camera to the detected tag.
      *
@@ -91,12 +91,10 @@ void AprilTag::detectTag()
     std::vector<cv::Vec3d> rvecs, tvecs;
     std::vector<std::vector<cv::Point2f>> markerCorners;
 
-    cv::Mat cameraMatrix = (cv::Mat1d(3, 3)
-                                << 278.5971299187092,
-                            0, 323.0268692272516, 0, 284.902753361877, 235.7951612448387, 0, 0, 1);
-    cv::Mat distortionCoefficients = (cv::Mat1d(1, 5)
-                                          << -0.08455656319490816,
-                                      0.09495737180245305, 0.005608739170439007, -0.007920839212581778, -0.05865648378565153);
+    cv::Mat cameraMatrix =
+        (cv::Mat1d(3, 3) << 278.5971299187092, 0, 323.0268692272516, 0, 284.902753361877, 235.7951612448387, 0, 0, 1);
+    cv::Mat distortionCoefficients = (cv::Mat1d(1, 5) << -0.08455656319490816, 0.09495737180245305,
+                                      0.005608739170439007, -0.007920839212581778, -0.05865648378565153);
 
     cv::Ptr<cv::aruco::DetectorParameters> parameters = cv::aruco::DetectorParameters::create();
     cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_APRILTAG_36h11);

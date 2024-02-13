@@ -1,8 +1,8 @@
-#include <rclcpp/rclcpp.hpp>
-#include <sensor_msgs/msg/image.hpp>
-#include <sensor_msgs/msg/camera_info.hpp>
 #include <message_filters/subscriber.h>
 #include <message_filters/time_synchronizer.h>
+#include <rclcpp/rclcpp.hpp>
+#include <sensor_msgs/msg/camera_info.hpp>
+#include <sensor_msgs/msg/image.hpp>
 
 /**
  * @brief Synchronizes camera topics.
@@ -13,7 +13,7 @@
 class CameraSynchronization : public rclcpp::Node
 {
 
-public:
+  public:
     /**
      * @brief Constructor for CameraSynchronization.
      */
@@ -30,11 +30,14 @@ public:
         synced_info_publisher_ = create_publisher<sensor_msgs::msg::CameraInfo>("sync_camera_info", 10);
 
         // Sync image_raw and camera_info messages
-        synchronizer_.reset(new message_filters::TimeSynchronizer<sensor_msgs::msg::Image, sensor_msgs::msg::Image, sensor_msgs::msg::CameraInfo>(rgb_subscriber_, depth_subscriber_, info_subscriber_, 10));
-        synchronizer_->registerCallback(std::bind(&CameraSynchronization::synchronizedCallback, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        synchronizer_.reset(new message_filters::TimeSynchronizer<sensor_msgs::msg::Image, sensor_msgs::msg::Image,
+                                                                  sensor_msgs::msg::CameraInfo>(
+            rgb_subscriber_, depth_subscriber_, info_subscriber_, 10));
+        synchronizer_->registerCallback(std::bind(&CameraSynchronization::synchronizedCallback, this,
+                                                  std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     }
 
-private:
+  private:
     /**
      * @brief Callback function for synchronized messages
      *
@@ -42,7 +45,9 @@ private:
      * @param depth_msg Synchronized depth message
      * @param info_msg Synchronized camera_info message
      */
-    void synchronizedCallback(const sensor_msgs::msg::Image::ConstSharedPtr &rgb_msg, const sensor_msgs::msg::Image::ConstSharedPtr &depth_msg, const sensor_msgs::msg::CameraInfo::ConstSharedPtr &info_msg)
+    void synchronizedCallback(const sensor_msgs::msg::Image::ConstSharedPtr &rgb_msg,
+                              const sensor_msgs::msg::Image::ConstSharedPtr &depth_msg,
+                              const sensor_msgs::msg::CameraInfo::ConstSharedPtr &info_msg)
     {
         /*
         RCLCPP_INFO(
@@ -72,7 +77,9 @@ private:
     message_filters::Subscriber<sensor_msgs::msg::Image> rgb_subscriber_;
     message_filters::Subscriber<sensor_msgs::msg::Image> depth_subscriber_;
     message_filters::Subscriber<sensor_msgs::msg::CameraInfo> info_subscriber_;
-    std::shared_ptr<message_filters::TimeSynchronizer<sensor_msgs::msg::Image, sensor_msgs::msg::Image, sensor_msgs::msg::CameraInfo>> synchronizer_;
+    std::shared_ptr<message_filters::TimeSynchronizer<sensor_msgs::msg::Image, sensor_msgs::msg::Image,
+                                                      sensor_msgs::msg::CameraInfo>>
+        synchronizer_;
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr synced_rgb_publisher_;
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr synced_depth_publisher_;
     rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr synced_info_publisher_;

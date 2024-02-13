@@ -1,8 +1,8 @@
 #pragma once
 
-#include <cmath>
-#include <array>
 #include <algorithm>
+#include <array>
+#include <cmath>
 
 /**
  * @brief Calculates percent output for differential drive based off joystick values.
@@ -14,7 +14,7 @@
  */
 class DifferentialDrive
 {
-public:
+  public:
     /**
      * @brief Constructor for DifferentialDrive class.
      *
@@ -22,15 +22,14 @@ public:
      * @param Y Y-coordinate.
      * @param R Percent output.
      */
-    DifferentialDrive(double X, double Y, double R)
-        : percent_output(R),
-          theta(std::atan2(Y, X))
+    DifferentialDrive(double X, double Y, double R) : percent_output(R), theta(std::atan2(Y, X))
     {
         // Scale theta to the turning radius output range
         double radiusScaleFactor = 5.0;
         double abstheta = std::abs(theta);
 
-        // Multiple cases to keep the turning radius positive and between certain values even when theta is in other quadrants
+        // Multiple cases to keep the turning radius positive and between certain values even when theta is in other
+        // quadrants
         if (abstheta > 0 && abstheta < 1.57)
         {
             turning_radius = static_cast<double>(radiusScaleFactor * abstheta);
@@ -125,7 +124,7 @@ public:
         return wheelPercentOutput;
     }
 
-private:
+  private:
     double percent_output;
     double theta;
     double turning_radius;
