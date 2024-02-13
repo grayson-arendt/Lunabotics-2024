@@ -355,7 +355,7 @@ int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
 
-    std::vector<double> std_deviation = {0.005, 0.005, 0.01};
+    std::vector<double> std_deviation = {0.005, 0.005, 0.005};
 
     auto particleFilter = std::make_shared<ParticleFilter>(500, std_deviation);
 
