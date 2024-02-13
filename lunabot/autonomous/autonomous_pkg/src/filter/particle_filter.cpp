@@ -11,7 +11,7 @@
  * odometry and IMU data will be used as an influence on robot pose.
  *
  * @param particles Number of particles.
- * @param deviation Vector containing standard deviations for x, y, and theta.
+ * @param deviation Vector containing standard deviations for x, y, and yaw.
  * @author Grayson Arendt
  */
 ParticleFilter::ParticleFilter(int particles, std::vector<double> deviation) : Node("particle_filter"), state(FilterState::INIT)
@@ -73,7 +73,7 @@ void ParticleFilter::resetTimer()
 
 /**
  * @brief Callback for the lidar odometry subscription.
- * @param odometry Received Odometry message.
+ * @param odometry Received odometry message.
  */
 void ParticleFilter::lidar_odometry_callback(const nav_msgs::msg::Odometry::SharedPtr odometry)
 {
@@ -95,7 +95,7 @@ void ParticleFilter::lidar_odometry_callback(const nav_msgs::msg::Odometry::Shar
 
 /**
  * @brief Callback for the camera odometry subscription.
- * @param odometry Received Odometry message.
+ * @param odometry Received odometry message.
  */
 void ParticleFilter::camera_odometry_callback(const nav_msgs::msg::Odometry::SharedPtr odometry)
 {
@@ -178,7 +178,7 @@ void ParticleFilter::estimate_pose()
 
         x_positions.push_back(updated_particles[prime_id].x);
         y_positions.push_back(updated_particles[prime_id].y);
-        yaws.push_back(updated_particles[prime_id].theta);
+        yaws.push_back(updated_particles[prime_id].yaw);
 
         current_x = x_positions[iteration + 1];
         current_y = y_positions[iteration + 1];
@@ -194,7 +194,7 @@ void ParticleFilter::estimate_pose()
  * @brief Initialize the particles with the given pose.
  * @param initial_x Initial x position.
  * @param initial_y Initial y position.
- * @param initial_yaw Initial theta (yaw) orientation.
+ * @param initial_yaw Initial yaw orientation.
  */
 void ParticleFilter::initialize(double initial_x, double initial_y, double initial_yaw)
 {
@@ -206,15 +206,15 @@ void ParticleFilter::initialize(double initial_x, double initial_y, double initi
         particles[i].id = i;
         particles[i].x = initial_x;
         particles[i].y = initial_y;
-        particles[i].theta = initial_yaw;
+        particles[i].yaw = initial_yaw;
         particles[i].weight = 1.0;
     }
 }
 
 /**
  * @brief Creates a prediction of possible robot states via particles based off of lidar odometry.
- * @param lidar_position_x lidar x position.
- * @param lidar_position_y lidar y position.
+ * @param lidar_position_x Lidar x position.
+ * @param lidar_position_y Lidar y position.
  * @param lidar_yaw Lidar yaw orientation.
  */
 void ParticleFilter::predict(double lidar_position_x, double lidar_position_y, double lidar_yaw)
@@ -229,16 +229,16 @@ void ParticleFilter::predict(double lidar_position_x, double lidar_position_y, d
     {
         std::normal_distribution<double> dist_x(lidar_position_x, std_x);
         std::normal_distribution<double> dist_y(lidar_position_y, std_y);
-        std::normal_distribution<double> dist_theta(lidar_yaw, std_yaw);
+        std::normal_distribution<double> dist_yaw(lidar_yaw, std_yaw);
 
         particles[i].x = dist_x(generator);
         particles[i].y = dist_y(generator);
-        particles[i].theta = dist_theta(generator);
+        particles[i].yaw = dist_yaw(generator);
     }
 }
 
 /**
- * @brief Calculates the weight of a particle based on lidar and camera values.
+ * @brief Calculates the weight of a particle based on lidar, camera, and IMU values.
  * @param lidar_position_x Lidar x position.
  * @param lidar_position_y Lidar y position.
  * @param lidar_yaw Lidar yaw orientation.
@@ -255,30 +255,30 @@ double ParticleFilter::calculateWeight(double lidar_position_x, double lidar_pos
     // Calculate differences between camera and lidar positions and orientations
     double dx = camera_position_x - lidar_position_x;
     double dy = camera_position_y - lidar_position_y;
-    double dtheta_camera = camera_yaw - lidar_yaw;
-    double dtheta_imu = imu_yaw - lidar_yaw;
+    double dyaw_camera = camera_yaw - lidar_yaw;
+    double dyaw_imu = imu_yaw - lidar_yaw;
 
     // Calculate the components of the log weights
     double exponent_x = -(dx * dx) / (2 * std_deviation[0] * std_deviation[0]);
     double exponent_y = -(dy * dy) / (2 * std_deviation[1] * std_deviation[1]);
-    double exponent_theta_camera = -(dtheta_camera * dtheta_camera) / (2 * std_deviation[2] * std_deviation[2]);
-    double exponent_theta_imu = -(dtheta_imu * dtheta_imu) / (2 * std_deviation[2] * std_deviation[2]);
+    double exponent_yaw_camera = -(dyaw_camera * dyaw_camera) / (2 * std_deviation[2] * std_deviation[2]);
+    double exponent_yaw_imu = -(dyaw_imu * dyaw_imu) / (2 * std_deviation[2] * std_deviation[2]);
 
     // Calculate log weights for each dimension (extra weight scale for IMU, since it is more accurate angle-wise)
     double log_weight_x = exponent_x - 0.5 * log(2 * M_PI * std_deviation[0] * std_deviation[0]);
     double log_weight_y = exponent_y - 0.5 * log(2 * M_PI * std_deviation[1] * std_deviation[1]);
-    double log_weight_theta_camera = exponent_theta_camera - 0.5 * log(2 * M_PI * std_deviation[2] * std_deviation[2]);
-    double log_weight_theta_imu = 1.5 * exponent_theta_imu - 0.5 * log(2 * M_PI * std_deviation[2] * std_deviation[2]);
+    double log_weight_yaw_camera = exponent_yaw_camera - 0.5 * log(2 * M_PI * std_deviation[2] * std_deviation[2]);
+    double log_weight_yaw_imu = 1.5 * exponent_yaw_imu - 0.5 * log(2 * M_PI * std_deviation[2] * std_deviation[2]);
 
     // Sum up the log weights
 
     if (odometry_lost)
     {
-        log_weight = log_weight_theta_imu;
+        log_weight = log_weight_yaw_imu;
     }
     else
     {
-        log_weight = log_weight_x + log_weight_y + log_weight_theta_camera + log_weight_theta_imu;
+        log_weight = log_weight_x + log_weight_y + log_weight_yaw_camera + log_weight_yaw_imu;
     }
 
     return log_weight;
@@ -289,13 +289,14 @@ double ParticleFilter::calculateWeight(double lidar_position_x, double lidar_pos
  * @param camera_position_x Camera x position.
  * @param camera_position_y Camera y position.
  * @param camera_yaw Camera yaw orientation.
+ * @param imu_yaw IMU yaw orientation.
  */
 void ParticleFilter::updateWeight(double camera_position_x, double camera_position_y, double camera_yaw, double imu_yaw)
 {
     for (int i = 0; i < num_particles; i++)
     {
         double newWeight = calculateWeight(
-            particles[i].x, particles[i].y, particles[i].theta,
+            particles[i].x, particles[i].y, particles[i].yaw,
             camera_position_x, camera_position_y, camera_yaw, imu_yaw);
 
         particles[i].weight = newWeight;

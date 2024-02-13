@@ -30,7 +30,7 @@ struct Particle
     int id;
     double x;
     double y;
-    double theta;
+    double yaw;
     double weight;
 };
 
@@ -101,9 +101,9 @@ public:
      * @brief Initializes the particle filter with given initial pose.
      * @param initial_x Initial x position.
      * @param initial_y Initial y position.
-     * @param initial_theta Initial orientation (yaw).
+     * @param initial_yaw Initial yaw orientation.
      */
-    void initialize(double initial_x, double initial_y, double initial_theta);
+    void initialize(double initial_x, double initial_y, double initial_yaw);
 
     /**
      * @brief Predicts the next state of the particles based on lidar odometry.
@@ -129,11 +129,11 @@ public:
 
     /**
      * @brief Updates the weights of particles based on camera data.
-     * @param camera_position_x x position of camera.
-     * @param camera_position__y y position of camera.
+     * @param camera_position_x X position of camera.
+     * @param camera_position_y Y position of camera.
      * @param camera_position_yaw Yaw orientation of camera.
      */
-    void updateWeight(double camera_position_x, double camera_position__y, double camera_position_yaw, double imu_yaw);
+    void updateWeight(double camera_position_x, double camera_position_y, double camera_position_yaw, double imu_yaw);
 
     /**
      * @brief Resamples particles based on their weights.
