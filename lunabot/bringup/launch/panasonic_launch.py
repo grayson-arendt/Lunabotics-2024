@@ -48,10 +48,33 @@ def generate_launch_description():
             name='static_transform_publisher',
     )
 
+    imu_complementary_filter = Node(
+                package='imu_complementary_filter',
+                executable='complementary_filter_node',
+                name='complementary_filter_gain_node',
+                output='screen',
+                parameters=[
+                    {'fixed_frame': 'odom'},
+                    {'do_bias_estimation': True},
+                    {'do_adaptive_gain': True},
+                    {'use_mag': False},
+                    {'gain_acc': 0.01},
+                    {'publish_tf': False},
+                ],
+    )
+
+    imu_madgwick = Node(
+                package='imu_filter_madgwick',
+                executable='imu_filter_madgwick_node',
+                name='imu_filter',
+                output='screen',
+                parameters=[os.path.join(get_package_share_directory("bringup"), 'params', 'imu_filter.yaml')])
+
     imu_rotator = Node(
         package='autonomous_pkg',
         executable='imu_rotator'
     )
+
 
     motor_controller_node = Node(
         package='autonomous_pkg',
@@ -71,6 +94,11 @@ def generate_launch_description():
     laserscan_to_pointcloud_merger = Node(
         package="autonomous_pkg",
         executable="laserscan_to_pointcloud_merger"
+    )
+
+    particle_filter = Node(
+                package="autonomous_pkg",
+                executable="particle_filter",
     )
 
     lidar1 = Node(
@@ -100,14 +128,6 @@ def generate_launch_description():
                          'angle_compensate': True,
                          'scan_mode':'Boost'}],
         output='screen')
-
-    ukf_node = Node(
-            package='robot_localization',
-            executable='ukf_node',
-            name='ukf_filter_node',
-            output='screen',
-            parameters=[os.path.join(get_package_share_directory("bringup"), 'params', 'ukf.yaml')],
-    )
   
     lidar1_odom = Node(
         package='rf2o_laser_odometry',
@@ -121,7 +141,7 @@ def generate_launch_description():
                     'base_frame_id' : 'base_link',
                     'odom_frame_id' : 'odom',
                     'init_pose_from_topic' : '',
-                    'freq' : 30.0}],
+                    'freq' : 15.0}],
     )
 
     foxglove_launch = IncludeLaunchDescription(
@@ -148,6 +168,9 @@ def generate_launch_description():
 	        'scan_topic':'/scan1',
             'approx_sync': 'true',
             'rviz': 'false',
+            'publish_tf_odom':'false',
+            'publish_tf_map':'false',
+            'publish_null_when_lost':'false',
             'queue_size': '300', 
         }.items(),)])
 
@@ -155,12 +178,12 @@ def generate_launch_description():
         lidar1,
         lidar1_odom,
         camera_launch,
-        imu_rotator,
+        imu_complementary_filter,
         robot_state_publisher_node,
         joint_state_publisher_node,
         map_to_odom_tf,
         motor_controller_node,
-        ukf_node,
+        particle_filter,
         odometry_transform,
         foxglove_launch,
         rtabmap_launch,

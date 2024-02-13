@@ -5,20 +5,20 @@ This repository contains code made by the College of DuPage team for the NASA Lu
 ## Dependencies
 
 To use this project, you need to have the following packages installed:
-
-- `robot_state_publisher`
-- `joint_state_publisher`
-- `tf2_ros`
-- `robot_localization`
+- `rtabmap`
+- `rtabmap_ros`
+- `navigation2`
 - `librealsense2`
 - `realsense2_camera`
 - `realsense2_camera_dbgsym`
 - `realsense2_camera_msgs`
 - `realsense2_camera_msgs_dbgsym`
 - `realsense2_description`
+- `imu_filter_madgwick`
 - `foxglove_bridge`
-- `rtabmap`
-- `rtabmap_ros`
+- `robot_state_publisher`
+- `joint_state_publisher`
+- `tf2_ros`
 
 For each dependency, use `sudo apt install ros-humble-<package_name>`. Make sure the underscores in some of the names are replaced by dashes when using this command.
 

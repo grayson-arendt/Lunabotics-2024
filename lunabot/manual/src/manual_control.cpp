@@ -20,6 +20,13 @@ using namespace ctre::phoenix::motorcontrol::can;
  * 
  * @author Anthony Baran
  */
+
+std::string interface = "can0";
+// create wheel objects of the TalonFX class, pass in the motor ID and interface, default interface is can0
+// leaving interface as a parameter for example, in our case we don't need to because the CANbus is named can0
+TalonFX left_wheel_motor(2, interface);
+TalonFX right_wheel_motor(3);
+
 class ManualControl : public rclcpp::Node
 {
 public:

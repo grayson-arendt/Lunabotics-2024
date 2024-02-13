@@ -34,14 +34,14 @@ private:
     auto rotated_msg = std::make_shared<sensor_msgs::msg::Imu>(*msg);
 
     // Transform linear acceleration
-    rotated_msg->linear_acceleration.y = msg->linear_acceleration.x;  // X -> Y
-    rotated_msg->linear_acceleration.x = msg->linear_acceleration.y;  // Y -> X
-    rotated_msg->linear_acceleration.z = -msg->linear_acceleration.z; // Invert Z
+    rotated_msg->linear_acceleration.y = msg->linear_acceleration.x;
+    rotated_msg->linear_acceleration.x = msg->linear_acceleration.y;
+    rotated_msg->linear_acceleration.z = -msg->linear_acceleration.z;
 
     // Transform angular velocity
-    rotated_msg->angular_velocity.y = msg->angular_velocity.x;  // X -> Y
-    rotated_msg->angular_velocity.x = msg->angular_velocity.y;  // Y -> X
-    rotated_msg->angular_velocity.z = -msg->angular_velocity.z; // Invert Z
+    rotated_msg->angular_velocity.y = msg->angular_velocity.x;
+    rotated_msg->angular_velocity.x = msg->angular_velocity.y;
+    rotated_msg->angular_velocity.z = -msg->angular_velocity.z;
 
     // Publish the transformed message
     publisher_->publish(*rotated_msg);

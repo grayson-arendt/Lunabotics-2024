@@ -176,7 +176,7 @@ void CLaserOdometry2DNode::process()
   else
   {
     // This is a warning. We depend on laser scans, so no meaning running faster than scan freq.
-    RCLCPP_WARN(get_logger(), "Waiting for laser_scans....");
+    //RCLCPP_WARN(get_logger(), "Waiting for laser_scans....");
   }
 }
 

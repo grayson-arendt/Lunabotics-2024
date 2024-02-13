@@ -2,6 +2,8 @@
 #include "nav_msgs/msg/odometry.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "tf2_ros/transform_broadcaster.h"
+#include "tf2/LinearMath/Quaternion.h"
+#include "tf2/LinearMath/Matrix3x3.h"
 
 /**
  * @brief Broadcasts the odom->base_link transform.
@@ -20,7 +22,7 @@ public:
         tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
 
         odometry_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
-            "odometry/filtered", 10,
+            "filtered_odom", 10,
             std::bind(&OdometryTransform::transform_odom, this, std::placeholders::_1));
     }
 
@@ -40,16 +42,24 @@ private:
         odometry_transform.transform.translation.x = odometry->pose.pose.position.x;
         odometry_transform.transform.translation.y = odometry->pose.pose.position.y;
         odometry_transform.transform.translation.z = 0.0;
-        odometry_transform.transform.rotation.x = odometry->pose.pose.orientation.x;
-        odometry_transform.transform.rotation.y = odometry->pose.pose.orientation.y;
-        odometry_transform.transform.rotation.z = odometry->pose.pose.orientation.z;
-        odometry_transform.transform.rotation.w = odometry->pose.pose.orientation.w;
+
+        tf2::Quaternion quaternion(odometry->pose.pose.orientation.x, odometry->pose.pose.orientation.y, odometry->pose.pose.orientation.z, odometry->pose.pose.orientation.w);
+        tf2::Matrix3x3 euler(quaternion);
+
+        euler.getRPY(roll, pitch, yaw);
+        quaternion.setRPY(0.0, 0.0, yaw);
+
+        odometry_transform.transform.rotation.x = quaternion.x();
+        odometry_transform.transform.rotation.y = quaternion.y();
+        odometry_transform.transform.rotation.z = quaternion.z();
+        odometry_transform.transform.rotation.w = quaternion.w();
 
         tf_broadcaster_->sendTransform(odometry_transform);
     }
 
     std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
     rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odometry_subscriber_;
+    double roll, pitch, yaw;
 };
 
 /**
