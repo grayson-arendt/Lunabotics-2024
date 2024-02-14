@@ -84,10 +84,13 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
         - autonomous_pkg
           - AprilTag.h (Header for AprilTag detection)
           - CalculateGoal.h (Header for calculating goal based off AprilTag positions)
+          - ParticleFilter.h (Header for sensor fusion with a particle filter)
       - ctre (CTRE Phoenix C++ API for using Falcon 500 motors)
       - **src**
         - **camera**
           - camera_synchronization.cpp (Synchronizes RGB, depth, and camera info messages to have same timestamp)
+        - **filter**
+          - particle_filter.cpp (Fuses lidar odometry, camera odometry, and IMU data to estimate robot pose)     
         - **motor**
           - motor_controller.cpp (Sends percent output commands to motors based off /cmd_vel topic)
           - motor_test.cpp (Simple node for testing motors)
