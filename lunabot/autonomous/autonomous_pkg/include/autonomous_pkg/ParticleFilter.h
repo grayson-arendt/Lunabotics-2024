@@ -158,7 +158,6 @@ class ParticleFilter : public rclcpp::Node
     int num_particles;
     int max_weight_index;
     int prime_id;
-    int iteration;
     double weight_sum;
     double log_weight;
     double max_weight = std::numeric_limits<double>::lowest();
@@ -171,10 +170,8 @@ class ParticleFilter : public rclcpp::Node
     double camera_position_x, camera_position_y;
     double camera_orientation_x, camera_orientation_y, camera_orientation_z, camera_orientation_w;
     double camera_roll, camera_pitch, camera_yaw;
-    std::vector<Particle> particles;
-    std::vector<Particle> updated_particles;
-    std::vector<double> std_deviation, weights;
-    std::vector<double> x_positions, y_positions, yaws, init_values;
+    std::vector<Particle> particles, updated_particles;
+    std::vector<double> init_values, std_deviation, weights;
     tf2::Quaternion current_quaternion, lidar_quaternion, camera_quaternion, imu_quaternion;
     tf2::Matrix3x3 lidar_euler, camera_euler, imu_euler;
     rclcpp::TimerBase::SharedPtr camera_odometry_timer_;
