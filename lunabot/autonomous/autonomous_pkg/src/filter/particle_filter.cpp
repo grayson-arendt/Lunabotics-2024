@@ -43,12 +43,7 @@ ParticleFilter::ParticleFilter(int particles, std::vector<double> deviation)
 
     odometry_publisher_timer_ =
         create_wall_timer(std::chrono::milliseconds(100), [this]() { this->publish_odometry(); });
-
-    // Initial pose
-    x_positions.push_back(0.0);
-    y_positions.push_back(0.0);
-    yaws.push_back(0.0);
-
+    
     std_deviation = deviation;
     num_particles = particles;
 }
@@ -153,7 +148,6 @@ void ParticleFilter::estimate_pose()
     if (state == FilterState::INIT)
     {
         this->initialize(0, 0, 0);
-        iteration = 0;
         state = FilterState::PREDICT;
     }
     else
@@ -164,18 +158,12 @@ void ParticleFilter::estimate_pose()
 
         updated_particles = this->getParticles();
         prime_id = this->getPrimeParticle();
-
-        x_positions.push_back(updated_particles[prime_id].x);
-        y_positions.push_back(updated_particles[prime_id].y);
-        yaws.push_back(updated_particles[prime_id].yaw);
-
-        current_x = x_positions[iteration + 1];
-        current_y = y_positions[iteration + 1];
-        current_yaw = yaws[iteration + 1];
+        
+        current_x = updated_particles[prime_id].x;
+        current_y =updated_particles[prime_id].y;
+        current_yaw = updated_particles[prime_id].yaw;
 
         current_quaternion.setRPY(0, 0, current_yaw);
-
-        iteration++;
     }
 }
 
