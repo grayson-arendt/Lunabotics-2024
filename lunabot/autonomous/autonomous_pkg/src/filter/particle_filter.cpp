@@ -263,7 +263,6 @@ double ParticleFilter::calculateWeight(double lidar_position_x, double lidar_pos
     double log_weight_yaw_imu = 1.5 * exponent_yaw_imu - 0.5 * log(2 * M_PI * std_deviation[2] * std_deviation[2]);
 
     // Sum up the log weights
-
     if (odometry_lost)
     {
         log_weight = log_weight_yaw_imu;
