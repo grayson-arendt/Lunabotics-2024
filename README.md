@@ -73,7 +73,6 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
 ## Structure
 
 - **external** (Packages from external sources)
-  - navigation2
   - rf2o_laser_odometry
   - sllidar_ros2
 - **lunabot**  (Contains code written specifically for Lunabotics robot)

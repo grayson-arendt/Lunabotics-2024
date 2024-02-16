@@ -80,8 +80,8 @@ class NavigatorClient : public rclcpp::Node
                            const std::shared_ptr<const NavigateToPose::Feedback> feedback)
     {
         // Update the feedback_callback with correct format strings
-        RCLCPP_INFO(this->get_logger(), "Current pose: %f", feedback->navigation_time);
-        RCLCPP_INFO(this->get_logger(), "Distance remaining: %f", feedback->distance_remaining);
+        RCLCPP_INFO(this->get_logger(), "Current pose: %d", feedback->navigation_time);
+        RCLCPP_INFO(this->get_logger(), "Distance remaining: %d", feedback->distance_remaining);
     }
 
     /**
