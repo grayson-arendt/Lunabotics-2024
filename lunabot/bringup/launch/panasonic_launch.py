@@ -133,7 +133,7 @@ def generate_launch_description():
         parameters=[
             {
                 "channel_type": "serial",
-                "serial_port": "/dev/ttyUSB2",
+                "serial_port": "/dev/ttyUSB1",
                 "serial_baudrate": 115200,
                 "frame_id": "lidar2_link",
                 "inverted": False,
@@ -207,6 +207,7 @@ def generate_launch_description():
     return LaunchDescription(
         [
             lidar1,
+            lidar2,
             lidar1_odom,
             camera_launch,
             imu_complementary_filter,
