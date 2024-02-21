@@ -14,6 +14,7 @@ To use this project, you need to have the following packages installed:
 - `realsense2_camera_msgs`
 - `realsense2_camera_msgs_dbgsym`
 - `realsense2_description`
+- `depth_image_proc`
 - `imu_filter_madgwick`
 - `foxglove_bridge`
 - `robot_state_publisher`
@@ -28,6 +29,13 @@ cd <ros_workspace>/src
 git clone -b panasonic-dev https://github.com/grayson-arendt/Lunabotics-2024.git
 cd ..
 colcon build
+```
+
+Generally, the computer may not be able to find the shared object files for CTRE Phoenix library. An easy way to fix this is to directly copy them into the /usr/lib directory.
+
+```bash
+cd <ros_workspace>/src/Lunabotics-2024/lunabot/autonomous_pkg/phoenix_lib/x86-64/
+sudo cp libCTRE_Phoenix.so libCTRE_PhoenixCCI.so libCTRE_PhoenixTools.so /usr/lib/
 ```
 
 ## Running Robot
