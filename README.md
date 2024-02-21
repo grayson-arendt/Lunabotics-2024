@@ -26,7 +26,7 @@ For each dependency, use `sudo apt install ros-humble-<package_name>`. Make sure
 ## Installation
 ```bash
 cd <ros_workspace>/src
-git clone -b panasonic-dev https://github.com/grayson-arendt/Lunabotics-2024.git
+git clone -b intel-dev https://github.com/grayson-arendt/Lunabotics-2024.git
 cd ..
 colcon build
 ```
@@ -40,7 +40,7 @@ sudo cp libCTRE_Phoenix.so libCTRE_PhoenixCCI.so libCTRE_PhoenixTools.so /usr/li
 
 ## Running Robot
 
-If you would like to see RViz2 on your host computer without cloning this branch, use the previous instructions to clone external-dev onto your computer and panasonic-dev onto the robot's computer. Running the second command in step 3 involves no cloning on host computer, but you will have to manually select all the robot topics for visualization.
+If you would like to see RViz2 on your host computer without cloning this branch, use the previous instructions to clone external-dev onto your computer and intel-dev onto the robot's computer. Running the second command in step 3 involves no cloning on host computer, but you will have to manually select all the robot topics for visualization.
 
 Each launch file should be ran in a new terminal window. 
 
@@ -67,7 +67,7 @@ rviz2
 #### 4. Startup sensors, motors, and RTAB-Map:
 
 ```bash
-ros2 launch bringup panasonic_launch.py
+ros2 launch bringup intel_launch.py
 ```
 
 #### 5. Startup Navigation 2 stack:
