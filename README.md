@@ -2,8 +2,19 @@
 
 This branch contains a simple bringup package for running RViz2 on host computer.
 
-## Dependencies
+## Installation
 
-To use this project, you need to have the following packages installed:
+```bash
+cd <ros_workspace>/src
+git clone -b external-dev https://github.com/grayson-arendt/Lunabotics-2024.git
+cd ..
+colcon build
+```
 
-- `nav2_bringup`
+## Running RViz2
+
+```bash
+ros2 launch bringup external_launch.py
+```
+
+Once RViz2 loads up, use the "Nav2 Goal" tool to set a location for the robot to navigate to. Wait for the map to load before doing so.
