@@ -75,35 +75,27 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        base_footprint:
-          Value: true
         base_link:
           Value: true
-        base_scan:
+        lidar1_link:
           Value: true
-        camera_depth_frame:
+        lidar2_link:
           Value: true
-        camera_depth_optical_frame:
+        d455_link:
           Value: true
-        camera_link:
-          Value: true
-        camera_rgb_frame:
-          Value: true
-        camera_rgb_optical_frame:
-          Value: true
-        caster_back_left_link:
-          Value: true
-        caster_back_right_link:
-          Value: true
-        imu_link:
+        t265_link:
           Value: true
         map:
           Value: true
         odom:
           Value: true
-        wheel_left_link:
+        rear_right_wheel_link:
           Value: true
-        wheel_right_link:
+        rear_left_wheel_link:
+          Value: true
+        front_right_wheel_link:
+          Value: true
+        front_left_wheel_link:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -115,24 +107,21 @@ Visualization Manager:
           odom:
             base_footprint:
               base_link:
-                base_scan:
+                lidar_link1:
                   {}
-                camera_link:
-                  camera_depth_frame:
-                    camera_depth_optical_frame:
-                      {}
-                  camera_rgb_frame:
-                    camera_rgb_optical_frame:
-                      {}
-                caster_back_left_link:
+                lidar_link2:
                   {}
-                caster_back_right_link:
+                d455_link:
                   {}
-                imu_link:
+                t265_link:
                   {}
-                wheel_left_link:
+                rear_right_wheel_link:
                   {}
-                wheel_right_link:
+                rear_left_wheel_link:
+                  {}
+                front_right_wheel_link:
+                  {}
+                front_left_wheel_link:
                   {}
       Update Interval: 0
       Value: true
@@ -166,7 +155,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /scan
+        Value: /scan1
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -180,7 +169,7 @@ Visualization Manager:
       Channel Name: intensity
       Class: rviz_default_plugins/PointCloud2
       Color: 255; 255; 255
-      Color Transformer: ""
+      Color Transformer: RGB8
       Decay Time: 0
       Enabled: true
       Invert Rainbow: false
@@ -188,19 +177,18 @@ Visualization Manager:
       Max Intensity: 4096
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: Bumper Hit
-      Position Transformer: ""
+      Name: Camera Cloud
+      Position Transformer: XYZ
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.07999999821186066
-      Style: Spheres
+      Size (m): 0.009999999776482582
+      Style: Points
       Topic:
         Depth: 5
         Durability Policy: Volatile
-        Filter size: 10
         History Policy: Keep Last
-        Reliability Policy: Best Effort
-        Value: /mobile_base/sensors/bumper_pointcloud
+        Reliability Policy: Reliable
+        Value: /rtabmap/cloud_obstacles
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -473,7 +461,7 @@ Visualization Manager:
             Durability Policy: Volatile
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /intel_realsense_r200_depth/image_raw
+            Value: /d455/color/image_raw
           Value: true
         - Alpha: 1
           Autocompute Intensity Bounds: true
