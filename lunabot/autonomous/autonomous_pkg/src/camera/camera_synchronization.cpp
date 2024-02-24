@@ -20,14 +20,14 @@ class CameraSynchronization : public rclcpp::Node
     CameraSynchronization() : Node("synchronized_image_camera_node")
     {
         // Image_raw and camera_info subscribers
-        rgb_subscriber_.subscribe(this, "/image_raw");
-        depth_subscriber_.subscribe(this, "/depth/image_raw");
-        info_subscriber_.subscribe(this, "/depth/camera_info");
+        rgb_subscriber_.subscribe(this, "astra_pro/color/image_raw");
+        depth_subscriber_.subscribe(this, "astra_pro/depth/image_raw");
+        info_subscriber_.subscribe(this, "astra_pro/depth/camera_info");
 
         // Publishers for synced messages
-        synced_rgb_publisher_ = create_publisher<sensor_msgs::msg::Image>("sync_image_raw", 10);
-        synced_depth_publisher_ = create_publisher<sensor_msgs::msg::Image>("sync_depth_raw", 10);
-        synced_info_publisher_ = create_publisher<sensor_msgs::msg::CameraInfo>("sync_camera_info", 10);
+        synced_rgb_publisher_ = create_publisher<sensor_msgs::msg::Image>("astra_pro/color/sync/image_raw", 10);
+        synced_depth_publisher_ = create_publisher<sensor_msgs::msg::Image>("astra_pro/depth/sync/image_raw", 10);
+        synced_info_publisher_ = create_publisher<sensor_msgs::msg::CameraInfo>("astra_pro/depth/sync/camera_info", 10);
 
         // Sync image_raw and camera_info messages
         synchronizer_.reset(new message_filters::TimeSynchronizer<sensor_msgs::msg::Image, sensor_msgs::msg::Image,

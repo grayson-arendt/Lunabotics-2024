@@ -75,7 +75,8 @@ add_executable(wheel_imu_odometry src/odometry/wheel_imu_odometry.cpp)
 add_executable(odometry_transform src/odometry/odometry_transform.cpp)
 
 # Utilities
-add_executable(imu_rotator src/utilities/imu_rotator.cpp)
+add_executable(imu_rotator_d455 src/utilities/imu_rotator_d455.cpp)
+add_executable(imu_rotator_t265 src/utilities/imu_rotator_t265.cpp)
 add_executable(map_merger src/utilities/map_merger.cpp)
 add_executable(pointcloud_to_laserscan src/utilities/pointcloud_to_laserscan.cpp)
 add_executable(laserscan_to_pointcloud_merger src/utilities/laserscan_to_pointcloud_merger.cpp)
@@ -87,7 +88,8 @@ ament_target_dependencies(motor_test rclcpp sensor_msgs)
 ament_target_dependencies(navigator_client rclcpp rclcpp_action nav2_msgs geometry_msgs)
 ament_target_dependencies(odometry_transform rclcpp nav_msgs geometry_msgs tf2 tf2_ros)
 ament_target_dependencies(wheel_imu_odometry rclcpp nav_msgs std_msgs geometry_msgs tf2 tf2_ros sensor_msgs autonomous_msgs)
-ament_target_dependencies(imu_rotator rclcpp sensor_msgs)
+ament_target_dependencies(imu_rotator_d455 rclcpp sensor_msgs)
+ament_target_dependencies(imu_rotator_t265 rclcpp sensor_msgs)
 ament_target_dependencies(map_merger rclcpp nav_msgs)
 ament_target_dependencies(pointcloud_to_laserscan rclcpp sensor_msgs)
 ament_target_dependencies(laserscan_to_pointcloud_merger rclcpp sensor_msgs pcl_conversions)
@@ -109,7 +111,8 @@ install(TARGETS
   navigator_client
   odometry_transform
   wheel_imu_odometry
-  imu_rotator
+  imu_rotator_d455
+  imu_rotator_t265
   map_merger
   pointcloud_to_laserscan
   laserscan_to_pointcloud_merger

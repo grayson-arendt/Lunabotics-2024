@@ -30,7 +30,7 @@ class LaserScanToPointCloudMerger : public rclcpp::Node
             "scan2", 10, std::bind(&LaserScanToPointCloudMerger::scan2_callback, this, std::placeholders::_1));
 
         // Create publisher for PointCloud2 messages
-        cloud_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("cloud_in", 10);
+        cloud_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("rtabmap_d455/scan_cloud", 10);
 
         // Create timer to publish merged PointCloud periodically
         timer_ = this->create_wall_timer(std::chrono::milliseconds(100),
@@ -45,7 +45,7 @@ class LaserScanToPointCloudMerger : public rclcpp::Node
      */
     void scan1_callback(const sensor_msgs::msg::LaserScan::SharedPtr msg)
     {
-        cloud1_ = convert_scan_to_pointcloud(msg);
+        cloud1_ = convert_scan_to_pointcloud(msg, 0.0, 0.0, 0.0);
     }
 
     /**
@@ -55,7 +55,7 @@ class LaserScanToPointCloudMerger : public rclcpp::Node
      */
     void scan2_callback(const sensor_msgs::msg::LaserScan::SharedPtr msg)
     {
-        cloud2_ = convert_scan_to_pointcloud(msg);
+        cloud2_ = convert_scan_to_pointcloud(msg, M_PI, 0.74835, 0.0);
     }
 
     /**
@@ -64,19 +64,27 @@ class LaserScanToPointCloudMerger : public rclcpp::Node
      * @param msg The received LaserScan message.
      * @return The converted PCL PointCloud.
      */
-    pcl::PointCloud<pcl::PointXYZ>::Ptr convert_scan_to_pointcloud(const sensor_msgs::msg::LaserScan::SharedPtr msg)
+    pcl::PointCloud<pcl::PointXYZ>::Ptr convert_scan_to_pointcloud(const sensor_msgs::msg::LaserScan::SharedPtr msg,
+                                                                   float angle_offset, float translation_offset_x,
+                                                                   float translation_offset_y)
     {
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
 
         float angle_min = msg->angle_min;
         float angle_increment = msg->angle_increment;
 
-        // Convert polar coordinates to cartesian coordinates
+        // Convert polar coordinates to cartesian coordinates and apply transformation
         for (size_t i = 0; i < msg->ranges.size(); ++i)
         {
-            float angle = angle_min + i * angle_increment;
-            float x = msg->ranges[i] * std::cos(angle);
-            float y = msg->ranges[i] * std::sin(angle);
+            float angle = angle_min + i * angle_increment + angle_offset;
+            // Ensure angle is within [-pi, pi] range
+            while (angle > M_PI)
+                angle -= 2 * M_PI;
+            while (angle < -M_PI)
+                angle += 2 * M_PI;
+
+            float x = msg->ranges[i] * std::cos(angle) + translation_offset_x;
+            float y = msg->ranges[i] * std::sin(angle) + translation_offset_y;
             cloud->push_back(pcl::PointXYZ(x, y, 0.0));
         }
 
@@ -94,7 +102,7 @@ class LaserScanToPointCloudMerger : public rclcpp::Node
 
         pcl::concatenate(*cloud1_, *cloud2_, *merged_cloud_);
         pcl::toROSMsg(*merged_cloud_, cloud_out);
-
+      
         cloud_out.header.frame_id = "lidar1_link";
         cloud_pub_->publish(cloud_out);
     }
