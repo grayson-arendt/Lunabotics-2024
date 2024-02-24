@@ -126,8 +126,6 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
   - rf2o_laser_odometry
 - **lunabot**  (Contains code written specifically for Lunabotics robot)
   - **autonomous**
-    - autonomous_msgs
-    - autonomous_pkg
       - **include**
       - ctre (CTRE Phoenix C++ API for using Falcon 500 motors)
       - **src**   
@@ -139,5 +137,6 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
         - **utilities**
           - imu_rotator_d455.cpp (Rotates the D455 IMU to be ENU)
           - imu_rotator_t265.cpp (Rotates the T265 IMU to be ENU)
-  - **bringup** (Contains launch files for running the robot and running Navigation 2 stack)
+  - **bringup** (Contains launch files for running the robot, mapping with RTAB-Map, and navigating with the Navigation 2 stack)
+  - **description** (Contains URDF for robot model)
   - **manual**  (Contains node for driving robot with a controller)
