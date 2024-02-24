@@ -59,7 +59,7 @@ sudo ./install_dependencies.sh
 ```
 ## Setup Permissions and CTRE Phoenix Library
 
-The sllidar_ros2 package needs to access /dev/ttyUSB0 and /dev/ttyUSB1 (using both lidars). While you can run `sudo chmod +x 777 /dev/ttyUSB0` for example, it would need to be ran each time on startup. To fix this, run the command below and restart the computer.
+The rplidar_ros package needs to access /dev/ttyUSB0 and /dev/ttyUSB1 (using both lidars). While you can run `sudo chmod +x 777 /dev/ttyUSB0` for example, it would need to be ran each time on startup. To fix this, run the command below and restart the computer.
 
 ```bash
 sudo usermod -a -G dialout $USER
@@ -122,16 +122,13 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
 ## Structure
 
 - **external** (Packages from external sources)
-  - realsense_ros2 
+  - realsense_ros
   - rf2o_laser_odometry
-  - sllidar_ros2
 - **lunabot**  (Contains code written specifically for Lunabotics robot)
   - **autonomous**
     - autonomous_msgs
     - autonomous_pkg
       - **include**
-        - autonomous_pkg
-          - CalculateGoal.h (Header for calculating goal based off AprilTag positions)
       - ctre (CTRE Phoenix C++ API for using Falcon 500 motors)
       - **src**   
         - **motor**

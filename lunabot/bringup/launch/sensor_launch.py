@@ -27,9 +27,9 @@ def generate_launch_description():
     )
 
     lidar1 = Node(
-        package="sllidar_ros2",
-        executable="sllidar_node",
-        name="sllidar_node",
+        package="rplidar_ros",
+        executable="rplidar_node",
+        name="rplidar_node",
         remappings=[("/scan", "/scan1")],
         parameters=[
             {
@@ -46,9 +46,9 @@ def generate_launch_description():
     )
 
     lidar2 = Node(
-        package="sllidar_ros2",
-        executable="sllidar_node",
-        name="sllidar_node",
+        package="rplidar_ros",
+        executable="rplidar_node",
+        name="rplidar_node",
         remappings=[("/scan", "/scan2")],
         parameters=[
             {
