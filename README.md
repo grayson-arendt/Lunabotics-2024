@@ -21,14 +21,8 @@ This repository contains code made by the College of DuPage team for the NASA Lu
 - `rtabmap_ros`
 - `navigation2`
 - `robot_localization`
-- `depth_image_proc`
-- `image_publisher`
-- `imu_filter_madgwick`
-- `imu_complementary_filter`
-- `foxglove_bridge`
 - `robot_state_publisher`
 - `joint_state_publisher`
-- `tf2_ros`
 
 ## Installation
 
@@ -104,13 +98,20 @@ ros2 launch bringup external_launch.py
 rviz2
 ```
 
-#### 4. Startup sensors, motors, and RTAB-Map:
+#### 4. Startup sensors:
 
 ```bash
-ros2 launch bringup intel_launch.py
+ros2 launch bringup sensor_launch.py
+```
+`Note: this is a separate launch file in order to check conditions of sensors before trying to start everything else.`
+
+#### 5. Startup RTAB-Map and other nodes:
+
+```bash
+ros2 launch bringup mapping_launch.py
 ```
 
-#### 5. Startup Navigation 2 stack:
+#### 6. Startup Navigation 2 stack:
 
 ```bash
 ros2 launch bringup navigation_launch.py
@@ -130,28 +131,16 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
     - autonomous_pkg
       - **include**
         - autonomous_pkg
-          - AprilTag.h (Header for AprilTag detection)
           - CalculateGoal.h (Header for calculating goal based off AprilTag positions)
-          - ParticleFilter.h (Header for sensor fusion with a particle filter)
       - ctre (CTRE Phoenix C++ API for using Falcon 500 motors)
-      - **src**
-        - **camera**
-          - camera_synchronization.cpp (Synchronizes RGB, depth, and camera info messages to have same timestamp)
-        - **filter**
-          - particle_filter.cpp (Fuses lidar odometry, camera odometry, and IMU data to estimate robot pose)     
+      - **src**   
         - **motor**
           - motor_controller.cpp (Sends percent output commands to motors based off /cmd_vel topic)
           - motor_test.cpp (Simple node for testing motors)
         - **navigation**
           - navigator_client.cpp (Action client for sending goals to Navigation 2 stack)
-        - **odometry**
-          - odometry_transform.cpp (Odometry to base_link transform broadcaster)
-          - wheel_imu_odometry.cpp (Calculates odometry based off both encoders and IMU)
-          - wheel_odometry.cpp (Calculates odometry based off only encoders)
         - **utilities**
-          - imu_rotator.cpp (Rotates the D455 IMU, since the camera has non-standard orientation)
-          - laserscan_to_pointcloud_merger.cpp (Combines two LaserScan messages into one and publishes as a PointCloud2 message)
-          - map_merger.cpp (Combines two occupancy grids and publishes the merged occupancy grid)
-          - pointcloud_to_laserscan.cpp (Converts PointCloud2 into LaserScan and publishes the message)
+          - imu_rotator_d455.cpp (Rotates the D455 IMU to be ENU)
+          - imu_rotator_t265.cpp (Rotates the T265 IMU to be ENU)
   - **bringup** (Contains launch files for running the robot and running Navigation 2 stack)
   - **manual**  (Contains node for driving robot with a controller)
