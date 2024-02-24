@@ -53,33 +53,6 @@ def generate_launch_description():
         name="static_transform_publisher",
     )
 
-    imu_complementary_filter = Node(
-        package="imu_complementary_filter",
-        executable="complementary_filter_node",
-        name="complementary_filter_gain_node",
-        output="screen",
-        parameters=[
-            {"fixed_frame": "odom"},
-            {"do_bias_estimation": True},
-            {"do_adaptive_gain": True},
-            {"use_mag": False},
-            {"gain_acc": 0.01},
-            {"publish_tf": False},
-        ],
-    )
-
-    imu_madgwick = Node(
-        package="imu_filter_madgwick",
-        executable="imu_filter_madgwick_node",
-        name="imu_filter",
-        output="screen",
-        parameters=[
-            os.path.join(
-                get_package_share_directory("bringup"), "params", "imu_filter.yaml"
-            )
-        ],
-    )
-
     imu_rotator_d455 = Node(package="autonomous_pkg", executable="imu_rotator_d455")
 
     imu_rotator_t265 = Node(package="autonomous_pkg", executable="imu_rotator_t265")
@@ -88,24 +61,7 @@ def generate_launch_description():
         package="autonomous_pkg", executable="motor_controller"
     )
 
-    wheel_imu_odometry = Node(package="autonomous_pkg", executable="wheel_imu_odometry")
-
-    odometry_transform = Node(package="autonomous_pkg", executable="odometry_transform")
-
-    laserscan_to_pointcloud_merger = Node(
-        package="autonomous_pkg", executable="laserscan_to_pointcloud_merger"
-    )
-
-    pointcloud_to_laserscan = Node(
-        package="autonomous_pkg", executable="pointcloud_to_laserscan"
-    )
-
-    particle_filter = Node(
-        package="autonomous_pkg",
-        executable="particle_filter",
-    )
-
-    lidar1_odom = Node(
+    lidar_odom = Node(
         package="rf2o_laser_odometry",
         executable="rf2o_laser_odometry_node",
         name="rf2o_laser_odometry",
@@ -113,30 +69,12 @@ def generate_launch_description():
         parameters=[
             {
                 "laser_scan_topic": "/scan1",
-                "odom_topic": "/odom_lidar1",
+                "odom_topic": "/odom_lidar",
                 "publish_tf": False,
                 "base_frame_id": "base_link",
                 "odom_frame_id": "odom",
                 "init_pose_from_topic": "",
                 "freq": 35.0,
-            }
-        ],
-    )
-
-    lidar2_odom = Node(
-        package="rf2o_laser_odometry",
-        executable="rf2o_laser_odometry_node",
-        name="rf2o_laser_odometry",
-        output="screen",
-        parameters=[
-            {
-                "laser_scan_topic": "/scan2",
-                "odom_topic": "/odom_lidar2",
-                "publish_tf": False,
-                "base_frame_id": "base_link",
-                "odom_frame_id": "odom",
-                "init_pose_from_topic": "",
-                "freq": 15.0,
             }
         ],
     )
@@ -149,13 +87,6 @@ def generate_launch_description():
             parameters=[os.path.join(get_package_share_directory("bringup"), 'params', 'ekf.yaml')],
     )
 
-    ukf = Node(
-            package='robot_localization',
-            executable='ukf_node',
-            name='ukf_filter_node',
-            output='screen',
-            parameters=[os.path.join(get_package_share_directory("bringup"), 'params', 'ukf.yaml')],
-    )
 
     rtabmap_launch = GroupAction(
         actions=[
@@ -189,9 +120,7 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
-            lidar1_odom,
-            laserscan_to_pointcloud_merger,
-            pointcloud_to_laserscan,
+            lidar_odom,
             imu_rotator_d455,
             imu_rotator_t265,
             ekf_node,

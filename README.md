@@ -2,6 +2,19 @@
 
 This repository contains code made by the College of DuPage team for the NASA Lunabotics competition. It is made for ROS 2 Humble on Ubuntu 22.04. 
 
+## Hardware
+
+- `Intel NUC 13 Pro`
+- `RPLidar S2L`
+- `RPLidar A3`
+- `Intel Realsense D455 Depth Camera`
+- `Intel Realsense T265 Tracking Camera`
+- `CTRE Falcon 500 (x2)`
+- `RoyPow 12V 18Ah LiFePO4 Battery`
+- `Turnigy 14.8V 12000mAh LiPo Battery`
+- `AndyMark Power Distribution Panel`
+- `MKS CANable Pro`
+
 ## Dependencies
 
 - `rtabmap`
@@ -29,6 +42,9 @@ cd librealsense-2.53.1/
 mkdir build && cd build
 cmake ../ -DFORCE_RSUSB_BACKEND=true -DCMAKE_BUILD_TYPE=release -DBUILD_EXAMPLES=true -DBUILD_GRAPHICAL_EXAMPLES=true
 sudo make uninstall && make clean && make -j8 && sudo make install
+cd ..
+cd scripts
+./setup_udev_rules.sh
 ```
 
 Next, clone and build the repository.
@@ -45,7 +61,7 @@ Run the install_dependencies script to install the required dependencies.
 ```bash
 cd <ros_workspace>/src/Lunabotics-2024/scripts
 chmod +x install_dependencies.sh
-./install_dependencies.sh
+sudo ./install_dependencies.sh
 ```
 ## Setup Permissions and CTRE Phoenix Library
 
@@ -74,7 +90,7 @@ cd <ros_workspace>
 source install/setup.bash
 ```
 
-#### 2. Initialize SocketCAN communication (note: the canableStart.sh script will only need to be ran once each time the robot computer boots up).
+#### 2. Initialize SocketCAN communication (note: the canable_start.sh script will only need to be ran once each time the robot computer boots up).
 ```bash
 cd <ros_workspace>/src/Lunabotics-2024/scripts
 chmod +x canable_start.sh 
