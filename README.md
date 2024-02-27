@@ -24,7 +24,7 @@ This repository contains code made by the College of DuPage team for the NASA Lu
 
 ## Installation
 
-1. Download the source code for [this](https://github.com/IntelRealSense/librealsense/releases/tag/v2.53.1) release and install.
+#### 1. Download the source code for [this](https://github.com/IntelRealSense/librealsense/releases/tag/v2.53.1) release and install.
 `Note: this repository contains realsense-ros version 4.51.1 in external directory. This is because support was dropped for the T265 camera in later releases.`
 
 ```bash
@@ -39,7 +39,7 @@ cd scripts
 ./setup_udev_rules.sh
 ```
 
-2. Next, clone and build the repository.
+#### 2. Next, clone and build the repository.
 
 ```bash
 cd <ros_workspace>/src
@@ -48,7 +48,7 @@ cd ..
 colcon build
 ```
 
-3. Run the install_dependencies script to install the required dependencies.
+#### 3. Run the install_dependencies script to install the required dependencies.
 
 ```bash
 cd <ros_workspace>/src/Lunabotics-2024/scripts
@@ -56,7 +56,7 @@ chmod +x install_dependencies.sh
 sudo ./install_dependencies.sh
 ```
 
-4. Repeat the last two steps with the [external-dev](https://github.com/grayson-arendt/Lunabotics-2024/external-dev.git) branch on the host computer (not robot computer). This branch is for visualizing the robot in RViz2.
+#### 4. Repeat the last two steps with the [external-dev](https://github.com/grayson-arendt/Lunabotics-2024/external-dev.git) branch on the host computer (not robot computer). This branch is for visualizing the robot in RViz2.
 
 ## Setup Permissions and CTRE Phoenix Library
 
