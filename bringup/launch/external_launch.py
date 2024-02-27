@@ -22,13 +22,20 @@ from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
 from launch.events import Shutdown
 from launch.substitutions import LaunchConfiguration
+from ament_index_python.packages import get_package_share_path, get_package_share_directory
 from launch_ros.actions import Node
 from nav2_common.launch import ReplaceString
-
+import xacro
 
 def generate_launch_description():
     # Get the launch directory
     bringup_dir = get_package_share_directory('bringup')
+
+    urdf_path = os.path.join(
+        get_package_share_path("description"), "urdf", "test_bot.xacro"
+    )
+
+    description = xacro.process_file(urdf_path).toxml()
 
     # Create the launch configuration variables
     namespace = LaunchConfiguration('namespace')
@@ -53,7 +60,7 @@ def generate_launch_description():
 
     declare_rviz_config_file_cmd = DeclareLaunchArgument(
         'rviz_config',
-        default_value=os.path.join(bringup_dir, 'config', 'nav2_default_view.rviz'),
+        default_value=os.path.join(bringup_dir, 'config', 'default_view.rviz'),
         description='Full path to the RVIZ config file to use',
     )
 
@@ -104,6 +111,17 @@ def generate_launch_description():
         ),
     )
 
+    start_robot_state_publisher_node = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        parameters=[{"robot_description": description}, {"use_sim_time": False}],
+    )
+
+    start_joint_state_publisher_node = Node(
+        package="joint_state_publisher",
+        executable="joint_state_publisher",
+        parameters=[{"use_sim_time": False}],
+    )
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -115,6 +133,8 @@ def generate_launch_description():
     # Add any conditioned actions
     ld.add_action(start_rviz_cmd)
     ld.add_action(start_namespaced_rviz_cmd)
+    ld.add_action(start_joint_state_publisher_node)
+    ld.add_action(start_robot_state_publisher_node)
 
     # Add other nodes and processes we need
     ld.add_action(exit_event_handler)
