@@ -76,7 +76,7 @@ namespace realsense2_camera
 
     const bool ALLOW_NO_TEXTURE_POINTS = false;
     const bool ORDERED_PC     = false;
-    const bool SYNC_FRAMES    = false;
+    const bool SYNC_FRAMES    = true;
 
     const bool PUBLISH_TF     = true;
     const double TF_PUBLISH_RATE = 0; // Static transform
@@ -103,7 +103,7 @@ namespace realsense2_camera
 
     const std::string DEFAULT_UNITE_IMU_METHOD         = "";
     const std::string DEFAULT_FILTERS                  = "";
-    const std::string DEFAULT_TOPIC_ODOM_IN            = "";
+    const std::string DEFAULT_TOPIC_ODOM_IN            = "odom_lidar";
 
     const float ROS_DEPTH_SCALE = 0.001;
 

@@ -22,7 +22,7 @@ class OdometryTransform : public rclcpp::Node
         tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
 
         odometry_subscriber_ = this->create_subscription<nav_msgs::msg::Odometry>(
-            "odometry/filtered", 10, std::bind(&OdometryTransform::transform_odom, this, std::placeholders::_1));
+            "t265/pose/sample", 10, std::bind(&OdometryTransform::transform_odom, this, std::placeholders::_1));
     }
 
   private:
