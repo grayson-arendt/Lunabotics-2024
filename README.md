@@ -21,7 +21,6 @@ This repository contains code made by the College of DuPage team for the NASA Lu
 - `rtabmap_ros`
 - `rplidar_ros`
 - `navigation2`
-- `robot_localization`
 
 ## Installation
 

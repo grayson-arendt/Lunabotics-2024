@@ -21,14 +21,8 @@ find_package(rclcpp_action REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
-find_package(nav_msgs REQUIRED)
-find_package(tf2 REQUIRED)
-find_package(tf2_ros REQUIRED)
 
 include_directories(include)
-
-# Filter
-add_executable(particle_filter src/filter/particle_filter.cpp)
 
 # Motor
 add_executable(motor_controller src/motor/motor_controller.cpp)
@@ -37,16 +31,9 @@ add_executable(motor_test src/motor/motor_test.cpp)
 # Navigation
 add_executable(navigator_client src/navigation/navigator_client.cpp)
 
-# Utilities
-add_executable(imu_rotator src/utilities/imu_rotator.cpp)
-add_executable(odometry_transform src/utilities/odometry_transform.cpp)
-
-ament_target_dependencies(particle_filter rclcpp nav_msgs sensor_msgs geometry_msgs tf2 tf2_ros)
 ament_target_dependencies(motor_controller rclcpp geometry_msgs)
 ament_target_dependencies(motor_test rclcpp sensor_msgs)
 ament_target_dependencies(navigator_client rclcpp rclcpp_action nav2_msgs geometry_msgs)
-ament_target_dependencies(imu_rotator rclcpp sensor_msgs)
-ament_target_dependencies(odometry_transform rclcpp nav_msgs geometry_msgs tf2 tf2_ros)
 
 install(
   DIRECTORY phoenix_lib/
@@ -54,12 +41,9 @@ install(
 )
 
 install(TARGETS
-  particle_filter
   motor_controller
   motor_test
   navigator_client
-  imu_rotator
-  odometry_transform
   DESTINATION lib/${PROJECT_NAME}
 )
 
