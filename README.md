@@ -43,7 +43,7 @@ cd scripts
 
 ```bash
 cd <ros_workspace>/src
-git clone -b intel-dev https://github.com/grayson-arendt/Lunabotics-2024.git
+git clone https://github.com/grayson-arendt/Lunabotics-2024.git
 cd ..
 colcon build
 ```
