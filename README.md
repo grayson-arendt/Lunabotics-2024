@@ -83,7 +83,7 @@ sudo cp libCTRE_Phoenix.so libCTRE_PhoenixCCI.so libCTRE_PhoenixTools.so /usr/li
 
 Each launch file should be ran in a new terminal window. 
 
-`Note: Unplug and replug in the T265 after booting up the NUC, it will not detect it if it is not replugged in again.`
+`Note: unplug and replug in the T265 after booting up the NUC, it will not detect it if it is not replugged in again.`
 
 #### 1. Navigate to ROS 2 workspace and install (repeat on each new terminal before launches):
 ```bash
