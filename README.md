@@ -129,39 +129,34 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
 - **external** (Packages from external sources)
   - realsense_ros
   - rf2o_laser_odometry
-- **lunabot**  (Contains code written specifically for Lunabotics robot)
+- **lunabot** (Contains code written specifically for Lunabotics robot)
   - **autonomous**
-      - **autonomous** (For Python scripts)
-      - __init__.py
-      - module_to_import.py
-      - **include**
-        - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
-      - **phoenix_lib** (Contains shared object files for CTRE Phoenix C++ API)
-      - **scripts**
+    - **scripts**
       - navigate_through_poses.py (Navigates robot through multiple goals)
       - simple_commander.py (Simple Navigation 2 commander)
-      - **src**   
-        - **motor**
-          - motor_controller.cpp (Sends percent output commands to motors based off /cmd_vel topic)
-          - motor_test.cpp (Simple node for testing motors)
-        - **navigation**
-          - navigator_client.cpp (Action client for sending goals to Navigation 2)
+    - **include**
+      - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
+    - **phoenix_lib** (Contains shared object files for CTRE Phoenix C++ API)
+    - **src**
+      - **motor**
+        - motor_controller.cpp (Sends percent output commands to motors based off /cmd_vel topic)
+        - motor_test.cpp (Simple node for testing motors)
+      - **navigation**
+        - navigator_client.cpp (Action client for sending goals to Navigation 2)
   - **bringup** 
-        - **behavior_trees**
-          - navigate_to_pose_w_replanning_and_recovery.xml (Continuously replans path and backs up for recovery)
-        - **launch**
-          - mapping_launch.py (Launches static transforms, lidar odometry, motor controller node, and RTAB-Map)
-          - navigation_launch.py (Launches Navigation 2 stack)
-          - sensor_launch.py (Launches lidars and cameras)
-        - **params**
-            - nav2_params.yaml (Parameters for Navigation 2 stack)
+    - **behavior_trees**
+      - navigate_to_pose_w_replanning_and_recovery.xml (Continuously replans path and backs up for recovery)
+    - **launch**
+      - mapping_launch.py (Launches static transforms, lidar odometry, motor controller node, and RTAB-Map)
+      - navigation_launch.py (Launches Navigation 2 stack)
+      - sensor_launch.py (Launches lidars and cameras)
+    - **params**
+      - nav2_params.yaml (Parameters for Navigation 2 stack)
   - **manual**
-      - **include**
-        - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
-        - **manual**
+    - **include**
+      - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
+      - **manual**
         - DifferentialDrive.hpp (Header for driving differential robot)
-      - **phoenix_lib** (Contains shared object files for CTRE Phoenix C++ API)
-      - **src**   
-        - manual_control.cpp (Drives robot using a controller)
-      
-
+    - **phoenix_lib** (Contains shared object files for CTRE Phoenix C++ API)
+    - **src**
+      - manual_control.cpp (Drives robot using a controller)
