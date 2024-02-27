@@ -32,14 +32,12 @@ add_executable(motor_test src/motor/motor_test.cpp)
 add_executable(navigator_client src/navigation/navigator_client.cpp)
 
 # Utilities
-add_executable(imu_rotator_d455 src/utilities/imu_rotator_d455.cpp)
-add_executable(imu_rotator_t265 src/utilities/imu_rotator_t265.cpp)
+add_executable(imu_rotator src/utilities/imu_rotator.cpp)
 
 ament_target_dependencies(motor_controller rclcpp geometry_msgs)
 ament_target_dependencies(motor_test rclcpp sensor_msgs)
 ament_target_dependencies(navigator_client rclcpp rclcpp_action nav2_msgs geometry_msgs)
-ament_target_dependencies(imu_rotator_d455 rclcpp sensor_msgs)
-ament_target_dependencies(imu_rotator_t265 rclcpp sensor_msgs)
+ament_target_dependencies(imu_rotator rclcpp sensor_msgs)
 
 install(
   DIRECTORY phoenix_lib/
@@ -50,8 +48,7 @@ install(TARGETS
   motor_controller
   motor_test
   navigator_client
-  imu_rotator_d455
-  imu_rotator_t265
+  imu_rotator
   DESTINATION lib/${PROJECT_NAME}
 )
 

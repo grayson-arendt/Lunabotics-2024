@@ -1,6 +1,4 @@
-# ignore vscode
 **/.vscode/
-
-# ignore build 
 **/build/
-.DS_Store
+**/install/
+**/log/

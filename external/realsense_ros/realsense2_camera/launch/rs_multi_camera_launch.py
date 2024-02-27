@@ -54,10 +54,4 @@ def generate_launch_description():
             PythonLaunchDescriptionSource([ThisLaunchFileDir(), '/rs_launch.py']),
             launch_arguments=set_configurable_parameters(params2).items(),
         ),
-        # dummy static transformation from camera1 to camera2
-        launch_ros.actions.Node(
-            package = "tf2_ros",
-            executable = "static_transform_publisher",
-            arguments = ["0", "0", "0", "0", "0", "0", "camera1_link", "camera2_link"]
-        ),
     ])

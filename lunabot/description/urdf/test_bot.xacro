@@ -7,7 +7,7 @@
 	<link name="base_link">
 		<visual>
 			<geometry>
-				<mesh filename="file:///$(find robot_description)/meshes/base_link.stl" />
+				<mesh filename="file:/$(find description)/meshes/base_link.stl" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="0 0 0" />
@@ -18,7 +18,7 @@
 	<link name="ebox_link">
 		<visual>
 			<geometry>
-				<mesh filename="file:///$(find robot_description)/meshes/ebox_link.stl" />
+				<mesh filename="file:/$(find description)/meshes/ebox_link.stl" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="0 0 0" />
@@ -29,7 +29,7 @@
 	<link name="front_right_wheel_link">
 		<visual>
 			<geometry>
-				<mesh filename="file:///$(find robot_description)/meshes/wheel_link.stl" />
+				<mesh filename="file://$(find description)/meshes/wheel_link.stl" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="${pi / 2.0} 0 0" />
@@ -40,7 +40,7 @@
 	<link name="front_left_wheel_link">
 		<visual>
 			<geometry>
-				<mesh filename="file:///$(find robot_description)/meshes/wheel_link.stl" />
+				<mesh filename="file://$(find description)/meshes/wheel_link.stl" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="${pi / 2.0} 0 0" />
@@ -51,7 +51,7 @@
 	<link name="rear_right_wheel_link">
 		<visual>
 			<geometry>
-				<mesh filename="file:///$(find robot_description)/meshes/wheel_link.stl" />
+				<mesh filename="file://$(find description)/meshes/wheel_link.stl" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="${pi / 2.0} 0 0" />
@@ -62,7 +62,7 @@
 	<link name="rear_left_wheel_link">
 		<visual>
 			<geometry>
-				<mesh filename="file:///$(find robot_description)/meshes/wheel_link.stl" />
+				<mesh filename="file://$(find description)/meshes/wheel_link.stl" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="${pi / 2.0} 0 0" />
@@ -73,7 +73,7 @@
 	<link name="lidar1_link">
 		<visual>
 			<geometry>
-				<mesh filename="file:///$(find robot_description)/meshes/lidar_link.stl" />
+				<mesh filename="file://$(find description)/meshes/lidar_link.stl" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="0 0 0" />
@@ -84,7 +84,7 @@
 	<link name="lidar2_link">
 		<visual>
 			<geometry>
-				<mesh filename="file:///$(find robot_description)/meshes/lidar_link.stl" />
+				<mesh filename="file://$(find description)/meshes/lidar_link.stl" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="0 0 0" />
@@ -95,7 +95,7 @@
 	<link name="d455_link">
 		<visual>
 			<geometry>
-				<mesh filename="file:///$(find robot_description)/meshes/camera_link.stl" />
+				<mesh filename="file://$(find description)/meshes/camera_link.stl" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="0 0 0" />
@@ -106,7 +106,7 @@
 	<link name="t265_link">
 		<visual>
 			<geometry>
-				<mesh filename="file:///$(find robot_description)/meshes/camera_link.stl" />
+				<mesh filename="file://$(find description)/meshes/camera_link.stl" />
 			</geometry>
 			<origin xyz="0 0 0"
 				rpy="0 0 0" />

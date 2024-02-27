@@ -11,8 +11,8 @@ import pathlib
 sys.path.append(str(pathlib.Path(__file__).parent.absolute()))
 import rs_launch
 
-local_parameters = [{'name': 'camera_name1', 'default': 'D400', 'description': 'camera unique name'},
-                    {'name': 'device_type1', 'default': 'd4.', 'description': 'choose device by type'},
+local_parameters = [{'name': 'camera_name1', 'default': 'd455', 'description': 'camera unique name'},
+                    {'name': 'device_type1', 'default': 'd455', 'description': 'choose device by type'},
                     {'name': 'camera_name2', 'default': 'T265', 'description': 'camera unique name'},
                     {'name': 'device_type2', 'default': 't265', 'description': 'choose device by type'},
                     {'name': 'enable_fisheye12', 'default': 'false', 'description': 'topic for T265 wheel odometry'},
