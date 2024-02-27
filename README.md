@@ -116,7 +116,7 @@ ros2 launch bringup sensor_launch.py
 ros2 launch bringup mapping_launch.py
 ```
 
-#### 6. Startup Navigation 2 stack:
+#### 6. Startup Navigation 2:
 
 ```bash
 ros2 launch bringup navigation_launch.py
@@ -148,10 +148,10 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
       - navigate_to_pose_w_replanning_and_recovery.xml (Continuously replans path and backs up for recovery)
     - **launch**
       - mapping_launch.py (Launches static transforms, lidar odometry, motor controller node, and RTAB-Map)
-      - navigation_launch.py (Launches Navigation 2 stack)
+      - navigation_launch.py (Launches Navigation 2)
       - sensor_launch.py (Launches lidars and cameras)
     - **params**
-      - nav2_params.yaml (Parameters for Navigation 2 stack)
+      - nav2_params.yaml (Parameters for Navigation 2)
   - **manual**
     - **include**
       - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
