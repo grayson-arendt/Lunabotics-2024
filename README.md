@@ -56,7 +56,7 @@ chmod +x install_dependencies.sh
 sudo ./install_dependencies.sh
 ```
 
-#### 4. Repeat the last two steps with the [external-dev](https://github.com/grayson-arendt/Lunabotics-2024/external-dev.git) branch on the host computer (not robot computer). This branch is for visualizing the robot in RViz2.
+#### 4. Repeat the last two steps with the [external-dev](https://github.com/grayson-arendt/Lunabotics-2024/tree/external-dev?tab=readme-ov-file) branch on the host computer (not robot computer). This branch is for visualizing the robot in RViz2.
 
 ## Setup Permissions and CTRE Phoenix Library
 
