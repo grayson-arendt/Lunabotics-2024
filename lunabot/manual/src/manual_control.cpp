@@ -13,6 +13,13 @@ using namespace ctre::phoenix::platform;
 using namespace ctre::phoenix::motorcontrol;
 using namespace ctre::phoenix::motorcontrol::can;
 
+std::string interface = "can0";
+// create wheel objects of the TalonFX class, pass in the motor ID and interface, default interface is can0
+// leaving interface as a parameter for example, in our case we don't need to because the CANbus is named can0
+TalonFX left_wheel_motor(2, interface);
+TalonFX right_wheel_motor(3);
+
+
 /**
  * @brief Node that subscribes to the joy topic and uses joystick input to move robot.
  * @details This class creates a node that subscribes to the joy topic and uses joystick input
@@ -20,13 +27,6 @@ using namespace ctre::phoenix::motorcontrol::can;
  *
  * @author Anthony Baran
  */
-
-std::string interface = "can0";
-// create wheel objects of the TalonFX class, pass in the motor ID and interface, default interface is can0
-// leaving interface as a parameter for example, in our case we don't need to because the CANbus is named can0
-TalonFX left_wheel_motor(2, interface);
-TalonFX right_wheel_motor(3);
-
 class ManualControl : public rclcpp::Node
 {
   public:
