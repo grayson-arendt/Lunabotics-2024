@@ -19,6 +19,7 @@ def generate_launch_description():
         get_package_share_path("realsense2_camera"), "launch", "rs_multi_camera_launch.py"
     )
 
+    # RPLidar A3
     lidar1 = Node(
         package="rplidar_ros",
         executable="rplidar_node",
@@ -28,6 +29,7 @@ def generate_launch_description():
             {
                 "channel_type": "serial",
                 "serial_port": "/dev/ttyUSB1",
+                "scan_frequency": 30.0,
                 "serial_baudrate": 256000,
                 "frame_id": "lidar1_link",
                 "inverted": False,
@@ -38,6 +40,7 @@ def generate_launch_description():
         output="screen",
     )
 
+    # RPLidar S2L
     lidar2 = Node(
         package="rplidar_ros",
         executable="rplidar_node",
@@ -67,15 +70,13 @@ def generate_launch_description():
             "enable_gyro1": "true",
             "enable_accel1": "true",
             "unite_imu_method1": "2",
-            "depth_module.profile1":"848x480x60",
-            "rgb_camera.profile1":"848x480x60",
-            "enable_sync1":"true",
+            "depth_module.profile1":"848x480x30",
+            "rgb_camera.profile1":"848x480x30",
             "publish_odom_tf1":"false",
             "publish_tf1":"false",
             "camera_name2":"t265",
             "camera_namespace2":"t265",
             "device_type2": "t265",
-            "base_frame_id1":"t265_link",
             "enable_gyro2": "true",
             "enable_accel2": "true",
             "emable_pose2": "true",

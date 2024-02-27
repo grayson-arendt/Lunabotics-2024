@@ -16,26 +16,9 @@ from nav2_common.launch import RewrittenYaml
 from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
 def generate_launch_description():
-    urdf_path = os.path.join(
-        get_package_share_path("description"), "urdf", "test_bot.xacro"
-    )
-
-    description = xacro.process_file(urdf_path).toxml()
 
     rtabmap_launch_path = os.path.join(
         get_package_share_path("rtabmap_launch"), "launch", "rtabmap.launch.py"
-    )
-
-    robot_state_publisher_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        parameters=[{"robot_description": description}, {"use_sim_time": False}],
-    )
-
-    joint_state_publisher_node = Node(
-        package="joint_state_publisher",
-        executable="joint_state_publisher",
-        parameters=[{"use_sim_time": False}],
     )
 
     map_to_odom_tf = Node(
@@ -46,10 +29,10 @@ def generate_launch_description():
         name="static_transform_publisher",
     )
 
-    odom_frame_to_t265_tf = Node(
+    pose_to_base_link_tf = Node(
         package="tf2_ros",
         executable="static_transform_publisher",
-        arguments=["0", "0", "0", "0", "0", "0", "t265_link", "odom_frame"],
+        arguments=["0", "0", "0", "0", "0", "0", "t265_pose_frame", "base_link"],
         output="screen",
         name="static_transform_publisher",
     )
@@ -76,7 +59,7 @@ def generate_launch_description():
                 "base_frame_id": "base_link",
                 "odom_frame_id": "odom",
                 "init_pose_from_topic": "",
-                "freq": 35.0,
+                "freq": 20.0,
             }
         ],
     )
@@ -88,7 +71,6 @@ def generate_launch_description():
             output='screen',
             parameters=[os.path.join(get_package_share_directory("bringup"), 'params', 'ekf.yaml')],
     )
-
 
     rtabmap_launch = GroupAction(
         actions=[
@@ -122,14 +104,9 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
-            lidar_odom,
-            imu_rotator,
-            ekf_node,
             motor_controller_node,
-            robot_state_publisher_node,
-            joint_state_publisher_node,
             map_to_odom_tf,
-            odom_frame_to_t265_tf,
+            pose_to_base_link_tf,
             rtabmap_launch,
         ]
     )
