@@ -7,8 +7,8 @@ This repository contains code made by the College of DuPage team for the NASA Lu
 - `Intel NUC 13 Pro`
 - `RPLidar S2L`
 - `RPLidar A3`
-- `Intel Realsense D455 Depth Camera`
-- `Intel Realsense T265 Tracking Camera`
+- `Intel RealSense D455 Depth Camera`
+- `Intel RealSense T265 Tracking Camera`
 - `CTRE Falcon 500 (x2)`
 - `RoyPow 12V 18Ah LiFePO4 Battery`
 - `Turnigy 14.8V 12000mAh LiPo Battery`

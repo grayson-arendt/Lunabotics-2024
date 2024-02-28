@@ -114,7 +114,7 @@ controller_server:
       regulated_linear_scaling_min_radius: 1.5
       regulated_linear_scaling_min_speed: 0.25
       use_rotate_to_heading: false
-      allow_reversing: true
+      allow_reversing: false
       rotate_to_heading_min_angle: 0.785
       max_angular_accel: 10.0
       max_robot_pose_search_dist: 10.0
