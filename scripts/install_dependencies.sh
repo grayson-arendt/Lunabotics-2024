@@ -1,8 +1,10 @@
 #!/bin/bash
 
 ros_packages=(
-    "ros-humble-robot-state-publisher"
     "ros-humble-joint-state-publisher"
+    "ros-humble-xacro"
+    "ros-humble-navigation2"
+    "ros-humble-nav2-common"
 )
 
 # Install ROS 2 packages
