@@ -124,6 +124,8 @@ ros2 launch bringup navigation_launch.py
 
 In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in the GUI and have the robot navigate to that location. 
 
+![Demo](demo.png)
+
 ## Structure
 
 - **external** (Packages from external sources)
