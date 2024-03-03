@@ -7,6 +7,7 @@ from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch.conditions import IfCondition
 from launch_ros.actions import Node, SetParameter
 
+
 class ConditionalText(Substitution):
     def __init__(self, text_if, text_else, condition):
         self.text_if = text_if

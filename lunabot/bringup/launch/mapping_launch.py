@@ -5,6 +5,7 @@ from launch.actions import IncludeLaunchDescription, GroupAction
 from launch_ros.actions import Node, SetRemap
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
+
 def generate_launch_description():
 
     rtabmap_launch_path = os.path.join(
