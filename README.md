@@ -137,9 +137,6 @@ motors for the mechanisms for the zone.
 
 ## Structure
 
-- **external** (Packages from external sources)
-  - realsense_ros (Version 4.51.1)
-  - rf2o_laser_odometry
 - **lunabot** (Contains code written specifically for Lunabotics robot)
   - **autonomous**
     - **include**
@@ -168,4 +165,7 @@ motors for the mechanisms for the zone.
     - **urdf**
       - common_properties.xacro (Defines material colors)
       - test_bot.xacro (Defines links and joints for test bot)
+  - **external** (Packages from external sources)
+    - realsense_ros (Version 4.51.1)
+    - rf2o_laser_odometry
 
