@@ -116,13 +116,22 @@ ros2 launch bringup sensor_launch.py
 ros2 launch bringup mapping_launch.py
 ```
 
-#### 6. Startup Navigation 2:
+#### 6. Startup Navigation2:
 
 ```bash
 ros2 launch bringup navigation_launch.py
 ```
 
 In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in the GUI and have the robot navigate to that location. 
+
+#### (Optional) 7. Startup action client:
+
+```bash
+ros2 run autonomous navigation_client
+```
+
+The action client will send two goals, one for excavation zone and another for construction zone. After the goal has been reached, it will publish to /control topic and activate the certain
+mechanisms for that specific zone.
 
 ![Demo](demo.png)
 
@@ -133,32 +142,21 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
   - rf2o_laser_odometry
 - **lunabot** (Contains code written specifically for Lunabotics robot)
   - **autonomous**
-    - **scripts**
-      - navigate_through_poses.py (Navigates robot through multiple goals)
-      - simple_commander.py (Simple Navigation 2 commander)
     - **include**
       - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
     - **phoenix_lib** (Contains shared object files for CTRE Phoenix C++ API)
     - **src**
       - **motor**
-        - motor_controller.cpp (Sends percent output commands to motors based off /cmd_vel topic)
+        - motor_controller.cpp (Controller for both autonomous and manual control of robot)
         - motor_test.cpp (Simple node for testing motors)
       - **navigation**
-        - navigator_client.cpp (Action client for sending goals to Navigation 2)
+        - navigator_client.cpp (Action client that sends two goals and control commands)
   - **bringup** 
     - **behavior_trees**
       - navigate_to_pose_w_replanning_and_recovery.xml (Continuously replans path and backs up for recovery)
     - **launch**
       - mapping_launch.py (Launches static transforms, lidar odometry, motor controller node, and RTAB-Map)
-      - navigation_launch.py (Launches Navigation 2)
+      - navigation_launch.py (Launches Navigation2)
       - sensor_launch.py (Launches lidars and cameras)
     - **params**
       - nav2_params.yaml (Parameters for Navigation 2)
-  - **manual**
-    - **include**
-      - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
-      - **manual**
-        - DifferentialDrive.hpp (Header for driving differential robot)
-    - **phoenix_lib** (Contains shared object files for CTRE Phoenix C++ API)
-    - **src**
-      - manual_control.cpp (Drives robot using a controller)

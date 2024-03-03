@@ -1,0 +1,6 @@
+bool enable_autonomous_drive
+bool enable_manual_drive
+bool enable_intake
+bool enable_outtake
+bool actuator_up
+bool actuator_down

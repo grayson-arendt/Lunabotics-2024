@@ -21,6 +21,11 @@ find_package(rclcpp_action REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/Control.msg"
+)
 
 include_directories(include)
 
@@ -31,9 +36,12 @@ add_executable(motor_test src/motor/motor_test.cpp)
 # Navigation
 add_executable(navigator_client src/navigation/navigator_client.cpp)
 
-ament_target_dependencies(motor_controller rclcpp geometry_msgs)
+ament_target_dependencies(motor_controller rclcpp sensor_msgs geometry_msgs)
 ament_target_dependencies(motor_test rclcpp sensor_msgs)
 ament_target_dependencies(navigator_client rclcpp rclcpp_action nav2_msgs geometry_msgs)
+
+rosidl_target_interfaces(motor_controller ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rosidl_target_interfaces(navigator_client ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 install(
   DIRECTORY phoenix_lib/

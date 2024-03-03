@@ -5,10 +5,13 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_path
 
+
 def generate_launch_description():
 
     realsense_launch_path = os.path.join(
-        get_package_share_path("realsense2_camera"), "launch", "rs_multi_camera_launch.py"
+        get_package_share_path("realsense2_camera"),
+        "launch",
+        "rs_multi_camera_launch.py",
     )
 
     # RPLidar A3
@@ -61,10 +64,10 @@ def generate_launch_description():
             "enable_gyro1": "true",
             "enable_accel1": "true",
             "unite_imu_method1": "2",
-            "depth_module.profile1":"848x480x60",
-            "rgb_camera.profile1":"848x480x60",
-            "camera_name2":"t265",
-            "camera_namespace2":"t265",
+            "depth_module.profile1": "848x480x60",
+            "rgb_camera.profile1": "848x480x60",
+            "camera_name2": "t265",
+            "camera_namespace2": "t265",
             "device_type2": "t265",
             "enable_gyro2": "true",
             "enable_accel2": "true",

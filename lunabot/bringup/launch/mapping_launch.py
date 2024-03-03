@@ -1,14 +1,18 @@
 import os
 from launch import LaunchDescription
 from launch_ros.actions import Node, SetRemap
-from launch.actions import IncludeLaunchDescription,GroupAction
+from launch.actions import IncludeLaunchDescription, GroupAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from ament_index_python.packages import get_package_share_path, get_package_share_directory
+from ament_index_python.packages import (
+    get_package_share_path,
+    get_package_share_directory,
+)
+
 
 def generate_launch_description():
 
     rtabmap_launch_path = os.path.join(
-        get_package_share_path("rtabmap_launch"), "launch", "rtabmap.launch.py"
+        get_package_share_path("bringup"), "launch", "rtabmap_launch.py"
     )
 
     map_to_odom_tf = Node(
@@ -27,9 +31,8 @@ def generate_launch_description():
         name="static_transform_publisher",
     )
 
-    motor_controller_node = Node(
-        package="autonomous", executable="motor_controller"
-    )
+    motor_controller_node = Node(package="autonomous", executable="motor_controller")
+    teleop_node = Node(package="manual", executable="manual_control")
 
     lidar_odom = Node(
         package="rf2o_laser_odometry",
@@ -55,6 +58,7 @@ def generate_launch_description():
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(rtabmap_launch_path),
                 launch_arguments={
+                    "output":"log",
                     "rtabmapviz": "false",
                     "frame_id": "base_link",
                     "args": "-d -Rtabmap/DetectionRate 10 -Optimizer/Robust true -Grid/Sensor 2 -Grid/RangeMin 0.5 -Reg/Force3DoF true -Reg/Strategy 0 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
@@ -64,8 +68,8 @@ def generate_launch_description():
                     "subscribe_rgb": "true",
                     "subscribe_depth": "true",
                     "subscribe_scan": "true",
-                    "scan_topic":"/scan2",
-                    "subscribe_odom_info":"false",
+                    "scan_topic": "/scan2",
+                    "subscribe_odom_info": "false",
                     "approx_sync": "true",
                     "rviz": "false",
                     "publish_tf_odom": "false",
@@ -75,7 +79,7 @@ def generate_launch_description():
                 }.items(),
             ),
         ]
-    )  
+    )
 
     return LaunchDescription(
         [
