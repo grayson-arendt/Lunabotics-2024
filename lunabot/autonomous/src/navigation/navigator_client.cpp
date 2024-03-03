@@ -1,8 +1,3 @@
-/**
- * @file navigator_client.cpp
- * @brief This file contains the implementation of a navigator client node.
- */
-
 #include "geometry_msgs/msg/pose.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
 #include "nav2_msgs/action/navigate_to_pose.hpp"
