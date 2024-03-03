@@ -1,13 +1,9 @@
 import os
+from ament_index_python.packages import get_package_share_path
 from launch import LaunchDescription
-from launch_ros.actions import Node, SetRemap
 from launch.actions import IncludeLaunchDescription, GroupAction
+from launch_ros.actions import Node, SetRemap
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from ament_index_python.packages import (
-    get_package_share_path,
-    get_package_share_directory,
-)
-
 
 def generate_launch_description():
 
@@ -58,7 +54,6 @@ def generate_launch_description():
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(rtabmap_launch_path),
                 launch_arguments={
-                    "output":"log",
                     "rtabmapviz": "false",
                     "frame_id": "base_link",
                     "args": "-d -Rtabmap/DetectionRate 10 -Optimizer/Robust true -Grid/Sensor 2 -Grid/RangeMin 0.5 -Reg/Force3DoF true -Reg/Strategy 0 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",

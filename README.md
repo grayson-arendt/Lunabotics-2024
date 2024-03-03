@@ -130,8 +130,8 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
 ros2 run autonomous navigation_client
 ```
 
-The action client will send two goals, one for excavation zone and another for construction zone. After the goal has been reached, it will publish to /control topic and activate the certain
-mechanisms for that specific zone.
+The action client will send two goals, one for excavation zone and another for construction zone. After the goal has been reached, it will publish to /control topic and enable the specific
+motors for the mechanisms for the zone.
 
 ![Demo](demo.png)
 

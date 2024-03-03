@@ -1,8 +1,7 @@
-#include "geometry_msgs/msg/pose.hpp"
-#include "geometry_msgs/msg/pose_stamped.hpp"
-#include "nav2_msgs/action/navigate_to_pose.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
+#include "nav2_msgs/action/navigate_to_pose.hpp"
+#include "geometry_msgs/msg/pose.hpp"
 #include "autonomous/msg/control.hpp"
 
 /**
@@ -239,10 +238,9 @@ private:
 };
 
 /**
- * @brief Main function.
- * @param argc Number of command-line arguments.
- * @param argv Array of command-line arguments.
- * @return Return status.
+ * @brief Main function
+ *
+ * Initializes and spins the NavigatorClient node
  */
 int main(int argc, char **argv)
 {

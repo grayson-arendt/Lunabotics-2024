@@ -1,6 +1,5 @@
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/joy.hpp"
-#include <algorithm>
 
 #define Phoenix_No_WPI
 #include "ctre/Phoenix.h"
@@ -64,7 +63,7 @@ class MotorTest : public rclcpp::Node
 };
 
 /**
- * @brief Main function.
+ * @brief Main function
  *
  * Initializes and spins the MotorTest node
  */
