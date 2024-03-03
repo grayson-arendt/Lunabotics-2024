@@ -75,7 +75,7 @@ ls /dev/ttyUSB*
 The computer may not be able to find the shared object files for CTRE Phoenix library. An easy way to fix this is to directly copy them into /usr/lib/.
 
 ```bash
-cd <ros_workspace>/src/Lunabotics-2024/lunabot/autonomous_pkg/phoenix_lib/x86-64/
+cd <ros_workspace>/src/Lunabotics-2024/lunabot/autonomous/phoenix_lib/x86-64/
 sudo cp libCTRE_Phoenix.so libCTRE_PhoenixCCI.so libCTRE_PhoenixTools.so /usr/lib/
 ```
 
