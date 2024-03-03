@@ -24,7 +24,7 @@ def generate_launch_description():
             {
                 "channel_type": "serial",
                 "serial_port": "/dev/ttyUSB1",
-                "scan_frequency": 30.0,
+                "scan_frequency": 20.0,
                 "serial_baudrate": 256000,
                 "frame_id": "lidar1_link",
                 "inverted": False,

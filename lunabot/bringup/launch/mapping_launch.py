@@ -474,9 +474,6 @@ def launch_setup(context, *args, **kwargs):
             arguments=[
                 LaunchConfiguration("args"),
                 LaunchConfiguration("odom_args"),
-                "--ros-args",
-                "--disable-rosout-logs",
-                "--disable-stdout-logs",
             ],
             prefix=LaunchConfiguration("launch_prefix"),
             namespace=LaunchConfiguration("namespace"),
@@ -688,7 +685,6 @@ def launch_setup(context, *args, **kwargs):
                 }
             ],
             remappings=[
-                ("rtabmap/map", "map"),
                 ("rgb/image", LaunchConfiguration("rgb_topic_relay")),
                 ("depth/image", LaunchConfiguration("depth_topic_relay")),
                 ("rgb/camera_info", LaunchConfiguration("camera_info_topic")),
@@ -708,11 +704,7 @@ def launch_setup(context, *args, **kwargs):
                 ("imu", LaunchConfiguration("imu_topic")),
             ],
             arguments=[
-                LaunchConfiguration("args"),
-                "--ros-args",
-                "--disable-rosout-logs",
-                "--disable-stdout-logs",
-            ],
+                LaunchConfiguration("args"),],
             prefix=LaunchConfiguration("launch_prefix"),
             namespace=LaunchConfiguration("namespace"),
         ),
@@ -847,7 +839,7 @@ def generate_launch_description():
                 default_value="false",
                 description="Publish TF between map and odomerty.",
             ),
-            DeclareLaunchArgument("namespace", default_value="rtabmap", description=""),
+            DeclareLaunchArgument("namespace", default_value="", description=""),
             DeclareLaunchArgument(
                 "database_path",
                 default_value="~/.ros/rtabmap.db",
@@ -864,7 +856,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "rtabmap_args",
-                default_value="",
+                default_value="-d -Rtabmap/DetectionRate 10 -Optimizer/Robust true -Grid/Sensor 2 -Grid/RangeMin 0.5 -Reg/Force3DoF true -Reg/Strategy 0 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
                 description='Backward compatibility, use "args" instead.',
             ),
             DeclareLaunchArgument(
@@ -990,9 +982,9 @@ def generate_launch_description():
             ),
             # LiDAR
             DeclareLaunchArgument(
-                "subscribe_scan", default_value="false", description=""
+                "subscribe_scan", default_value="true", description=""
             ),
-            DeclareLaunchArgument("scan_topic", default_value="/scan", description=""),
+            DeclareLaunchArgument("scan_topic", default_value="/scan2", description=""),
             DeclareLaunchArgument(
                 "subscribe_scan_cloud", default_value="false", description=""
             ),
@@ -1034,7 +1026,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "odom_args",
-                default_value="",
+                default_value="-d -Optimizer/Robust true -Reg/Force3DoF true -Reg/Strategy 0",
                 description="More arguments for odometry (overwrite same parameters in rtabmap_args).",
             ),
             DeclareLaunchArgument(
