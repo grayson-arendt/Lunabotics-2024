@@ -138,7 +138,7 @@ mechanisms for that specific zone.
 ## Structure
 
 - **external** (Packages from external sources)
-  - realsense_ros
+  - realsense_ros (Version 4.51.1)
   - rf2o_laser_odometry
 - **lunabot** (Contains code written specifically for Lunabotics robot)
   - **autonomous**
@@ -150,7 +150,7 @@ mechanisms for that specific zone.
         - motor_controller.cpp (Controller for both autonomous and manual control of robot)
         - motor_test.cpp (Simple node for testing motors)
       - **navigation**
-        - navigator_client.cpp (Action client that sends two goals and control commands)
+        - navigator_client.cpp (Action client that sends goals and motor control commands)
   - **bringup** 
     - **behavior_trees**
       - navigate_to_pose_w_replanning_and_recovery.xml (Continuously replans path and backs up for recovery)
@@ -159,4 +159,15 @@ mechanisms for that specific zone.
       - navigation_launch.py (Launches Navigation2)
       - sensor_launch.py (Launches lidars and cameras)
     - **params**
-      - nav2_params.yaml (Parameters for Navigation 2)
+      - nav2_params.yaml (Parameters for Navigation2)
+  - **description** 
+    - **meshes** (Meshes for robot model in RViz2)
+      - base_link.stl
+      - camera_link.stl
+      - ebox_link.stl
+      - lidar_link.stl
+      - wheel_link.stl
+    - **urdf**
+      - common_properties.xacro (Defines material colors)
+      - test_bot.xacro (Defines links and joints for test bot)
+
