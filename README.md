@@ -137,7 +137,7 @@ motors for the mechanisms for the zone.
 
 ## Structure
 
-- **lunabot** (Contains code written specifically for Lunabotics robot)
+- **lunabot** (Contains code for Lunabotics robot)
   - **autonomous**
     - **include**
       - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
