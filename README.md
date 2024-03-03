@@ -150,7 +150,8 @@ motors for the mechanisms for the zone.
     - **behavior_trees**
       - navigate_to_pose_w_replanning_and_recovery.xml (Continuously replans path and backs up for recovery)
     - **launch**
-      - mapping_launch.py (Launches static transforms, lidar odometry, motor controller node, and RTAB-Map)
+      - external_launch.py (Launches RViz2 and robot state/joint publisher nodes)
+      - mapping_launch.py (Launches static transforms, lidar odometry, robot controller node, and RTAB-Map)
       - navigation_launch.py (Launches Navigation2)
       - sensor_launch.py (Launches lidars and cameras)
     - **params**
