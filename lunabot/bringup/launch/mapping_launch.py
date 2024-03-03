@@ -28,8 +28,7 @@ def generate_launch_description():
         name="static_transform_publisher",
     )
 
-    motor_controller_node = Node(package="autonomous", executable="motor_controller")
-    teleop_node = Node(package="manual", executable="manual_control")
+    robot_controller_node = Node(package="autonomous", executable="robot_controller")
 
     lidar_odom = Node(
         package="rf2o_laser_odometry",
@@ -80,7 +79,7 @@ def generate_launch_description():
     return LaunchDescription(
         [
             lidar_odom,
-            motor_controller_node,
+            robot_controller_node,
             map_to_odom_tf,
             pose_to_base_link_tf,
             rtabmap_launch,

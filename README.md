@@ -146,11 +146,9 @@ motors for the mechanisms for the zone.
       - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
     - **phoenix_lib** (Contains shared object files for CTRE Phoenix C++ API)
     - **src**
-      - **motor**
-        - motor_controller.cpp (Controller for both autonomous and manual control of robot)
-        - motor_test.cpp (Simple node for testing motors)
-      - **navigation**
-        - navigator_client.cpp (Action client that sends goals and motor control commands)
+      - motor_test.cpp (Simple node for testing motors)
+      - navigator_client.cpp (Action client that sends goals and motor control commands)
+      - robot_controller.cpp (Controller for both autonomous and manual control of robot)
   - **bringup** 
     - **behavior_trees**
       - navigate_to_pose_w_replanning_and_recovery.xml (Continuously replans path and backs up for recovery)

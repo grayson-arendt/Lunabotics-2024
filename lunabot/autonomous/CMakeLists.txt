@@ -30,17 +30,17 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 include_directories(include)
 
 # Motor
-add_executable(motor_controller src/motor/motor_controller.cpp)
-add_executable(motor_test src/motor/motor_test.cpp)
+add_executable(robot_controller src/robot_controller.cpp)
+add_executable(motor_test src/motor_test.cpp)
 
 # Navigation
-add_executable(navigator_client src/navigation/navigator_client.cpp)
+add_executable(navigator_client src/navigator_client.cpp)
 
-ament_target_dependencies(motor_controller rclcpp sensor_msgs geometry_msgs)
+ament_target_dependencies(robot_controller rclcpp sensor_msgs geometry_msgs)
 ament_target_dependencies(motor_test rclcpp sensor_msgs)
 ament_target_dependencies(navigator_client rclcpp rclcpp_action nav2_msgs geometry_msgs)
 
-rosidl_target_interfaces(motor_controller ${PROJECT_NAME} "rosidl_typesupport_cpp")
+rosidl_target_interfaces(robot_controller ${PROJECT_NAME} "rosidl_typesupport_cpp")
 rosidl_target_interfaces(navigator_client ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 install(
@@ -49,7 +49,7 @@ install(
 )
 
 install(TARGETS
-  motor_controller
+  robot_controller
   motor_test
   navigator_client
   DESTINATION lib/${PROJECT_NAME}
@@ -63,9 +63,9 @@ else()
     set(PHOENIX_LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/phoenix_lib/x86-64)
 endif()
 
-target_link_libraries(motor_controller ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so)
-target_link_libraries(motor_controller ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so)
-target_link_libraries(motor_controller ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so)
+target_link_libraries(robot_controller ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so)
+target_link_libraries(robot_controller ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so)
+target_link_libraries(robot_controller ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so)
 
 target_link_libraries(motor_test ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so)
 target_link_libraries(motor_test ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so)
