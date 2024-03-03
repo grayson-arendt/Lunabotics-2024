@@ -122,6 +122,13 @@ def generate_launch_description():
         executable="joint_state_publisher",
         parameters=[{"use_sim_time": False}],
     )
+
+    start_joy_node = Node(
+        package="joy",
+        executable="joy_node",
+        name="joy_node",
+    )
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -135,6 +142,7 @@ def generate_launch_description():
     ld.add_action(start_namespaced_rviz_cmd)
     ld.add_action(start_joint_state_publisher_node)
     ld.add_action(start_robot_state_publisher_node)
+    ld.add_action(start_joy_node)
 
     # Add other nodes and processes we need
     ld.add_action(exit_event_handler)
