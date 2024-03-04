@@ -159,7 +159,7 @@ motors for the mechanisms for the zone.
       - navigate_to_pose_w_replanning_goal_patience_and_recovery.xml (Behavior tree for Navigation2)
     - **launch**
       - external_launch.py (Launches RViz2 and robot state/joint publisher nodes)
-      - hardware_launch.py (Launches lidars, cameras, and robot_controller)
+      - hardware_launch.py (Launches lidars, cameras, and robot controller)
       - mapping_launch.py (Launches RTAB-Map)
       - navigation_launch.py (Launches Navigation2)
     - **params**
