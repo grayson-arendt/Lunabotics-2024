@@ -41,11 +41,11 @@ class HardwareMonitor : public rclcpp::Node
         });
 
         lidar1_timer_ = create_wall_timer(std::chrono::seconds(1), [this]() {
-            RCLCPP_WARN(get_logger(), "\033[0;36mLIDAR S2L:\033[0m \033[1;31mNO CONNECTION\033[0m");
+            RCLCPP_WARN(get_logger(), "\033[0;36mLIDAR S2L:\033[0m \033[1;31mNO CONNECTION, CHECK ttyUSB# IN LAUNCH\033[0m");
         });
 
         lidar2_timer_ = create_wall_timer(std::chrono::seconds(1), [this]() {
-            RCLCPP_WARN(get_logger(), "\033[0;36mLIDAR A3:\033[0m \033[1;31mNO CONNECTION\033[0m");
+            RCLCPP_WARN(get_logger(), "\033[0;36mLIDAR A3:\033[0m \033[1;31mNO CONNECTION, CHECK ttyUSB# IN LAUNCH\033[0m");
         });
     }
 

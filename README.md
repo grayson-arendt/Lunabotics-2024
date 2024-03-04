@@ -64,7 +64,7 @@ sudo apt --fix-broken install
 
 The install_dependencies.sh script will also remove librealsense2 and realsense2_camera packages. I have not been able to find another way around this yet, but RTAB-Map depends on librealsense2 and realsense2_camera and will cause broken dependencies. However, when the workspace is built, it will choose to use the newest realsense2_ros and not the one in the external directory, which will cause the T265 camera not to work. The current work around is to remove the packages before building the workspace, then fixing the broken dependencies afterwards.
 
-#### 4. Repeat the last two steps with the [external-dev](https://github.com/grayson-arendt/Lunabotics-2024/tree/external-dev?tab=readme-ov-file) branch on the host computer (not robot computer). This branch is for visualizing the robot in RViz2.
+#### 4. Repeat the last two steps (excluding the last line) with the [external-dev](https://github.com/grayson-arendt/Lunabotics-2024/tree/external-dev?tab=readme-ov-file) branch on the host computer (not robot computer). This branch is for visualizing the robot in RViz2.
 
 ## Setup Permissions and CTRE Phoenix Library
 
