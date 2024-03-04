@@ -59,7 +59,7 @@ def launch_setup(context, *args, **kwargs):
         ),
         DeclareLaunchArgument(
             "args",
-            default_value=LaunchConfiguration("rtabmap_args"),
+            default_value=LaunchConfiguration("rtabmap_args"), 
             description="Can be used to pass RTAB-Map's parameters or other flags like --udebug and --delete_db_on_start/-d",
         ),
         DeclareLaunchArgument(
@@ -474,6 +474,9 @@ def launch_setup(context, *args, **kwargs):
             arguments=[
                 LaunchConfiguration("args"),
                 LaunchConfiguration("odom_args"),
+                "--ros-args",
+                "--disable-stdout-logs",
+                "--disable-rosout-logs",
             ],
             prefix=LaunchConfiguration("launch_prefix"),
             namespace=LaunchConfiguration("namespace"),
@@ -704,7 +707,8 @@ def launch_setup(context, *args, **kwargs):
                 ("imu", LaunchConfiguration("imu_topic")),
             ],
             arguments=[
-                LaunchConfiguration("args"),],
+                LaunchConfiguration("args"), "--ros-args", "--disable-rosout-logs",
+            ],
             prefix=LaunchConfiguration("launch_prefix"),
             namespace=LaunchConfiguration("namespace"),
         ),
@@ -734,38 +738,6 @@ def launch_setup(context, *args, **kwargs):
                 ("rgb/camera_info", LaunchConfiguration("camera_info_topic")),
                 ("rgbd_image", LaunchConfiguration("rgbd_topic_relay")),
                 ("cloud", "voxel_cloud"),
-            ],
-        ),
-        Node(
-            package="tf2_ros",
-            executable="static_transform_publisher",
-            arguments=["0", "0", "0", "0", "0", "0", "map", "odom"],
-            output="screen",
-            name="static_transform_publisher",
-        ),
-        Node(
-            package="tf2_ros",
-            executable="static_transform_publisher",
-            arguments=["0", "0", "0", "0", "0", "0", "t265_pose_frame", "base_link"],
-            output="screen",
-            name="static_transform_publisher",
-        ),
-        Node(package="autonomous", executable="robot_controller"),
-        Node(
-            package="rf2o_laser_odometry",
-            executable="rf2o_laser_odometry_node",
-            name="rf2o_laser_odometry",
-            output="screen",
-            parameters=[
-                {
-                    "laser_scan_topic": "/scan1",
-                    "odom_topic": "/odom_lidar",
-                    "publish_tf": False,
-                    "base_frame_id": "base_link",
-                    "odom_frame_id": "odom",
-                    "init_pose_from_topic": "",
-                    "freq": 35.0,
-                }
             ],
         ),
     ]
@@ -836,8 +808,8 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "publish_tf_map",
-                default_value="false",
-                description="Publish TF between map and odomerty.",
+                default_value="true",
+                description="Publish TF between map and odometry.",
             ),
             DeclareLaunchArgument("namespace", default_value="", description=""),
             DeclareLaunchArgument(
@@ -848,7 +820,7 @@ def generate_launch_description():
             DeclareLaunchArgument("queue_size", default_value="300", description=""),
             DeclareLaunchArgument(
                 "qos",
-                default_value="1",
+                default_value="2",
                 description="General QoS used for sensor input data: 0=system default, 1=Reliable, 2=Best Effort.",
             ),
             DeclareLaunchArgument(
@@ -856,7 +828,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "rtabmap_args",
-                default_value="-d -Rtabmap/DetectionRate 10 -Optimizer/Robust true -Grid/Sensor 2 -Grid/RangeMin 0.5 -Reg/Force3DoF true -Reg/Strategy 0 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
+                default_value="--ros-args --disable-rosout-logs -d -Rtabmap/DetectionRate 10 -Optimizer/Robust true -Grid/Sensor 2 -Grid/RangeMin 0.5 -Reg/Force3DoF true -Reg/Strategy 0 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
                 description='Backward compatibility, use "args" instead.',
             ),
             DeclareLaunchArgument(
@@ -1026,7 +998,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "odom_args",
-                default_value="-d -Optimizer/Robust true -Reg/Force3DoF true -Reg/Strategy 0",
+                default_value="",
                 description="More arguments for odometry (overwrite same parameters in rtabmap_args).",
             ),
             DeclareLaunchArgument(

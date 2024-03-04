@@ -101,7 +101,7 @@ namespace realsense2_camera
     const std::string DEFAULT_ODOM_FRAME_ID            = "odom";
     const std::string DEFAULT_IMU_OPTICAL_FRAME_ID     = "camera_imu_optical_frame";
 
-    const std::string DEFAULT_UNITE_IMU_METHOD         = "";
+    const std::string DEFAULT_UNITE_IMU_METHOD         = "2";
     const std::string DEFAULT_FILTERS                  = "";
     const std::string DEFAULT_TOPIC_ODOM_IN            = "odom_lidar";
 

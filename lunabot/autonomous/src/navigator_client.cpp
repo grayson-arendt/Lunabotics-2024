@@ -73,7 +73,6 @@ public:
 
         RCLCPP_INFO(this->get_logger(), "Sending target goal...");
         this->nav_to_pose_client_->async_send_goal(goal_msg, send_goal_options);
-        this->enable_autonomous_drive();
     }
 
 private:
@@ -135,24 +134,8 @@ private:
         control_msg.enable_outtake = false;
         control_msg.enable_autonomous_drive = false;
         control_msg.enable_manual_drive = false;
-        control_msg.actuator_up = true;
-        control_msg.actuator_down = false;
-
-        publisher_->publish(control_msg);
-    }
-
-    /**
-     * @brief Enables autonomous drive control
-     */
-    void enable_autonomous_drive()
-    {
-        auto control_msg = autonomous::msg::Control();
-        control_msg.enable_intake = false;
-        control_msg.enable_outtake = false;
-        control_msg.enable_autonomous_drive = true;
-        control_msg.enable_manual_drive = false;
         control_msg.actuator_up = false;
-        control_msg.actuator_down = false;
+        control_msg.actuator_down = true;
 
         publisher_->publish(control_msg);
     }

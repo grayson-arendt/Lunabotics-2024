@@ -66,7 +66,7 @@ void T265RealsenseNode::setupSubscribers()
 
 void T265RealsenseNode::odom_in_callback(const nav_msgs::msg::Odometry::SharedPtr msg)
 {
-    ROS_DEBUG("Got in_odom message");
+    ROS_INFO("Got in_odom message");
     rs2_vector velocity {-(float)(msg->twist.twist.linear.y),
                           (float)(msg->twist.twist.linear.z),
                          -(float)(msg->twist.twist.linear.x)};

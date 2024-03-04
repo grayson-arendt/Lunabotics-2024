@@ -29,16 +29,15 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 
 include_directories(include)
 
-# Motor
-add_executable(robot_controller src/robot_controller.cpp)
+add_executable(hardware_monitor src/hardware_monitor.cpp)
 add_executable(motor_test src/motor_test.cpp)
-
-# Navigation
+add_executable(robot_controller src/robot_controller.cpp)
 add_executable(navigator_client src/navigator_client.cpp)
 
-ament_target_dependencies(robot_controller rclcpp sensor_msgs geometry_msgs)
+ament_target_dependencies(hardware_monitor rclcpp sensor_msgs)
 ament_target_dependencies(motor_test rclcpp sensor_msgs)
 ament_target_dependencies(navigator_client rclcpp rclcpp_action nav2_msgs geometry_msgs)
+ament_target_dependencies(robot_controller rclcpp sensor_msgs geometry_msgs)
 
 rosidl_target_interfaces(robot_controller ${PROJECT_NAME} "rosidl_typesupport_cpp")
 rosidl_target_interfaces(navigator_client ${PROJECT_NAME} "rosidl_typesupport_cpp")
@@ -49,9 +48,10 @@ install(
 )
 
 install(TARGETS
-  robot_controller
+  hardware_monitor
   motor_test
   navigator_client
+  robot_controller
   DESTINATION lib/${PROJECT_NAME}
 )
 

@@ -1,6 +1,6 @@
 ## Overview
 
-This repository contains code made by the College of DuPage team for the NASA Lunabotics competition. It is made for ROS 2 Humble on Ubuntu 22.04. 
+This repository contains code made by the College of DuPage team for the NASA Lunabotics competition. It is made for ROS 2 Humble on Ubuntu 22.04 (Kernel 5.15). 
 
 ## Hardware
 
@@ -32,29 +32,36 @@ cd Downloads/
 tar -xzvf librealsense-2.53.1.tar.gz
 cd librealsense-2.53.1/
 mkdir build && cd build
-cmake ../ -DFORCE_RSUSB_BACKEND=true -DCMAKE_BUILD_TYPE=release -DBUILD_EXAMPLES=true -DBUILD_GRAPHICAL_EXAMPLES=true
+cmake ../ -DFORCE_RSUSB_BACKEND=false -DCMAKE_BUILD_TYPE=release -DBUILD_EXAMPLES=true -DBUILD_GRAPHICAL_EXAMPLES=true
 sudo make uninstall && make clean && make -j8 && sudo make install
 cd ..
 cd scripts
 ./setup_udev_rules.sh
 ```
 
+The flag -DFORCE_RSUSB_BACKEND=false will only work with librealsense's supported kernel versions. If this is ran on a version above 5.15, set it to true. To check kernel version, type the command: `uname -r`. If you are using a newer kernel version and want to downgrade, run `sudo apt install linux-image-generic`, reboot the computer, press shift to go GRUB menu (as soon as Ubuntu logo comes up), select `Advanced options for Ubuntu` then use arrow keys/enter to select kernel 5.15. 
+
+The NUC WiFi did not work when I did this, but I ran `sudo apt purge backport-iwlwifi-dkms` then `sudo apt install backport-iwlwifi-dkms` to re-install the driver. After rebooting, the WiFi worked again.
+
 #### 2. Next, clone and build the repository.
 
 ```bash
 cd <ros_workspace>/src
 git clone https://github.com/grayson-arendt/Lunabotics-2024.git
-cd ..
-colcon build
 ```
 
-#### 3. Run the install_dependencies script to install the required dependencies.
+#### 3. Run the install_dependencies script to install the required dependencies and build.
 
 ```bash
 cd <ros_workspace>/src/Lunabotics-2024/scripts
 chmod +x install_dependencies.sh
 sudo ./install_dependencies.sh
+cd ..
+colcon build
+sudo apt --fix-broken install
 ```
+
+The install_dependencies.sh script will also remove librealsense2 and realsense2_camera packages. I have not been able to find another way around this yet, but RTAB-Map depends on librealsense2 and realsense2_camera and will cause broken dependencies. However, when the workspace is built, it will choose to use the newest realsense2_ros and not the one in the external directory, which will cause the T265 camera not to work. The current work around is to remove the packages before building the workspace, then fixing the broken dependencies afterwards.
 
 #### 4. Repeat the last two steps with the [external-dev](https://github.com/grayson-arendt/Lunabotics-2024/tree/external-dev?tab=readme-ov-file) branch on the host computer (not robot computer). This branch is for visualizing the robot in RViz2.
 

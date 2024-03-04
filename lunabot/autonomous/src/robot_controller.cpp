@@ -14,11 +14,11 @@ using namespace ctre::phoenix::platform;
 using namespace ctre::phoenix::motorcontrol;
 using namespace ctre::phoenix::motorcontrol::can;
 
-TalonFX left_wheel_motor(2);
-TalonFX right_wheel_motor(3);
-TalonFX trencher_motor(4);
-TalonSRX actuator_motor(5);
-TalonSRX bucket_motor(6);
+TalonFX left_wheel_motor(1);
+TalonFX right_wheel_motor(2);
+TalonFX trencher_motor(3);
+TalonSRX actuator_motor(4);
+TalonSRX bucket_motor(5);
 
 /**
  * @brief Node for controlling robot. Has both autonomous and manual control
@@ -39,24 +39,24 @@ TalonSRX bucket_motor(6);
  * @author Grayson Arendt
  */
 
-class MotorController : public rclcpp::Node
+class RobotController : public rclcpp::Node
 {
 public:
     /**
-     * @brief Constructor for MotorController class
+     * @brief Constructor for RobotController class
      */
-    MotorController() : Node("motor_controller")
+    RobotController() : Node("motor_controller")
     {
         right_wheel_motor.SetInverted(true);
 
         velocity_subscriber_ = this->create_subscription<geometry_msgs::msg::Twist>(
-            "cmd_vel", 10, std::bind(&MotorController::callback_velocity, this, std::placeholders::_1));
+            "cmd_vel", 10, std::bind(&RobotController::callback_velocity, this, std::placeholders::_1));
 
         control_subscriber_ = this->create_subscription<autonomous::msg::Control>(
-            "control", 10, std::bind(&MotorController::callback_control, this, std::placeholders::_1));
+            "control", 10, std::bind(&RobotController::callback_control, this, std::placeholders::_1));
 
         joystick_subscriber_ = this->create_subscription<sensor_msgs::msg::Joy>(
-            "joy", 10, std::bind(&MotorController::joy_callback, this, std::placeholders::_1));
+            "joy", 10, std::bind(&RobotController::joy_callback, this, std::placeholders::_1));
 
         RCLCPP_INFO(this->get_logger(), "\033[0;35mAUTONOMOUS CONTROL:\033[0m \033[1;32mENABLED\033[0m");
 
@@ -72,16 +72,24 @@ private:
      */
     void joy_callback(const sensor_msgs::msg::Joy::SharedPtr joy_msg)
     {
+        if (joy_msg->buttons[6])
+        {
+            auto clock = rclcpp::Clock();
+            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL:\033[0m \033[1;32mENABLED\033[0m");
+            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL:\033[0m \033[1;31mDISABLED\033[0m");
+            manual_enabled = false;
+        }
+
         if (joy_msg->buttons[7])
         {
-            RCLCPP_INFO_ONCE(this->get_logger(), "\033[0;36mAUTONOMOUS CONTROL:\033[0m \033[1;31mDISABLED\033[0m");
-            autonomous_disabled = true;
+            auto clock = rclcpp::Clock();
+            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL:\033[0m \033[1;31mDISABLED\033[0m");
+            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
             manual_enabled = true;
         }
 
         if (manual_enabled)
         {
-            RCLCPP_INFO_ONCE(this->get_logger(), "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
             double turn = joy_msg->axes[0];
             double drive_forward = (1.0 - joy_msg->axes[5]) / 2.0;
             double drive_backward = (1.0 - joy_msg->axes[2]) / 2.0;
@@ -165,7 +173,7 @@ private:
      */
     void callback_velocity(const geometry_msgs::msg::Twist::SharedPtr velocity_msg)
     {
-        if (!manual_enabled && !autonomous_disabled)
+        if (!manual_enabled)
         {
             ctre::phoenix::unmanaged::Unmanaged::FeedEnable(100);
 
@@ -187,29 +195,32 @@ private:
      */
     void callback_control(const autonomous::msg::Control::SharedPtr control_msg)
     {
-        if (control_msg->enable_manual_drive)
-        {
-            manual_enabled = true;
-        }
+        manual_enabled = control_msg->enable_manual_drive;
 
         if (control_msg->enable_intake)
         {
             start_mechanism<TalonFX>("TRENCHER", trencher_motor);
         }
 
-        if (control_msg->enable_outtake)
+        else if (control_msg->enable_outtake)
         {
             start_mechanism<TalonSRX>("BUCKET", bucket_motor);
         }
 
-        if (control_msg->actuator_up)
+        else if (control_msg->actuator_up)
         {
             start_mechanism<TalonSRX>("ACTUATOR UP", actuator_motor);
         }
 
-        if (control_msg->actuator_down)
+        else if (control_msg->actuator_down)
         {
             start_mechanism<TalonSRX>("ACTUATOR DOWN", actuator_motor, -0.5);
+        }
+
+        else
+        {
+            auto clock = rclcpp::Clock();
+            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;33mNO MECHANISM ENABLED\033[0m");
         }
     }
 
@@ -255,12 +266,12 @@ private:
 /**
  * @brief Main function.
  *
- * Initializes and spins the MotorController node
+ * Initializes and spins the RobotController node
  */
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<MotorController>();
+    auto node = std::make_shared<RobotController>();
     rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;
