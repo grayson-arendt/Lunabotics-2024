@@ -5,9 +5,9 @@
 #include "autonomous/msg/control.hpp"
 
 /**
- * @brief Sends two goals to the navigation action server as an action client
+ * @brief Sends two goals to the navigation action server as an action client.
  * @details After a goal is reached, this node will publish booleans to the /control
- * topic to enable the specific mechanisms for that goal
+ * topic to enable the specific mechanisms for that goal.
  *
  * @author Grayson Arendt
  */
@@ -18,7 +18,7 @@ public:
     using GoalHandleNavigate = rclcpp_action::ClientGoalHandle<NavigateToPose>;
 
     /**
-     * @brief Constructor for NavigatorClient class
+     * @brief Constructor for NavigatorClient class.
      */
     NavigatorClient() : Node("navigator_client"), goal_reached(false), goal_aborted(false), goal_canceled(false), navigate_to_excavation(true)
     {
@@ -28,7 +28,7 @@ public:
     }
 
     /**
-     * @brief Sends the navigation goal
+     * @brief Sends the navigation goal.
      */
     void send_goal()
     {
@@ -77,7 +77,7 @@ public:
 
 private:
     /**
-     * @brief Enables the intake process
+     * @brief Enables the intake process.
      */
     void enable_intake()
     {
@@ -93,7 +93,7 @@ private:
     }
 
     /**
-     * @brief Enables the outtake process
+     * @brief Enables the outtake process.
      */
     void enable_outtake()
     {
@@ -109,7 +109,7 @@ private:
     }
 
     /**
-     * @brief Moves the actuator up
+     * @brief Moves the actuator up.
      */
     void actuator_up()
     {
@@ -125,7 +125,7 @@ private:
     }
 
     /**
-     * @brief Moves the actuator down
+     * @brief Moves the actuator down.
      */
     void actuator_down()
     {
@@ -141,7 +141,7 @@ private:
     }
 
     /**
-     * @brief Enables manual drive control
+     * @brief Enables manual drive control.
      */
     void enable_manual_drive()
     {
@@ -157,8 +157,8 @@ private:
     }
 
     /**
-     * @brief Callback function for result
-     * @param result The result of the navigation goal
+     * @brief Callback function for result.
+     * @param result The result of the navigation goal.
      */
     void result_callback(const GoalHandleNavigate::WrappedResult &result)
     {
@@ -221,9 +221,9 @@ private:
 };
 
 /**
- * @brief Main function
+ * @brief Main function.
  *
- * Initializes and spins the NavigatorClient node
+ * Initializes and spins the NavigatorClient node.
  */
 int main(int argc, char **argv)
 {

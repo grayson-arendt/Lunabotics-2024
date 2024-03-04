@@ -2,7 +2,7 @@
 #include "sensor_msgs/msg/image.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 /**
- * @brief Node for for monitoring hardware topics to check liveliness.
+ * @brief Node for monitoring hardware topics to check liveliness.
  *
  * @author Grayson Arendt
  */
@@ -11,7 +11,7 @@ class HardwareMonitor : public rclcpp::Node
 {
   public:
     /**
-     * @brief Constructor for HardwareMonitor class
+     * @brief Constructor for HardwareMonitor class.
      */
     HardwareMonitor() : Node("hardware_monitor")
     {
@@ -63,7 +63,7 @@ class HardwareMonitor : public rclcpp::Node
 /**
  * @brief Main function.
  *
- * Initializes and spins the HardwareMonitor node
+ * Initializes and spins the HardwareMonitor node.
  */
 int main(int argc, char **argv)
 {

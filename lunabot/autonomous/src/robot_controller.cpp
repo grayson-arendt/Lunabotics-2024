@@ -21,7 +21,7 @@ TalonSRX actuator_motor(4);
 TalonSRX bucket_motor(5);
 
 /**
- * @brief Node for controlling robot. Has both autonomous and manual control
+ * @brief Node for controlling robot. Has both autonomous and manual control.
  * @details
  * View button -> Disables autonomous control and enables manual control
  * Menu button -> Disables manual control and enables autonomous control
@@ -44,7 +44,7 @@ class RobotController : public rclcpp::Node
 {
 public:
     /**
-     * @brief Constructor for RobotController class
+     * @brief Constructor for RobotController class.
      */
     RobotController() : Node("motor_controller")
     {
@@ -67,9 +67,9 @@ public:
 
 private:
     /**
-     * @brief Callback function for processing controller input and manually controlling robot
+     * @brief Callback function for processing controller input and manually controlling robot.
      *
-     * @param joy_msg The received Joy message containing controller input
+     * @param joy_msg The received Joy message containing controller input.
      */
     void joy_callback(const sensor_msgs::msg::Joy::SharedPtr joy_msg)
     {
@@ -125,7 +125,6 @@ private:
                 right_power = turn;
             }
 
-            /*
             if (actuator_direction == 1.0)
             {
                 actuator_power = 0.5;
@@ -154,23 +153,19 @@ private:
                 bucket_power = 0.0;
                 trencher_power = 0.0;
             }
-            */
 
             left_wheel_motor.Set(ControlMode::PercentOutput, left_power * speed_multiplier);
             right_wheel_motor.Set(ControlMode::PercentOutput, right_power * speed_multiplier);
-
-            /*
             trencher_motor.Set(ControlMode::PercentOutput, trencher_power);
             actuator_motor.Set(ControlMode::PercentOutput, actuator_power);
             bucket_motor.Set(ControlMode::PercentOutput, bucket_power);
-            */
         }
     }
 
     /**
-     * @brief Callback function for processing velocity commands
+     * @brief Callback function for processing velocity commands.
      *
-     * @param velocity_msg The received Twist message containing velocity
+     * @param velocity_msg The received Twist message containing velocity.
      */
     void callback_velocity(const geometry_msgs::msg::Twist::SharedPtr velocity_msg)
     {
@@ -190,9 +185,9 @@ private:
     }
 
     /**
-     * @brief Callback function for activating digging or depositing mechanisms based off of /control topic
+     * @brief Callback function for activating digging or depositing mechanisms based off of /control topic.
      *
-     * @param control_msg The received Control message containing booleans to enable specific mechanisms
+     * @param control_msg The received Control message containing booleans to enable specific mechanisms.
      */
     void callback_control(const autonomous::msg::Control::SharedPtr control_msg)
     {
@@ -226,11 +221,11 @@ private:
     }
 
     /**
-     * @brief Callback function for starting mechanisms
+     * @brief Callback function for starting mechanisms.
      *
-     * @param name The name of mechanism
-     * @param motor The motor associated with the mechanism
-     * @param percent_output The percent output speed of the mechanism
+     * @param name The name of mechanism.
+     * @param motor The motor object associated with the mechanism.
+     * @param percent_output The percent output speed of the mechanism.
      */
 
     template <typename MotorType>
@@ -267,7 +262,7 @@ private:
 /**
  * @brief Main function.
  *
- * Initializes and spins the RobotController node
+ * Initializes and spins the RobotController node.
  */
 int main(int argc, char **argv)
 {
