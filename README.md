@@ -1,6 +1,6 @@
 ## Overview
 
-This repository contains code made by the College of DuPage team for the NASA Lunabotics competition. It is made for ROS 2 Humble on Ubuntu 22.04 (Kernel 5.15). 
+This repository contains code made by the College of DuPage team for the NASA Lunabotics competition. It is made for ROS 2 Humble on Ubuntu 22.04, kernel 5.15. 
 
 ## Hardware
 
@@ -21,6 +21,7 @@ This repository contains code made by the College of DuPage team for the NASA Lu
 - `rtabmap_ros`
 - `rplidar_ros`
 - `navigation2`
+- `laser_filters`
 
 ## Installation
 
@@ -73,7 +74,7 @@ The rplidar_ros package needs to access /dev/ttyUSB0 and /dev/ttyUSB1 (using bot
 sudo usermod -a -G dialout $USER
 ```
 
-If the lidars are not under /dev/ttyUSB0 and /dev/ttyUSB1 (which may happen when disconnected and reconnected), use this command with one lidar connected at a time to check the number at the end. Adjust the parameter in sensor_launch.py based off the number. 
+If the lidars are not under /dev/ttyUSB0 and /dev/ttyUSB1 (which may happen when disconnected and reconnected), use this command with one lidar connected at a time to check the number at the end. Adjust the parameter in hardware_launch.py based off the number. 
 
 ```bash
 ls /dev/ttyUSB*
@@ -110,14 +111,13 @@ chmod +x canable_start.sh
 ros2 launch bringup external_launch.py
 ```
 
-#### 4. Startup sensors:
+#### 4. Startup hardware:
 
 ```bash
-ros2 launch bringup sensor_launch.py
+ros2 launch bringup hardware_launch.py
 ```
-`Note: this is a separate launch file in order to check conditions of sensors before trying to start everything else.`
 
-#### 5. Startup RTAB-Map and other nodes:
+#### 5. Startup RTAB-Map:
 
 ```bash
 ros2 launch bringup mapping_launch.py
@@ -150,19 +150,22 @@ motors for the mechanisms for the zone.
       - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
     - **phoenix_lib** (Contains shared object files for CTRE Phoenix C++ API)
     - **src**
+      - hardware_monitor.cpp (Monitors liveliness of hardware topics)
       - motor_test.cpp (Simple node for testing motors)
       - navigator_client.cpp (Action client that sends goals and motor control commands)
       - robot_controller.cpp (Controller for both autonomous and manual control of robot)
   - **bringup** 
     - **behavior_trees**
-      - navigate_to_pose_w_replanning_and_recovery.xml (Continuously replans path and backs up for recovery)
+      - navigate_to_pose_w_replanning_goal_patience_and_recovery.xml (Behavior tree for Navigation2)
     - **launch**
       - external_launch.py (Launches RViz2 and robot state/joint publisher nodes)
-      - mapping_launch.py (Launches static transforms, lidar odometry, robot controller node, and RTAB-Map)
+      - hardware_launch.py (Launches lidars, cameras, and robot_controller)
+      - mapping_launch.py (Launches RTAB-Map)
       - navigation_launch.py (Launches Navigation2)
-      - sensor_launch.py (Launches lidars and cameras)
     - **params**
+      - default_view.rviz (RViz2 configuration file)
       - nav2_params.yaml (Parameters for Navigation2)
+      - range_filter.yaml (Filter for lidar)
   - **description** 
     - **meshes** (Meshes for robot model in RViz2)
       - base_link.stl
