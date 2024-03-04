@@ -141,7 +141,7 @@
 		type="fixed">
 		<parent link="base_link" />
 		<child link="lidar1_link" />
-		<origin xyz="0.374175 0 0" rpy="0 0 3.14" />
+		<origin xyz="0.45 0 0" rpy="0 0 3.14" />
 	</joint>
 
 	<joint name="base_lidar2_joint"
@@ -162,7 +162,7 @@
 		type="fixed">
 		<parent link="base_link" />
 		<child link="d455_link" />
-		<origin xyz="0.169175 0.18 0.21"
+		<origin xyz="0.20 0.10 0.21"
 			rpy="0 0 0" />
 	</joint>
 
