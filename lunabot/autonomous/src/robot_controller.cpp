@@ -23,7 +23,8 @@ TalonSRX bucket_motor(5);
 /**
  * @brief Node for controlling robot. Has both autonomous and manual control
  * @details
- * Settings/menu button -> Disables autonomous control and enables manual control
+ * View button -> Disables autonomous control and enables manual control
+ * Menu button -> Disables manual control and enables autonomous control
  * Home button -> Disables all motors in manual control
  *
  * Button layout for manual control:
@@ -58,10 +59,10 @@ public:
         joystick_subscriber_ = this->create_subscription<sensor_msgs::msg::Joy>(
             "joy", 10, std::bind(&RobotController::joy_callback, this, std::placeholders::_1));
 
-        RCLCPP_INFO(this->get_logger(), "\033[0;35mAUTONOMOUS CONTROL:\033[0m \033[1;32mENABLED\033[0m");
+        RCLCPP_INFO(this->get_logger(), "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
 
         robot_disabled = false;
-        manual_enabled = false;
+        manual_enabled = true;
     }
 
 private:
@@ -75,17 +76,17 @@ private:
         if (joy_msg->buttons[6])
         {
             auto clock = rclcpp::Clock();
-            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL:\033[0m \033[1;32mENABLED\033[0m");
-            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL:\033[0m \033[1;31mDISABLED\033[0m");
-            manual_enabled = false;
+            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL:\033[0m \033[1;31mDISABLED\033[0m");
+            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
+            manual_enabled = true;
         }
 
         if (joy_msg->buttons[7])
         {
-            auto clock = rclcpp::Clock();
-            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL:\033[0m \033[1;31mDISABLED\033[0m");
-            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
-            manual_enabled = true;
+             auto clock = rclcpp::Clock();
+            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL:\033[0m \033[1;32mENABLED\033[0m");
+            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL:\033[0m \033[1;31mDISABLED\033[0m");
+            manual_enabled = false;
         }
 
         if (manual_enabled)
@@ -175,7 +176,7 @@ private:
     {
         if (!manual_enabled)
         {
-            ctre::phoenix::unmanaged::Unmanaged::FeedEnable(100);
+            ctre::phoenix::unmanaged::Unmanaged::FeedEnable(1000);
 
             double linear_velocity = velocity_msg->linear.x;
             double angular_velocity = velocity_msg->angular.z;
