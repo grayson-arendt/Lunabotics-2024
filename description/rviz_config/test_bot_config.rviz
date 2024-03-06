@@ -155,7 +155,7 @@ Visualization Manager:
           Value: true
         rear_right_wheel_link:
           Value: true
-      Marker Scale: 1
+      Marker Scale: 0.5
       Name: TF
       Show Arrows: true
       Show Axes: true
