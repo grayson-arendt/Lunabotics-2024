@@ -168,7 +168,7 @@ motors for the mechanisms for the zone.
       - default_view.rviz (RViz2 configuration file)
       - nav2_params.yaml (Parameters for Navigation2)
       - range_filter.yaml (Filter parameters for lidar)
-      - tags_params.yaml (Parameters for Apriltags) 
+      - tags_params.yaml (Parameters for AprilTags) 
   - **description** 
     - **meshes** (Meshes for robot model in RViz2)
       - base_link.stl
