@@ -20,6 +20,7 @@ This repository contains code made by the College of DuPage team for the NASA Lu
 - `rtabmap`
 - `rtabmap_ros`
 - `rplidar_ros`
+- `apriltag_ros`
 - `navigation2`
 - `laser_filters`
 

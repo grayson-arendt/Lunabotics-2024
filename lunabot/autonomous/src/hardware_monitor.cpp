@@ -18,34 +18,34 @@ class HardwareMonitor : public rclcpp::Node
 
         d455_subscriber_ = this->create_subscription<sensor_msgs::msg::Image>(
             "d455/color/image_raw", rclcpp::QoS(10).reliable(),
-            [this](const sensor_msgs::msg::Image::SharedPtr msg) {this->d455_timer_->reset();});
+            [this](const sensor_msgs::msg::Image::SharedPtr) {this->d455_timer_->reset();});
 
         t265_subscriber_ = this->create_subscription<sensor_msgs::msg::Image>(
             "t265/fisheye1/image_raw", rclcpp::QoS(10).reliable(),
-            [this](const sensor_msgs::msg::Image::SharedPtr msg) {this->t265_timer_->reset();});
+            [this](const sensor_msgs::msg::Image::SharedPtr) {this->t265_timer_->reset();});
 
         lidar1_subscriber_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
             "scan", rclcpp::QoS(10).reliable(),
-            [this](const sensor_msgs::msg::LaserScan::SharedPtr msg) {this->lidar1_timer_->reset();});
+            [this](const sensor_msgs::msg::LaserScan::SharedPtr) {this->lidar1_timer_->reset();});
 
         lidar2_subscriber_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
             "scan2", rclcpp::QoS(10).reliable(),
-            [this](const sensor_msgs::msg::LaserScan::SharedPtr msg) {this->lidar2_timer_->reset();});
+            [this](const sensor_msgs::msg::LaserScan::SharedPtr) {this->lidar2_timer_->reset();});
 
         d455_timer_ = create_wall_timer(std::chrono::seconds(1), [this]() {
-            RCLCPP_WARN(get_logger(), "\033[0;36mD455:\033[0m \033[1;31mNO CONNECTION\033[0m");
+            RCLCPP_WARN(get_logger(), "\033[0;36mD455:\033[0m \033[1;31mNO CONNECTION, CHECK CABLE\033[0m");
         });
 
         t265_timer_ = create_wall_timer(std::chrono::seconds(1), [this]() {
-            RCLCPP_WARN(get_logger(), "\033[0;36mT265:\033[0m \033[1;31mNO CONNECTION\033[0m");
+            RCLCPP_WARN(get_logger(), "\033[0;36mT265:\033[0m \033[1;31mNO CONNECTION, CHECK CABLE\033[0m");
         });
 
         lidar1_timer_ = create_wall_timer(std::chrono::seconds(1), [this]() {
-            RCLCPP_WARN(get_logger(), "\033[0;36mLIDAR S2L:\033[0m \033[1;31mNO CONNECTION, CHECK ttyUSB# IN LAUNCH\033[0m");
+            RCLCPP_WARN(get_logger(), "\033[0;36mLIDAR S2L:\033[0m \033[1;31mNO CONNECTION, CHECK CABLE OR ttyUSB# IN LAUNCH\033[0m");
         });
 
         lidar2_timer_ = create_wall_timer(std::chrono::seconds(1), [this]() {
-            RCLCPP_WARN(get_logger(), "\033[0;36mLIDAR A3:\033[0m \033[1;31mNO CONNECTION, CHECK ttyUSB# IN LAUNCH\033[0m");
+            RCLCPP_WARN(get_logger(), "\033[0;36mLIDAR A3:\033[0m \033[1;31mNO CONNECTION, CHECK CABLE OR ttyUSB# IN LAUNCH\033[0m");
         });
     }
 

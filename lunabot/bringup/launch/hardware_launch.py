@@ -3,8 +3,12 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from ament_index_python.packages import get_package_share_path, get_package_share_directory
+from ament_index_python.packages import (
+    get_package_share_path,
+    get_package_share_directory,
+)
 from launch.substitutions import PathJoinSubstitution
+
 
 def generate_launch_description():
 
@@ -22,7 +26,7 @@ def generate_launch_description():
         parameters=[
             {
                 "channel_type": "serial",
-                "serial_port": "/dev/ttyUSB0",
+                "serial_port": "/dev/ttyUSB1",
                 "serial_baudrate": 1000000,
                 "frame_id": "lidar1_link",
                 "inverted": False,
@@ -42,7 +46,7 @@ def generate_launch_description():
         parameters=[
             {
                 "channel_type": "serial",
-                "serial_port": "/dev/ttyUSB1",
+                "serial_port": "/dev/ttyUSB0",
                 "scan_frequency": 20.0,
                 "serial_baudrate": 256000,
                 "frame_id": "lidar2_link",
@@ -65,6 +69,7 @@ def generate_launch_description():
             "unite_imu_method1": "2",
             "depth_module.profile1": "848x480x60",
             "rgb_camera.profile1": "848x480x60",
+            "json_file_path1": "/home/intel-nuc/high_accuracy.json",
             "camera_name2": "t265",
             "camera_namespace2": "t265",
             "device_type2": "t265",
@@ -94,13 +99,17 @@ def generate_launch_description():
     )
 
     lidar1_filter = Node(
-            package="laser_filters",
-            executable="scan_to_scan_filter_chain",
-            parameters=[
-                PathJoinSubstitution([
+        package="laser_filters",
+        executable="scan_to_scan_filter_chain",
+        parameters=[
+            PathJoinSubstitution(
+                [
                     get_package_share_directory("bringup"),
-                    "params", "range_filter.yaml",
-                ])],
+                    "params",
+                    "range_filter.yaml",
+                ]
+            )
+        ],
     )
 
     pose_to_base_link = Node(
@@ -115,11 +124,30 @@ def generate_launch_description():
 
     hardware_monitor = Node(package="autonomous", executable="hardware_monitor")
 
+    apriltag = Node(
+        name="apriltag",
+        package="apriltag_ros",
+        executable="apriltag_node",
+        parameters=[
+            os.path.join(
+                get_package_share_directory("bringup"),
+                "params",
+                "tag_params.yaml",
+            )
+        ],
+        remappings=[
+            ("/image_rect", "/d455/color/image_raw"),
+            ("/camera_info", "/d455/color/camera_info"),
+            ("/detections", "/tag_detections"),
+        ],
+    )
+
     return LaunchDescription(
         [
             lidar1,
             lidar2,
             lidar_odom,
+            apriltag,
             realsense_launch,
             robot_controller,
             pose_to_base_link,

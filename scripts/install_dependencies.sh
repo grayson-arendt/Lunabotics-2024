@@ -6,6 +6,7 @@ ros_packages=(
     "ros-humble-rplidar-ros"
     "ros-humble-navigation2"
     "ros-humble-laser-filters"
+    "ros-humble-apriltag-ros"
     "ros-humble-rmw-cyclonedds-cpp"
 )
 

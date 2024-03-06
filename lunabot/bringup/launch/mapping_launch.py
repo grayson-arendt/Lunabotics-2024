@@ -707,7 +707,7 @@ def launch_setup(context, *args, **kwargs):
                 ("imu", LaunchConfiguration("imu_topic")),
             ],
             arguments=[
-                LaunchConfiguration("args"), "--ros-args", "--disable-rosout-logs",
+                LaunchConfiguration("args"), "--ros-args", "--disable-rosout-logs", "--disable-stdout-logs",
             ],
             prefix=LaunchConfiguration("launch_prefix"),
             namespace=LaunchConfiguration("namespace"),
