@@ -58,7 +58,7 @@ git clone https://github.com/grayson-arendt/Lunabotics-2024.git
 cd <ros_workspace>/src/Lunabotics-2024/scripts
 chmod +x install_dependencies.sh
 sudo ./install_dependencies.sh
-cd ..
+cd ../../..
 colcon build
 sudo apt --fix-broken install
 ```
