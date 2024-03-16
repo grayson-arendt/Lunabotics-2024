@@ -131,6 +131,7 @@ def generate_launch_description():
                 "outdoor_mode": True,
             }
         ],
+        arguments=['--ros-args', '--log-level', 'INFO'],
     )
 
     hardware_monitor = Node(package="autonomous", executable="hardware_monitor")

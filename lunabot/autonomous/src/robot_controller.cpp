@@ -38,7 +38,6 @@ class RobotController : public rclcpp::Node
             "joy", 10, std::bind(&RobotController::joy_callback, this, std::placeholders::_1));
 
         declare_and_get_parameters();
-
         apply_controller_mode();
 
         manual_enabled_ = true;
@@ -95,58 +94,50 @@ class RobotController : public rclcpp::Node
         right_trigger_ = joy_msg->axes[5];
 
         d_pad_horizontal_ = switch_mode_ ? joy_msg->axes[4]
-                           : ps4_mode_  ? joy_msg->axes[6]
-                           : xbox_mode_ ? joy_msg->axes[6]
-                                       : 0.0;
+                            : ps4_mode_  ? joy_msg->axes[6]
+                            : xbox_mode_ ? joy_msg->axes[6]
+                                         : 0.0;
 
         d_pad_vertical_ = switch_mode_ ? joy_msg->axes[5]
-                         : ps4_mode_  ? joy_msg->axes[7]
-                         : xbox_mode_ ? joy_msg->axes[7]
-                                     : 0.0;
+                          : ps4_mode_  ? joy_msg->axes[7]
+                          : xbox_mode_ ? joy_msg->axes[7]
+                                       : 0.0;
 
         b_button_ = switch_mode_ ? joy_msg->buttons[0]
-                   : ps4_mode_  ? joy_msg->buttons[2]
-                   : xbox_mode_ ? joy_msg->buttons[1]
-                               : -1;
+                    : ps4_mode_  ? joy_msg->buttons[2]
+                    : xbox_mode_ ? joy_msg->buttons[1]
+                                 : -1;
 
         share_button_ = switch_mode_ ? joy_msg->buttons[9]
-                       : ps4_mode_  ? joy_msg->buttons[8]
-                       : xbox_mode_ ? joy_msg->buttons[6]
-                                   : -1;
+                        : ps4_mode_  ? joy_msg->buttons[8]
+                        : xbox_mode_ ? joy_msg->buttons[6]
+                                     : -1;
 
         menu_button_ = switch_mode_ ? joy_msg->buttons[10]
-                      : ps4_mode_  ? joy_msg->buttons[9]
-                      : xbox_mode_ ? joy_msg->buttons[7]
-                                  : -1;
+                       : ps4_mode_  ? joy_msg->buttons[9]
+                       : xbox_mode_ ? joy_msg->buttons[7]
+                                    : -1;
 
         home_button_ = switch_mode_ ? joy_msg->buttons[11]
-                      : ps4_mode_  ? joy_msg->buttons[10]
-                      : xbox_mode_ ? joy_msg->buttons[8]
-                                  : -1;
+                       : ps4_mode_  ? joy_msg->buttons[10]
+                       : xbox_mode_ ? joy_msg->buttons[8]
+                                    : -1;
+
+        actuator_power_ = (d_pad_vertical_ == 1.0) ? 0.5 : (d_pad_vertical_ == -1.0) ? -0.5 : 0.0;
+        trencher_power_ = (d_pad_horizontal_ == 1.0) ? 0.5 : (d_pad_horizontal_ == -1.0) ? 0.0 : 0.0;
+        bucket_power_ = (d_pad_horizontal_ == -1.0) ? 0.5 : (d_pad_horizontal_ == 1.0) ? 0.0 : 0.0;
 
         speed_multiplier_ = b_button_ ? 1.0 : 0.3;
+        robot_disabled_ = home_button_;
 
-        if (home_button_)
-        {
-            robot_disabled_ = true;
-        }
+        set_manual_status(share_button_);
+        set_manual_status(!menu_button_);
 
-        if (share_button_)
-        {
-            set_manual_enabled(true);
-        }
-
-        if (menu_button_)
-        {
-            set_manual_enabled(false);
-        }
-
-        if (switch_mode_ && !ps4_mode_)
+        if (switch_mode_)
         {
             turn_ = left_joystick_x_;
             drive_forward_ = left_joystick_y_;
         }
-
         else
         {
             turn_ = left_joystick_x_;
@@ -159,24 +150,17 @@ class RobotController : public rclcpp::Node
             left_power_ = drive_forward_ - turn_;
             right_power_ = drive_forward_ + turn_;
         }
-
         else if (drive_backward_ != 0.0)
         {
             left_power_ = (drive_backward_ - turn_) * -1.0;
             right_power_ = (drive_backward_ + turn_) * -1.0;
         }
-
         else
         {
             left_power_ = -turn_;
             right_power_ = turn_;
         }
 
-        actuator_power_ = (d_pad_vertical_ == 1.0) ? 0.5 : (d_pad_vertical_ == -1.0) ? -0.5 : 0.0;
-        trencher_power_ = (d_pad_horizontal_ == 1.0) ? 0.5 : (d_pad_horizontal_ == -1.0) ? 0.0 : 0.0;
-        bucket_power_ = (d_pad_horizontal_ == -1.0) ? 0.5 : (d_pad_horizontal_ == 1.0) ? 0.0 : 0.0;
-
-  
         if (manual_enabled_)
         {
 
@@ -191,16 +175,16 @@ class RobotController : public rclcpp::Node
             }
 
             RCLCPP_DEBUG(get_logger(), "ACTUATOR SPEED %f, BUCKET SPEED: %f, TRENCHER SPEED: %f", actuator_power_,
-                    bucket_power_, trencher_power_);
+                         bucket_power_, trencher_power_);
 
             RCLCPP_DEBUG(get_logger(), "LEFT SPEED: %f, RIGHT SPEED: %f", left_power_ * speed_multiplier_,
                          right_power_ * speed_multiplier_);
 
             left_wheel_motor_.Set(ControlMode::PercentOutput, left_power_ * speed_multiplier_);
             right_wheel_motor_.Set(ControlMode::PercentOutput, right_power_ * speed_multiplier_);
-            trencher_motor_.Set(ControlMode::PercentOutput, trencher_power_);
-            
+
             /* Currently not wired up on robot
+            trencher_motor_.Set(ControlMode::PercentOutput, trencher_power_);
             bucket_motor_.Set(ControlMode::PercentOutput, bucket_power_);
             actuator_left_motor_.Set(ControlMode::PercentOutput, actuator_power_);
             actuator_right_motor_.Set(ControlMode::PercentOutput, actuator_power_);
@@ -267,7 +251,7 @@ class RobotController : public rclcpp::Node
         RCLCPP_INFO(get_logger(), "\033[0;34m%s:\033[0m \033[1;32mSTARTED\033[0m", name.c_str());
     }
 
-    void set_manual_enabled(bool enabled)
+    void set_manual_status(bool enabled)
     {
         auto clock = rclcpp::Clock();
         RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL:\033[0m %s",
@@ -282,7 +266,6 @@ class RobotController : public rclcpp::Node
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr velocity_subscriber_;
     rclcpp::Subscription<autonomous::msg::Control>::SharedPtr control_subscriber_;
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joystick_subscriber_;
-
     double velocity_left_cmd_, velocity_right_cmd_;
     double left_power_, right_power_;
     double actuator_power_, trencher_power_, bucket_power_;
