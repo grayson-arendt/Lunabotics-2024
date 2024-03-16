@@ -1,6 +1,6 @@
 ## Overview
 
-This repository contains code made by the College of DuPage team for the NASA Lunabotics competition. It is made for ROS 2 Humble on Ubuntu 22.04, kernel 5.15. 
+This repository contains code made by the College of DuPage team for the NASA Lunabotics competition. It is made for ROS 2 Humble on Ubuntu 22.04.
 
 ## Hardware
 
@@ -40,7 +40,7 @@ cd ..
 sudo ./scripts/setup_udev_rules.sh # Make sure cameras are unplugged before running
 ```
 
-The flag -DFORCE_RSUSB_BACKEND=false is meant for kernel version 5.15 and below, but the Intel NUC 13 Pro is currently on kernel 6.5 and it has been working well. Whenever I have set -DFORCE_RSUSB_BACKEND=true, librealsense performs poorly and the camera will sometimes fail to start with a "failed to set power state" error.
+The flag -DFORCE_RSUSB_BACKEND=false is meant for kernel 5.15 and below, but the Intel NUC 13 Pro is currently on kernel 6.5 and it has been working well. Whenever I have set -DFORCE_RSUSB_BACKEND=true, librealsense performs poorly and the camera will sometimes fail to start with a "failed to set power state" error.
 
 #### 2. Next, make a workspace and clone the repository.
 
