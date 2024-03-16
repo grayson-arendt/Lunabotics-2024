@@ -163,12 +163,10 @@ class RobotController : public rclcpp::Node
 
         if (manual_enabled_)
         {
-
             if (!robot_disabled_)
             {
                 ctre::phoenix::unmanaged::Unmanaged::FeedEnable(100);
             }
-
             else
             {
                 RCLCPP_ERROR(get_logger(), "\033[0;31mROBOT DISABLED\033[0m");
@@ -220,24 +218,20 @@ class RobotController : public rclcpp::Node
         {
             start_mechanism<TalonFX>("TRENCHER", trencher_motor_);
         }
-
         else if (control_msg->enable_outtake)
         {
             start_mechanism<TalonSRX>("BUCKET", bucket_motor_);
         }
-
         else if (control_msg->actuator_up)
         {
             start_mechanism<TalonSRX>("ACTUATOR LEFT UP", actuator_left_motor_);
             start_mechanism<TalonSRX>("ACTUATOR RIGHT UP", actuator_right_motor_);
         }
-
         else if (control_msg->actuator_down)
         {
             start_mechanism<TalonSRX>("ACTUATOR LEFT DOWN", actuator_left_motor_, -0.5);
             start_mechanism<TalonSRX>("ACTUATOR RIGHT DOWN", actuator_right_motor_, -0.5);
         }
-
         else
         {
             auto clock = rclcpp::Clock();
