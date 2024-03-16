@@ -42,20 +42,21 @@ sudo ./scripts/setup_udev_rules.sh # Make sure cameras are unplugged before runn
 
 The flag -DFORCE_RSUSB_BACKEND=false is meant for kernel version 5.15 and below, but the Intel NUC 13 Pro is currently on kernel 6.5 and it has been working well. Whenever I have set -DFORCE_RSUSB_BACKEND=true, librealsense performs poorly and the camera will sometimes fail to start with a "failed to set power state" error.
 
-#### 2. Next, clone and build the repository.
+#### 2. Next, make a workspace and clone the repository.
 
 ```bash
-cd <ros_workspace>/src
+mkdir -p lunabot_ws/src
+cd lunabot_ws/src
 git clone https://github.com/grayson-arendt/Lunabotics-2024.git
 ```
 
 #### 3. Run the install_dependencies script to install the required dependencies and build.
 
 ```bash
-cd <ros_workspace>/src/Lunabotics-2024/scripts
+cd lunabot_ws/src/Lunabotics-2024/scripts
 chmod +x install_dependencies.sh
 sudo ./install_dependencies.sh
-cd ..
+cd ../../..
 colcon build
 sudo apt --fix-broken install
 ```
@@ -81,7 +82,7 @@ ls /dev/ttyUSB*
 The computer may not be able to find the shared object files for CTRE Phoenix library. An easy way to fix this is to directly copy them into /usr/lib/.
 
 ```bash
-cd <ros_workspace>/src/Lunabotics-2024/lunabot/autonomous/phoenix_lib/x86-64/
+cd lunabot_ws/src/Lunabotics-2024/lunabot/autonomous/phoenix_lib/x86-64/
 sudo cp libCTRE_Phoenix.so libCTRE_PhoenixCCI.so libCTRE_PhoenixTools.so /usr/lib/
 ```
 
@@ -93,13 +94,13 @@ Each launch file should be ran in a new terminal window.
 
 #### 1. Navigate to ROS 2 workspace and install (repeat on each new terminal before launches):
 ```bash
-cd <ros_workspace>
+cd lunabot_ws
 source install/setup.bash
 ```
 
 #### 2. Initialize SocketCAN communication (note: the canable_start.sh script will only need to be ran once each time the robot computer boots up).
 ```bash
-cd <ros_workspace>/src/Lunabotics-2024/scripts
+cd lunabot_ws/src/Lunabotics-2024/scripts
 chmod +x canable_start.sh 
 ./canable_start.sh
 ```
@@ -164,7 +165,6 @@ motors for the mechanisms for the zone.
       - default_view.rviz (RViz2 configuration file)
       - nav2_params.yaml (Parameters for Navigation2)
       - range_filter.yaml (Filter for lidar)
-      - tag_params.yaml (Parameters for AprilTags)
   - **description** 
     - **meshes** (Meshes for robot model in RViz2)
       - base_link.stl
