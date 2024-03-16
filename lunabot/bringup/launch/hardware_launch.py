@@ -8,6 +8,7 @@ from ament_index_python.packages import (
     get_package_share_directory,
 )
 from launch.substitutions import PathJoinSubstitution
+from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
 
 def generate_launch_description():
@@ -58,7 +59,7 @@ def generate_launch_description():
         output="screen",
     )
 
-    realsense_launch = IncludeLaunchDescription(
+    realsense = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(realsense_launch_path),
         launch_arguments={
             "camera_name1": "d455",
@@ -67,8 +68,8 @@ def generate_launch_description():
             "enable_gyro1": "true",
             "enable_accel1": "true",
             "unite_imu_method1": "2",
-            "depth_module.profile1": "848x480x60",
-            "rgb_camera.profile1": "848x480x60",
+            "depth_module.profile1": "848x480x30",
+            "rgb_camera.profile1": "848x480x30",
             "json_file_path1": "/home/intel-nuc/high_accuracy.json",
             "camera_name2": "t265",
             "camera_namespace2": "t265",
@@ -77,25 +78,8 @@ def generate_launch_description():
             "enable_accel2": "true",
             "enable_pose2": "true",
             "unite_imu_method2": "2",
+            "tracking_module.profile2": "848x800x30",
         }.items(),
-    )
-
-    lidar_odom = Node(
-        package="rf2o_laser_odometry",
-        executable="rf2o_laser_odometry_node",
-        name="rf2o_laser_odometry",
-        output="screen",
-        parameters=[
-            {
-                "laser_scan_topic": "/scan2",
-                "odom_topic": "/odom_lidar",
-                "publish_tf": False,
-                "base_frame_id": "base_link",
-                "odom_frame_id": "odom",
-                "init_pose_from_topic": "",
-                "freq": 35.0,
-            }
-        ],
     )
 
     lidar1_filter = Node(
@@ -109,6 +93,24 @@ def generate_launch_description():
                     "range_filter.yaml",
                 ]
             )
+        ],
+    )
+
+    lidar2_odom = Node(
+        package="rf2o_laser_odometry",
+        executable="rf2o_laser_odometry_node",
+        name="rf2o_laser_odometry",
+        output="screen",
+        parameters=[
+            {
+                "laser_scan_topic": "/scan2",
+                "odom_topic": "/odom_lidar",
+                "publish_tf": False,
+                "base_frame_id": "base_link",
+                "odom_frame_id": "odom",
+                "init_pose_from_topic": "",
+                "freq": 30.0,
+            }
         ],
     )
 
@@ -145,13 +147,13 @@ def generate_launch_description():
     return LaunchDescription(
         [
             lidar1,
-            lidar2,
-            lidar_odom,
-            apriltag,
-            realsense_launch,
-            robot_controller,
-            pose_to_base_link,
             lidar1_filter,
+            lidar2,
+            lidar2_odom,
+            apriltag,
+            realsense,
+            pose_to_base_link,
+            robot_controller,
             hardware_monitor,
         ]
     )

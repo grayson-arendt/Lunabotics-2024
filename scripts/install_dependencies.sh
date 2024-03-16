@@ -4,9 +4,9 @@ ros_packages=(
     "ros-humble-rtabmap"
     "ros-humble-rtabmap-ros"
     "ros-humble-rplidar-ros"
+    "ros-humble-apriltag-ros"
     "ros-humble-navigation2"
     "ros-humble-laser-filters"
-    "ros-humble-apriltag-ros"
     "ros-humble-rmw-cyclonedds-cpp"
 )
 

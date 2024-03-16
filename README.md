@@ -37,13 +37,10 @@ mkdir build && cd build
 cmake ../ -DFORCE_RSUSB_BACKEND=false -DCMAKE_BUILD_TYPE=release -DBUILD_EXAMPLES=true -DBUILD_GRAPHICAL_EXAMPLES=true
 sudo make uninstall && make clean && make -j8 && sudo make install
 cd ..
-cd scripts
-./setup_udev_rules.sh
+sudo ./scripts/setup_udev_rules.sh # Make sure cameras are unplugged before running
 ```
 
-The flag -DFORCE_RSUSB_BACKEND=false will only work with librealsense's supported kernel versions. If this is ran on a version above 5.15, set it to true. To check kernel version, type the command: `uname -r`. If you are using a newer kernel version and want to downgrade, run `sudo apt install linux-image-generic`, reboot the computer, press shift to go GRUB menu (as soon as Ubuntu logo comes up), select `Advanced options for Ubuntu` then use arrow keys/enter to select kernel 5.15. 
-
-The NUC WiFi did not work when I did this, but I ran `sudo apt purge backport-iwlwifi-dkms` then `sudo apt install backport-iwlwifi-dkms` to re-install the driver. After rebooting, the WiFi worked again.
+The flag -DFORCE_RSUSB_BACKEND=false is meant for kernel version 5.15 and below, but the Intel NUC 13 Pro is currently on kernel 6.5 and it has been working well. Whenever I have set -DFORCE_RSUSB_BACKEND=true, librealsense performs poorly and the camera will sometimes fail to start with a "failed to set power state" error.
 
 #### 2. Next, clone and build the repository.
 
@@ -167,12 +164,15 @@ motors for the mechanisms for the zone.
       - default_view.rviz (RViz2 configuration file)
       - nav2_params.yaml (Parameters for Navigation2)
       - range_filter.yaml (Filter for lidar)
+      - tag_params.yaml (Parameters for AprilTags)
   - **description** 
     - **meshes** (Meshes for robot model in RViz2)
       - base_link.stl
       - camera_link.stl
       - ebox_link.stl
-      - lidar_link.stl
+      - lidar1_link.stl
+      - lidar2_link.stl
+      - nuc_link.stl
       - wheel_link.stl
     - **urdf**
       - common_properties.xacro (Defines material colors)

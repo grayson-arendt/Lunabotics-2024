@@ -16,96 +16,69 @@ using namespace ctre::phoenix::motorcontrol::can;
 
 TalonFX left_wheel_motor(1);
 TalonFX right_wheel_motor(2);
+
 TalonFX trencher_motor(3);
 TalonSRX actuator_motor(4);
 TalonSRX bucket_motor(5);
 
-/**
- * @brief Node for controlling robot. Has both autonomous and manual control.
- * @details
- * View button -> Disables autonomous control and enables manual control
- * Menu button -> Disables manual control and enables autonomous control
- * Home button -> Disables all motors in manual control
- *
- * Button layout for manual control:
- *
- * Left trigger -> Backwards speed
- * Right trigger -> Forwards speed
- * B button -> Turbo mode
- * D-pad up -> Linear actuator up
- * D-pad down -> Linear actuator down
- * D-pad right -> Trencher intake
- * D-pad left -> Bucket outtake
- *
- * @author Grayson Arendt
- */
-
 class RobotController : public rclcpp::Node
 {
 public:
-    /**
-     * @brief Constructor for RobotController class.
-     */
     RobotController() : Node("motor_controller")
     {
         right_wheel_motor.SetInverted(true);
 
-        velocity_subscriber_ = this->create_subscription<geometry_msgs::msg::Twist>(
+        velocity_subscriber_ = create_subscription<geometry_msgs::msg::Twist>(
             "cmd_vel", 10, std::bind(&RobotController::callback_velocity, this, std::placeholders::_1));
 
-        control_subscriber_ = this->create_subscription<autonomous::msg::Control>(
+        control_subscriber_ = create_subscription<autonomous::msg::Control>(
             "control", 10, std::bind(&RobotController::callback_control, this, std::placeholders::_1));
 
-        joystick_subscriber_ = this->create_subscription<sensor_msgs::msg::Joy>(
+        joystick_subscriber_ = create_subscription<sensor_msgs::msg::Joy>(
             "joy", 10, std::bind(&RobotController::joy_callback, this, std::placeholders::_1));
 
-        RCLCPP_INFO(this->get_logger(), "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
+        //RCLCPP_INFO(get_logger(), "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
 
         robot_disabled = false;
-        manual_enabled = true;
+        manual_enabled = false;
+        ps4_mode = false;
+        outdoor_mode = true;
     }
 
 private:
-    /**
-     * @brief Callback function for processing controller input and manually controlling robot.
-     *
-     * @param joy_msg The received Joy message containing controller input.
-     */
     void joy_callback(const sensor_msgs::msg::Joy::SharedPtr joy_msg)
     {
-        if (joy_msg->buttons[6])
+        left_joystick = joy_msg->axes[0];
+        left_trigger = joy_msg->axes[2];
+        right_trigger = joy_msg->axes[5];
+
+        b_button = ps4_mode ? joy_msg->buttons[2] : joy_msg->buttons[1];
+        share_button = ps4_mode ? joy_msg->buttons[8] : joy_msg->buttons[6];
+        menu_button = ps4_mode ? joy_msg->buttons[9] : joy_msg->buttons[7];
+        home_button = ps4_mode ? joy_msg->buttons[10] : joy_msg->buttons[8];
+
+        if (share_button)
         {
-            auto clock = rclcpp::Clock();
-            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL:\033[0m \033[1;31mDISABLED\033[0m");
-            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
-            manual_enabled = true;
+            set_manual_enabled(true);
         }
 
-        if (joy_msg->buttons[7])
+        if (menu_button)
         {
-             auto clock = rclcpp::Clock();
-            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL:\033[0m \033[1;32mENABLED\033[0m");
-            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL:\033[0m \033[1;31mDISABLED\033[0m");
-            manual_enabled = false;
+            set_manual_enabled(false);
         }
 
         if (manual_enabled)
         {
-            double turn = joy_msg->axes[0];
-            double drive_forward = (1.0 - joy_msg->axes[5]) / 2.0;
-            double drive_backward = (1.0 - joy_msg->axes[2]) / 2.0;
-            double speed_multiplier = joy_msg->buttons[1] ? 1.0 : 0.3;
+            double turn = left_joystick;
+            double drive_forward = (1.0 - right_trigger) / 2.0;
+            double drive_backward = (1.0 - left_trigger) / 2.0;
+            double speed_multiplier = b_button ? 1.0 : 0.3;
 
-            if (joy_msg->buttons[8])
-            {
-                RCLCPP_ERROR_ONCE(this->get_logger(), "\033[1;31mROBOT DISABLED\033[0m");
+            if (home_button)
                 robot_disabled = true;
-            }
 
             if (!robot_disabled)
-            {
                 ctre::phoenix::unmanaged::Unmanaged::FeedEnable(100);
-            }
 
             if (drive_forward != 0.0)
             {
@@ -125,48 +98,15 @@ private:
                 right_power = turn;
             }
 
-            if (actuator_direction == 1.0)
-            {
-                actuator_power = 0.5;
-            }
-            else if (actuator_direction == -1.0)
-            {
-                actuator_power = -0.5;
-            }
-            else
-            {
-                actuator_power = 0.0;
-            }
-
-            if (intake_direction == 1.0)
-            {
-                bucket_power = 0.5;
-                trencher_power = 0.0;
-            }
-            else if (intake_direction == -1.0)
-            {
-                trencher_power = 0.5;
-                bucket_power = 0.0;
-            }
-            else
-            {
-                bucket_power = 0.0;
-                trencher_power = 0.0;
-            }
+            actuator_power = (actuator_direction == 1.0) ? 0.5 : (actuator_direction == -1.0) ? -0.5 : 0.0;
+            bucket_power = (intake_direction == 1.0) ? 0.5 : (intake_direction == -1.0) ? 0.0 : 0.0;
+            trencher_power = (intake_direction == -1.0) ? 0.5 : (intake_direction == 1.0) ? 0.0 : 0.0;
 
             left_wheel_motor.Set(ControlMode::PercentOutput, left_power * speed_multiplier);
             right_wheel_motor.Set(ControlMode::PercentOutput, right_power * speed_multiplier);
-            trencher_motor.Set(ControlMode::PercentOutput, trencher_power);
-            actuator_motor.Set(ControlMode::PercentOutput, actuator_power);
-            bucket_motor.Set(ControlMode::PercentOutput, bucket_power);
         }
     }
 
-    /**
-     * @brief Callback function for processing velocity commands.
-     *
-     * @param velocity_msg The received Twist message containing velocity.
-     */
     void callback_velocity(const geometry_msgs::msg::Twist::SharedPtr velocity_msg)
     {
         if (!manual_enabled)
@@ -175,20 +115,17 @@ private:
 
             double linear_velocity = velocity_msg->linear.x;
             double angular_velocity = velocity_msg->angular.z;
+            double wheel_radius = outdoor_mode ? 0.2 : 0.1016;
+            double wheel_distance = 0.5;
 
-            velocity_left_cmd = linear_velocity - (angular_velocity * (0.2));
-            velocity_right_cmd = linear_velocity + (angular_velocity * (0.2));
+            velocity_left_cmd = 0.1 * (linear_velocity - angular_velocity * wheel_distance / 2.0) / wheel_radius;
+            velocity_right_cmd = 0.1 * (linear_velocity + angular_velocity * wheel_distance / 2.0) / wheel_radius;
 
             left_wheel_motor.Set(ControlMode::PercentOutput, velocity_left_cmd);
             right_wheel_motor.Set(ControlMode::PercentOutput, velocity_right_cmd);
         }
     }
 
-    /**
-     * @brief Callback function for activating digging or depositing mechanisms based off of /control topic.
-     *
-     * @param control_msg The received Control message containing booleans to enable specific mechanisms.
-     */
     void callback_control(const autonomous::msg::Control::SharedPtr control_msg)
     {
         manual_enabled = control_msg->enable_manual_drive;
@@ -197,55 +134,37 @@ private:
         {
             start_mechanism<TalonFX>("TRENCHER", trencher_motor);
         }
-
         else if (control_msg->enable_outtake)
         {
             start_mechanism<TalonSRX>("BUCKET", bucket_motor);
         }
-
         else if (control_msg->actuator_up)
         {
             start_mechanism<TalonSRX>("ACTUATOR UP", actuator_motor);
         }
-
         else if (control_msg->actuator_down)
         {
             start_mechanism<TalonSRX>("ACTUATOR DOWN", actuator_motor, -0.5);
         }
-
         else
         {
             auto clock = rclcpp::Clock();
-            RCLCPP_INFO_THROTTLE(this->get_logger(), clock, 1000, "\033[0;33mNO MECHANISM ENABLED\033[0m");
+            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;33mNO MECHANISM ENABLED\033[0m");
         }
     }
-
-    /**
-     * @brief Callback function for starting mechanisms.
-     *
-     * @param name The name of mechanism.
-     * @param motor The motor object associated with the mechanism.
-     * @param percent_output The percent output speed of the mechanism.
-     */
 
     template <typename MotorType>
     void start_mechanism(const std::string &name, MotorType &motor, double percent_output = 0.5)
     {
-        RCLCPP_INFO(this->get_logger(), "\033[0;34m%s:\033[0m \033[1;32mSTARTED\033[0m", name.c_str());
+        RCLCPP_INFO(get_logger(), "\033[0;34m%s:\033[0m \033[1;32mSTARTED\033[0m", name.c_str());
+    }
 
-        /*
-        Will use encoders once they are wired up. This is just for testing.
-
-        motor.Set(ControlMode::PercentOutput, percent_output);
-
-        // Run for 5 seconds then turn off
-        for (int i = 0; i < 5; i++) {
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
-
-        motor.Set(ControlMode::PercentOutput, 0.0);
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        */
+    void set_manual_enabled(bool enabled)
+    {
+        auto clock = rclcpp::Clock();
+        RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL:\033[0m %s", enabled ? "\033[1;31mDISABLED" : "\033[1;32mENABLED");
+        RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL:\033[0m %s", enabled ? "\033[1;32mENABLED" : "\033[1;31mDISABLED");
+        manual_enabled = enabled;
     }
 
 private:
@@ -253,17 +172,14 @@ private:
     double left_power, right_power;
     double actuator_power, trencher_power, bucket_power;
     double actuator_direction, intake_direction;
-    bool manual_enabled, autonomous_disabled, robot_disabled;
+    double left_trigger, right_trigger, left_joystick;
+    bool manual_enabled, robot_disabled, ps4_mode, outdoor_mode;
+    bool home_button, share_button, menu_button, b_button;
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr velocity_subscriber_;
     rclcpp::Subscription<autonomous::msg::Control>::SharedPtr control_subscriber_;
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joystick_subscriber_;
 };
 
-/**
- * @brief Main function.
- *
- * Initializes and spins the RobotController node.
- */
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);

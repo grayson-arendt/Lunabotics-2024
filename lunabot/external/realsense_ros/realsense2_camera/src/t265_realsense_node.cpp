@@ -12,7 +12,7 @@ T265RealsenseNode::T265RealsenseNode(rclcpp::Node& node,
                                      bool use_intra_process) : 
                                      BaseRealSenseNode(node, dev, parameters, use_intra_process),
                                      _wo_snr(dev.first<rs2::wheel_odometer>()),
-                                     _use_odom_in(true) 
+                                     _use_odom_in(false) 
                                      {
                                          _monitor_options = {RS2_OPTION_ASIC_TEMPERATURE, RS2_OPTION_MOTION_MODULE_TEMPERATURE};
                                          initializeOdometryInput();
