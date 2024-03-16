@@ -1,8 +1,8 @@
+#include "autonomous/msg/control.hpp"
+#include "geometry_msgs/msg/pose.hpp"
+#include "nav2_msgs/action/navigate_to_pose.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
-#include "nav2_msgs/action/navigate_to_pose.hpp"
-#include "geometry_msgs/msg/pose.hpp"
-#include "autonomous/msg/control.hpp"
 
 /**
  * @brief Sends two goals to the navigation action server as an action client.
@@ -13,17 +13,20 @@
  */
 class NavigatorClient : public rclcpp::Node
 {
-public:
+  public:
     using NavigateToPose = nav2_msgs::action::NavigateToPose;
     using GoalHandleNavigate = rclcpp_action::ClientGoalHandle<NavigateToPose>;
 
     /**
      * @brief Constructor for NavigatorClient class.
      */
-    NavigatorClient() : Node("navigator_client"), goal_reached(false), goal_aborted(false), goal_canceled(false), navigate_to_excavation(true)
+    NavigatorClient()
+        : Node("navigator_client"), goal_reached(false), goal_aborted(false), goal_canceled(false),
+          navigate_to_excavation(true)
     {
         this->nav_to_pose_client_ = rclcpp_action::create_client<NavigateToPose>(this, "navigate_to_pose");
-        this->timer_ = this->create_wall_timer(std::chrono::milliseconds(500), std::bind(&NavigatorClient::send_goal, this));
+        this->timer_ =
+            this->create_wall_timer(std::chrono::milliseconds(500), std::bind(&NavigatorClient::send_goal, this));
         publisher_ = this->create_publisher<autonomous::msg::Control>("control", 10);
     }
 
@@ -75,7 +78,7 @@ public:
         this->nav_to_pose_client_->async_send_goal(goal_msg, send_goal_options);
     }
 
-private:
+  private:
     /**
      * @brief Enables the intake process.
      */

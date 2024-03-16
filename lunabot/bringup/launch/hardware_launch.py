@@ -122,7 +122,16 @@ def generate_launch_description():
         name="static_transform_publisher",
     )
 
-    robot_controller = Node(package="autonomous", executable="robot_controller")
+    robot_controller = Node(
+        package="autonomous",
+        executable="robot_controller",
+        parameters=[
+            {
+                "switch_mode": True,
+                "outdoor_mode": True,
+            }
+        ],
+    )
 
     hardware_monitor = Node(package="autonomous", executable="hardware_monitor")
 
