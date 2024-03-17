@@ -88,26 +88,6 @@ class RobotController : public rclcpp::Node
 
     void joy_callback(const sensor_msgs::msg::Joy::SharedPtr joy_msg)
     {
-        left_joystick_x_ = joy_msg->axes[0];
-        left_joystick_y_ = joy_msg->axes[1];
-        left_trigger_ = joy_msg->axes[2];
-        right_trigger_ = joy_msg->axes[5];
-
-        d_pad_horizontal_ = switch_mode_ ? joy_msg->axes[4]
-                            : ps4_mode_  ? joy_msg->axes[6]
-                            : xbox_mode_ ? joy_msg->axes[6]
-                                         : 0.0;
-
-        d_pad_vertical_ = switch_mode_ ? joy_msg->axes[5]
-                          : ps4_mode_  ? joy_msg->axes[7]
-                          : xbox_mode_ ? joy_msg->axes[7]
-                                       : 0.0;
-
-        b_button_ = switch_mode_ ? joy_msg->buttons[0]
-                    : ps4_mode_  ? joy_msg->buttons[2]
-                    : xbox_mode_ ? joy_msg->buttons[1]
-                                 : -1;
-
         share_button_ = switch_mode_ ? joy_msg->buttons[9]
                         : ps4_mode_  ? joy_msg->buttons[8]
                         : xbox_mode_ ? joy_msg->buttons[6]
@@ -118,51 +98,84 @@ class RobotController : public rclcpp::Node
                        : xbox_mode_ ? joy_msg->buttons[7]
                                     : -1;
 
-        home_button_ = switch_mode_ ? joy_msg->buttons[11]
-                       : ps4_mode_  ? joy_msg->buttons[10]
-                       : xbox_mode_ ? joy_msg->buttons[8]
-                                    : -1;
-
-        actuator_power_ = (d_pad_vertical_ == 1.0) ? 0.5 : (d_pad_vertical_ == -1.0) ? -0.5 : 0.0;
-        trencher_power_ = (d_pad_horizontal_ == 1.0) ? 0.5 : (d_pad_horizontal_ == -1.0) ? 0.0 : 0.0;
-        bucket_power_ = (d_pad_horizontal_ == -1.0) ? 0.5 : (d_pad_horizontal_ == 1.0) ? 0.0 : 0.0;
-
-        speed_multiplier_ = b_button_ ? 1.0 : 0.3;
-        robot_disabled_ = home_button_;
-
-        set_manual_status(share_button_);
-        set_manual_status(!menu_button_);
-
-        if (switch_mode_)
+        if (share_button_)
         {
-            turn_ = left_joystick_x_;
-            drive_forward_ = left_joystick_y_;
-        }
-        else
-        {
-            turn_ = left_joystick_x_;
-            drive_forward_ = (1.0 - right_trigger_) / 2.0;
-            drive_backward_ = (1.0 - left_trigger_) / 2.0;
+            auto clock = rclcpp::Clock();
+            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL: \033[0m\033[1;31mDISABLED\033[0m");
+            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL: \033[0m\033[1;32mENABLED\033[0m");
+            manual_enabled_ = true;
         }
 
-        if (drive_forward_ != 0.0)
+        if (menu_button_)
         {
-            left_power_ = drive_forward_ - turn_;
-            right_power_ = drive_forward_ + turn_;
-        }
-        else if (drive_backward_ != 0.0)
-        {
-            left_power_ = (drive_backward_ - turn_) * -1.0;
-            right_power_ = (drive_backward_ + turn_) * -1.0;
-        }
-        else
-        {
-            left_power_ = -turn_;
-            right_power_ = turn_;
+            auto clock = rclcpp::Clock();
+            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL: \033[0m\033[1;32mENABLED\033[0m");
+            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL: \033[0m\033[1;31mDISABLED\033[0m");
+            manual_enabled_ = false;
         }
 
         if (manual_enabled_)
         {
+            left_joystick_x_ = joy_msg->axes[0];
+            left_joystick_y_ = joy_msg->axes[1];
+            left_trigger_ = joy_msg->axes[2];
+            right_trigger_ = joy_msg->axes[5];
+
+            home_button_ = switch_mode_ ? joy_msg->buttons[11]
+                           : ps4_mode_  ? joy_msg->buttons[10]
+                           : xbox_mode_ ? joy_msg->buttons[8]
+                                        : -1;
+
+            d_pad_horizontal_ = switch_mode_ ? joy_msg->axes[4]
+                                : ps4_mode_  ? joy_msg->axes[6]
+                                : xbox_mode_ ? joy_msg->axes[6]
+                                             : 0.0;
+
+            d_pad_vertical_ = switch_mode_ ? joy_msg->axes[5]
+                              : ps4_mode_  ? joy_msg->axes[7]
+                              : xbox_mode_ ? joy_msg->axes[7]
+                                           : 0.0;
+
+            b_button_ = switch_mode_ ? joy_msg->buttons[0]
+                        : ps4_mode_  ? joy_msg->buttons[2]
+                        : xbox_mode_ ? joy_msg->buttons[1]
+                                     : -1;
+
+            actuator_power_ = (d_pad_vertical_ == 1.0) ? 0.5 : (d_pad_vertical_ == -1.0) ? -0.5 : 0.0;
+            trencher_power_ = (d_pad_horizontal_ == 1.0) ? 0.5 : (d_pad_horizontal_ == -1.0) ? 0.0 : 0.0;
+            bucket_power_ = (d_pad_horizontal_ == -1.0) ? 0.5 : (d_pad_horizontal_ == 1.0) ? 0.0 : 0.0;
+
+            speed_multiplier_ = b_button_ ? 1.0 : 0.3;
+            robot_disabled_ = home_button_;
+
+            if (switch_mode_)
+            {
+                turn_ = left_joystick_x_;
+                drive_forward_ = left_joystick_y_;
+            }
+            else
+            {
+                turn_ = left_joystick_x_;
+                drive_forward_ = (1.0 - right_trigger_) / 2.0;
+                drive_backward_ = (1.0 - left_trigger_) / 2.0;
+            }
+
+            if (drive_forward_ != 0.0)
+            {
+                left_power_ = drive_forward_ - turn_;
+                right_power_ = drive_forward_ + turn_;
+            }
+            else if (drive_backward_ != 0.0)
+            {
+                left_power_ = (drive_backward_ - turn_) * -1.0;
+                right_power_ = (drive_backward_ + turn_) * -1.0;
+            }
+            else
+            {
+                left_power_ = -turn_;
+                right_power_ = turn_;
+            }
+
             if (!robot_disabled_)
             {
                 ctre::phoenix::unmanaged::Unmanaged::FeedEnable(100);
@@ -243,17 +256,6 @@ class RobotController : public rclcpp::Node
     void start_mechanism(const std::string &name, MotorType &motor, double percent_output = 0.5)
     {
         RCLCPP_INFO(get_logger(), "\033[0;34m%s:\033[0m \033[1;32mSTARTED\033[0m", name.c_str());
-    }
-
-    void set_manual_status(bool enabled)
-    {
-        auto clock = rclcpp::Clock();
-        RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL:\033[0m %s",
-                             enabled ? "\033[1;31mDISABLED" : "\033[1;32mENABLED");
-
-        RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL:\033[0m %s",
-                             enabled ? "\033[1;32mENABLED" : "\033[1;31mDISABLED");
-        manual_enabled_ = enabled;
     }
 
   private:
