@@ -16,6 +16,5 @@
 
         # optional list of tags
         tag:
-            ids: [0, 1]            # tag ID
-            frames: [tag1, tag2] 
+            ids: [0, 1]           # tag ID
             sizes: [0.08, 0.08]   # optional tag-specific edge size

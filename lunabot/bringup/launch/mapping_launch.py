@@ -583,12 +583,12 @@ def launch_setup(context, *args, **kwargs):
                 }
             ],
             remappings=[
-                ("scan", LaunchConfiguration("scan2")),
+                ("scan", LaunchConfiguration("scan_topic")),
                 ("scan_cloud", LaunchConfiguration("scan_cloud_topic")),
                 ("odom", LaunchConfiguration("odom_topic")),
                 ("imu", LaunchConfiguration("imu_topic")),
             ],
-            arguments=[LaunchConfiguration("args"), LaunchConfiguration("odom_args")],
+            arguments=[LaunchConfiguration("args"), LaunchConfiguration("odom_args"), "--ros-args", "--disable-rosout-logs", "--disable-stdout-logs"],
             prefix=LaunchConfiguration("launch_prefix"),
             namespace=LaunchConfiguration("namespace"),
         ),
@@ -828,7 +828,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "rtabmap_args",
-                default_value="--ros-args --disable-rosout-logs -d -Rtabmap/DetectionRate 10 -Optimizer/Robust true -Grid/Sensor 2 -Grid/RangeMin 0.5 -Reg/Force3DoF true -Reg/Strategy 0 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
+                default_value="-d -Kp/DetectorStrategy 2 -Rtabmap/DetectionRate 10 -Optimizer/Robust true -Grid/Sensor 2 -Grid/RangeMin 0.5 -Reg/Force3DoF true -Reg/Strategy 2 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
                 description='Backward compatibility, use "args" instead.',
             ),
             DeclareLaunchArgument(
@@ -972,11 +972,11 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "icp_odometry",
-                default_value="false",
+                default_value="true",
                 description="Launch rtabmap icp odometry node.",
             ),
             DeclareLaunchArgument(
-                "odom_topic", default_value="/filtered_odom", description="Odometry topic name."
+                "odom_topic", default_value="odom", description="Odometry topic name."
             ),
             DeclareLaunchArgument(
                 "vo_frame_id",
@@ -1045,7 +1045,7 @@ def generate_launch_description():
             # Tag/Landmark
             DeclareLaunchArgument(
                 "tag_topic",
-                default_value="/detections",
+                default_value="/tag_detections",
                 description="AprilTag topic async subscription. This is used for SLAM graph optimization and loop closure detection. Landmark poses are also published accordingly to current optimized map. Required: Remove optional frame name parameters from apriltag's cfg file so that TF frame can be deducted from topic's family and id.",
             ),
             DeclareLaunchArgument(
