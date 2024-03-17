@@ -14,16 +14,22 @@ using namespace ctre::phoenix::platform;
 using namespace ctre::phoenix::motorcontrol;
 using namespace ctre::phoenix::motorcontrol::can;
 
-TalonFX left_wheel_motor_(1);
-TalonFX right_wheel_motor_(2);
-TalonFX trencher_motor_(3);
-TalonSRX bucket_motor_(4);
-TalonSRX actuator_left_motor_(5);
-TalonSRX actuator_right_motor_(6);
-
+/**
+ * @class RobotController
+ * @brief A class for controlling the robot using a controller 
+ * (XBox One, PS4, or Nintendo Switch) and autonomous commands.
+ * @details 
+ * The Nintendo Switch controller triggers act as buttons instead 
+ * of providing variable input, so the mode will drive the robot
+ * based off of the left joystick instead.
+ * @author Grayson Arendt
+ */
 class RobotController : public rclcpp::Node
 {
   public:
+    /**
+     * @brief Constructor for RobotController.
+     */
     RobotController() : Node("motor_controller")
     {
         right_wheel_motor_.SetInverted(true);
@@ -47,6 +53,9 @@ class RobotController : public rclcpp::Node
     }
 
   private:
+    /**
+     * @brief Declares and gets parameters from the parameter server.
+     */
     void declare_and_get_parameters()
     {
         declare_parameter("xbox_mode", false);
@@ -60,6 +69,9 @@ class RobotController : public rclcpp::Node
         get_parameter("outdoor_mode", outdoor_mode_);
     }
 
+    /**
+     * @brief Applies the selected controller mode.
+     */
     void apply_controller_mode()
     {
         if (xbox_mode_)
@@ -86,6 +98,10 @@ class RobotController : public rclcpp::Node
         }
     }
 
+    /**
+     * @brief Callback function for processing joystick messages.
+     * @param joy_msg The joystick message.
+     */
     void joy_callback(const sensor_msgs::msg::Joy::SharedPtr joy_msg)
     {
         share_button_ = switch_mode_ ? joy_msg->buttons[9]
@@ -210,6 +226,10 @@ class RobotController : public rclcpp::Node
         }
     }
 
+    /**
+     * @brief Callback function for processing velocity messages.
+     * @param velocity_msg The velocity message.
+     */
     void callback_velocity(const geometry_msgs::msg::Twist::SharedPtr velocity_msg)
     {
         if (!manual_enabled_)
@@ -230,6 +250,10 @@ class RobotController : public rclcpp::Node
         }
     }
 
+    /**
+     * @brief Callback function for processing autonomous control messages.
+     * @param control_msg The autonomous control message.
+     */
     void callback_control(const autonomous::msg::Control::SharedPtr control_msg)
     {
         manual_enabled_ = control_msg->enable_manual_drive;
@@ -259,6 +283,13 @@ class RobotController : public rclcpp::Node
         }
     }
 
+    /**
+     * @brief Starts a mechanism with specified parameters.
+     * @tparam MotorType The type of motor.
+     * @param name The name of the mechanism.
+     * @param motor The motor to control the mechanism.
+     * @param percent_output The percentage output for the motor.
+     */
     template <typename MotorType>
     void start_mechanism(const std::string &name, MotorType &motor, double percent_output = 0.5)
     {
@@ -276,8 +307,20 @@ class RobotController : public rclcpp::Node
     double turn_, drive_, drive_forward_, drive_backward_, speed_multiplier_;
     bool manual_enabled_, robot_disabled_, xbox_mode_, ps4_mode_, switch_mode_, outdoor_mode_;
     bool home_button_, share_button_, menu_button_, b_button_;
+
+    TalonFX left_wheel_motor_{1};
+    TalonFX right_wheel_motor_{2};
+    TalonFX trencher_motor_{3};
+    TalonSRX bucket_motor_{4};
+    TalonSRX actuator_left_motor_{5};
+    TalonSRX actuator_right_motor_{6};
 };
 
+/**
+ * @brief Main function.
+ *
+ * Initializes and spins the RobotController node.
+ */
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);

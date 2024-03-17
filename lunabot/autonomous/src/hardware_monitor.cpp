@@ -2,9 +2,17 @@
 #include "sensor_msgs/msg/image.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 
+/**
+ * @class HardwareMonitor
+ * @brief A class for monitoring hardware connections and status.
+ * @author Grayson Arendt
+ */
 class HardwareMonitor : public rclcpp::Node
 {
   public:
+    /**
+     * @brief Constructor for HardwareMonitor.
+     */
     HardwareMonitor() : Node("hardware_monitor")
     {
         d455_subscriber_ = this->create_subscription<sensor_msgs::msg::Image>(
@@ -48,12 +56,23 @@ class HardwareMonitor : public rclcpp::Node
         lidar2_valid = false;
     }
 
+    /**
+     * @brief Resets the timer and sets the validity flag to true.
+     * @param timer The timer to reset.
+     * @param valid_flag The validity flag to set.
+     */
     void resetTimer(rclcpp::TimerBase::SharedPtr timer, bool &valid_flag)
     {
         timer->reset();
         valid_flag = true;
     }
 
+    /**
+     * @brief Checks the connection status and logs a warning if no connection is detected.
+     * @param timer The timer associated with the connection.
+     * @param valid_flag The validity flag indicating the connection status.
+     * @param sensor_name The name of the sensor.
+     */
     void checkConnection(rclcpp::TimerBase::SharedPtr timer, bool &valid_flag, const std::string &sensor_name)
     {
         if (!valid_flag)
@@ -71,6 +90,11 @@ class HardwareMonitor : public rclcpp::Node
     bool d455_valid, t265_valid, lidar1_valid, lidar2_valid;
 };
 
+/**
+ * @brief Main function.
+ *
+ * Initializes and spins the HardwareMonitor node.
+ */
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);

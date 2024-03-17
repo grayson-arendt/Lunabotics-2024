@@ -976,7 +976,7 @@ def generate_launch_description():
                 description="Launch rtabmap icp odometry node.",
             ),
             DeclareLaunchArgument(
-                "odom_topic", default_value="odom", description="Odometry topic name."
+                "odom_topic", default_value="/filtered_odom", description="Odometry topic name."
             ),
             DeclareLaunchArgument(
                 "vo_frame_id",
