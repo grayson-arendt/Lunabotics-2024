@@ -127,7 +127,7 @@ def generate_launch_description():
         executable="robot_controller",
         parameters=[
             {
-                "ps4_mode": True,
+                "switch_mode": True,
                 "outdoor_mode": True,
             }
         ],
@@ -135,6 +135,10 @@ def generate_launch_description():
     )
 
     hardware_monitor = Node(package="autonomous", executable="hardware_monitor")
+
+    particle_filter= Node(package="autonomous", executable="particle_filter")
+
+    odometry_transform = Node(package="autonomous", executable="odometry_transform")
 
     apriltag = Node(
         name="apriltag",
@@ -162,7 +166,8 @@ def generate_launch_description():
             lidar2_odom,
             apriltag,
             realsense,
-            pose_to_base_link,
+            particle_filter,
+            odometry_transform,
             robot_controller,
             hardware_monitor,
         ]

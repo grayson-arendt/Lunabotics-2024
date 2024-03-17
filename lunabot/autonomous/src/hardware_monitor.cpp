@@ -54,7 +54,6 @@ class HardwareMonitor : public rclcpp::Node
         valid_flag = true;
     }
 
-    // Function to check connection status
     void checkConnection(rclcpp::TimerBase::SharedPtr timer, bool &valid_flag, const std::string &sensor_name)
     {
         if (!valid_flag)

@@ -94,16 +94,16 @@ namespace realsense2_camera
     const bool ENABLE_FISHEYE = true;
     const bool ENABLE_IMU     = true;
     const bool HOLD_BACK_IMU_FOR_FRAMES = false;
-    const bool PUBLISH_ODOM_TF = true;
+    const bool PUBLISH_ODOM_TF = false;
 
 
     const std::string DEFAULT_BASE_FRAME_ID            = "link";
-    const std::string DEFAULT_ODOM_FRAME_ID            = "odom";
+    const std::string DEFAULT_ODOM_FRAME_ID            = "t265_odom_frame";
     const std::string DEFAULT_IMU_OPTICAL_FRAME_ID     = "camera_imu_optical_frame";
 
     const std::string DEFAULT_UNITE_IMU_METHOD         = "2";
     const std::string DEFAULT_FILTERS                  = "";
-    const std::string DEFAULT_TOPIC_ODOM_IN            = "odom_lidar";
+    const std::string DEFAULT_TOPIC_ODOM_IN            = "";
 
     const float ROS_DEPTH_SCALE = 0.001;
 

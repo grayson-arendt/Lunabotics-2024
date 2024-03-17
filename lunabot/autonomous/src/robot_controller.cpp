@@ -101,16 +101,20 @@ class RobotController : public rclcpp::Node
         if (share_button_)
         {
             auto clock = rclcpp::Clock();
-            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL: \033[0m\033[1;31mDISABLED\033[0m");
-            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL: \033[0m\033[1;32mENABLED\033[0m");
+            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000,
+                                 "\033[0;36mAUTONOMOUS CONTROL: \033[0m\033[1;31mDISABLED\033[0m");
+            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000,
+                                 "\033[0;33mMANUAL CONTROL: \033[0m\033[1;32mENABLED\033[0m");
             manual_enabled_ = true;
         }
 
         if (menu_button_)
         {
             auto clock = rclcpp::Clock();
-            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;36mAUTONOMOUS CONTROL: \033[0m\033[1;32mENABLED\033[0m");
-            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;33mMANUAL CONTROL: \033[0m\033[1;31mDISABLED\033[0m");
+            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000,
+                                 "\033[0;36mAUTONOMOUS CONTROL: \033[0m\033[1;32mENABLED\033[0m");
+            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000,
+                                 "\033[0;33mMANUAL CONTROL: \033[0m\033[1;31mDISABLED\033[0m");
             manual_enabled_ = false;
         }
 
@@ -145,35 +149,38 @@ class RobotController : public rclcpp::Node
             trencher_power_ = (d_pad_horizontal_ == 1.0) ? 0.5 : (d_pad_horizontal_ == -1.0) ? 0.0 : 0.0;
             bucket_power_ = (d_pad_horizontal_ == -1.0) ? 0.5 : (d_pad_horizontal_ == 1.0) ? 0.0 : 0.0;
 
-            speed_multiplier_ = b_button_ ? 1.0 : 0.3;
+            speed_multiplier_ = b_button_ ? 1.0 : 0.2;
             robot_disabled_ = home_button_;
 
             if (switch_mode_)
             {
                 turn_ = left_joystick_x_;
-                drive_forward_ = left_joystick_y_;
+                drive_ = left_joystick_y_;
+
+                left_power_ = drive_ - turn_;
+                right_power_ = drive_ + turn_;
             }
             else
             {
                 turn_ = left_joystick_x_;
                 drive_forward_ = (1.0 - right_trigger_) / 2.0;
                 drive_backward_ = (1.0 - left_trigger_) / 2.0;
-            }
 
-            if (drive_forward_ != 0.0)
-            {
-                left_power_ = drive_forward_ - turn_;
-                right_power_ = drive_forward_ + turn_;
-            }
-            else if (drive_backward_ != 0.0)
-            {
-                left_power_ = (drive_backward_ - turn_) * -1.0;
-                right_power_ = (drive_backward_ + turn_) * -1.0;
-            }
-            else
-            {
-                left_power_ = -turn_;
-                right_power_ = turn_;
+                if (drive_forward_ != 0.0)
+                {
+                    left_power_ = drive_forward_ - turn_;
+                    right_power_ = drive_forward_ + turn_;
+                }
+                else if (drive_backward_ != 0.0)
+                {
+                    left_power_ = (drive_backward_ - turn_) * -1.0;
+                    right_power_ = (drive_backward_ + turn_) * -1.0;
+                }
+                else
+                {
+                    left_power_ = -turn_;
+                    right_power_ = turn_;
+                }
             }
 
             if (!robot_disabled_)
@@ -189,7 +196,7 @@ class RobotController : public rclcpp::Node
                          bucket_power_, trencher_power_);
 
             RCLCPP_DEBUG(get_logger(), "LEFT SPEED: %f, RIGHT SPEED: %f", left_power_ * speed_multiplier_,
-                         right_power_ * speed_multiplier_);
+                        right_power_ * speed_multiplier_);
 
             left_wheel_motor_.Set(ControlMode::PercentOutput, left_power_ * speed_multiplier_);
             right_wheel_motor_.Set(ControlMode::PercentOutput, right_power_ * speed_multiplier_);
@@ -266,7 +273,7 @@ class RobotController : public rclcpp::Node
     double left_power_, right_power_;
     double actuator_power_, trencher_power_, bucket_power_;
     double left_trigger_, right_trigger_, d_pad_vertical_, d_pad_horizontal_, left_joystick_x_, left_joystick_y_;
-    double turn_, drive_forward_, drive_backward_, speed_multiplier_;
+    double turn_, drive_, drive_forward_, drive_backward_, speed_multiplier_;
     bool manual_enabled_, robot_disabled_, xbox_mode_, ps4_mode_, switch_mode_, outdoor_mode_;
     bool home_button_, share_button_, menu_button_, b_button_;
 };
