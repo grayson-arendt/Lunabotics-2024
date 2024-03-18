@@ -20,10 +20,7 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(nav_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
-find_package(tf2 REQUIRED)
-find_package(tf2_ros REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
@@ -35,16 +32,12 @@ include_directories(include)
 add_executable(hardware_monitor src/hardware_monitor.cpp)
 add_executable(motor_test src/motor_test.cpp)
 add_executable(navigator_client src/navigator_client.cpp)
-add_executable(odometry_transform src/odometry_transform.cpp)
-add_executable(particle_filter src/particle_filter.cpp)
 add_executable(robot_controller src/robot_controller.cpp)
 
 
 ament_target_dependencies(hardware_monitor rclcpp sensor_msgs)
 ament_target_dependencies(motor_test rclcpp sensor_msgs)
 ament_target_dependencies(navigator_client rclcpp rclcpp_action nav2_msgs geometry_msgs)
-ament_target_dependencies(odometry_transform rclcpp nav_msgs geometry_msgs tf2 tf2_ros)
-ament_target_dependencies(particle_filter rclcpp nav_msgs sensor_msgs geometry_msgs tf2 tf2_ros)
 ament_target_dependencies(robot_controller rclcpp sensor_msgs geometry_msgs)
 
 rosidl_target_interfaces(robot_controller ${PROJECT_NAME} "rosidl_typesupport_cpp")
@@ -59,8 +52,6 @@ install(TARGETS
   hardware_monitor
   motor_test
   navigator_client
-  odometry_transform
-  particle_filter
   robot_controller
   DESTINATION lib/${PROJECT_NAME}
 )

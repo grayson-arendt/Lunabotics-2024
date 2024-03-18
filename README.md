@@ -22,6 +22,7 @@ This repository contains code made by the College of DuPage team for the NASA Lu
 - `rplidar_ros`
 - `apriltag_ros`
 - `navigation2`
+- `robot_localization`
 - `laser_filters`
 
 ## Installation

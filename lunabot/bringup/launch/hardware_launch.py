@@ -48,7 +48,7 @@ def generate_launch_description():
             {
                 "channel_type": "serial",
                 "serial_port": "/dev/ttyUSB0",
-                "scan_frequency": 20.0,
+                "scan_frequency": 30.0,
                 "serial_baudrate": 256000,
                 "frame_id": "lidar2_link",
                 "inverted": False,
@@ -70,7 +70,7 @@ def generate_launch_description():
             "unite_imu_method1": "2",
             "depth_module.profile1": "848x480x30",
             "rgb_camera.profile1": "848x480x30",
-            "json_file_path1": "/home/intel-nuc/high_accuracy.json",
+            "json_file_path1": "/home/intel-nuc/high_density.json",
             "camera_name2": "t265",
             "camera_namespace2": "t265",
             "device_type2": "t265",
@@ -114,14 +114,6 @@ def generate_launch_description():
         ],
     )
 
-    pose_to_base_link = Node(
-        package="tf2_ros",
-        executable="static_transform_publisher",
-        arguments=["0", "0", "0", "0", "0", "0", "t265_pose_frame", "base_link"],
-        output="screen",
-        name="static_transform_publisher",
-    )
-
     robot_controller = Node(
         package="autonomous",
         executable="robot_controller",
@@ -136,9 +128,13 @@ def generate_launch_description():
 
     hardware_monitor = Node(package="autonomous", executable="hardware_monitor")
 
-    particle_filter= Node(package="autonomous", executable="particle_filter")
-
-    odometry_transform = Node(package="autonomous", executable="odometry_transform")
+    ekf = Node(
+            package='robot_localization',
+            executable='ekf_node',
+            name='ekf_filter_node',
+            output='screen',
+            parameters=[os.path.join(get_package_share_directory("bringup"), 'params', 'ekf_params.yaml')],
+    )
 
     apriltag = Node(
         name="apriltag",
@@ -166,8 +162,7 @@ def generate_launch_description():
             lidar2_odom,
             apriltag,
             realsense,
-            particle_filter,
-            odometry_transform,
+            ekf,
             robot_controller,
             hardware_monitor,
         ]

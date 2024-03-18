@@ -7,6 +7,7 @@ ros_packages=(
     "ros-humble-apriltag-ros"
     "ros-humble-navigation2"
     "ros-humble-laser-filters"
+    "ros-humble-robot-localization"
     "ros-humble-rmw-cyclonedds-cpp"
 )
 
