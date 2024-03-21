@@ -118,7 +118,7 @@ class RobotController : public rclcpp::Node
         {
             auto clock = rclcpp::Clock();
             RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000,
-                                 "\033[0;36mlunabot_autonomous CONTROL: \033[0m\033[1;31mDISABLED\033[0m");
+                                 "\033[0;36mAUTONOMOUS CONTROL: \033[0m\033[1;31mDISABLED\033[0m");
             RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000,
                                  "\033[0;33mMANUAL CONTROL: \033[0m\033[1;32mENABLED\033[0m");
             manual_enabled_ = true;
@@ -128,7 +128,7 @@ class RobotController : public rclcpp::Node
         {
             auto clock = rclcpp::Clock();
             RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000,
-                                 "\033[0;36mlunabot_autonomous CONTROL: \033[0m\033[1;32mENABLED\033[0m");
+                                 "\033[0;36mAUTONOMOUS CONTROL: \033[0m\033[1;32mENABLED\033[0m");
             RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000,
                                  "\033[0;33mMANUAL CONTROL: \033[0m\033[1;31mDISABLED\033[0m");
             manual_enabled_ = false;

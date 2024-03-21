@@ -653,6 +653,7 @@ def launch_setup(context, *args, **kwargs):
                     "qos_gps": LaunchConfiguration("qos_gps"),
                     "qos_user_data": LaunchConfiguration("qos_user_data"),
                     "scan_normal_k": LaunchConfiguration("scan_normal_k"),
+                    "grid_size": 50.0,
                     "landmark_linear_variance": LaunchConfiguration(
                         "tag_linear_variance"
                     ),
@@ -868,7 +869,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "rtabmap_args",
-                default_value="-d -RGBD/NewMapOdomChangeDistance 0.2 -RGBD/ProximityPathMaxNeighbors 5-RGBD/StartAtOrigin true -RGBD/ProximityAngle 135 -RGBD/ProximityOdomGuess true -Vis/MaxFeatures 2000 Rtabmap/StartNewMapOnGoodSignature true -Rtabmap/DetectionRate 2 -RGBD/CreateOccupancyGrid true-Grid/MaxGroundAngle 20 -Grid/DepthRoiRatios 0.0 0.0 0.0 0.1 -Grid/Sensor 2 -Grid/RangeMin 0.5 -Reg/Force3DoF true -Reg/Strategy 2 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
+                default_value="-d -RGBD/NewMapOdomChangeDistance 0.2 -RGBD/ProximityPathMaxNeighbors 5 -RGBD/StartAtOrigin true -RGBD/ProximityAngle 135 -RGBD/ProximityOdomGuess true -Vis/MaxFeatures 2000 -Rtabmap/StartNewMapOnGoodSignature true -Rtabmap/DetectionRate 2 -RGBD/CreateOccupancyGrid true -Grid/CellSize 0.01 -Grid/MaxGroundAngle 20 -Grid/DepthRoiRatios 0.0 0.0 0.0 0.1 -Grid/Sensor 2 -Grid/RangeMin 0.5 -Grid/RangeMax 0.0 Reg/Force3DoF true -Reg/Strategy 2 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
                 description='Backward compatibility, use "args" instead.',
             ),
             DeclareLaunchArgument(

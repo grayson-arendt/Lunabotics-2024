@@ -39,7 +39,7 @@ class NavigatorClient : public rclcpp::Node
 
         if (!this->nav_to_pose_client_->wait_for_action_server())
         {
-            RCLCPP_ERROR(this->get_logger(), "ACTION SERVER NOT AVAILABLE... SHUTTING DOWN NODE");
+            RCLCPP_ERROR(this->get_logger(), "\033[1;31mACTION SERVER NOT AVAILABLE... SHUTTING DOWN NODE\033[0m");
             rclcpp::shutdown();
         }
 
@@ -48,11 +48,11 @@ class NavigatorClient : public rclcpp::Node
 
         auto goal_msg = NavigateToPose::Goal();
         geometry_msgs::msg::Pose goal_pose;
-
+ 
         if (navigate_to_excavation)
         {
-            goal_pose.position.x = 0.5;
-            goal_pose.position.y = 0.0;
+            goal_pose.position.x = 4.38;
+            goal_pose.position.y = 3.0;
             goal_pose.position.z = 0.0;
             goal_pose.orientation.x = 0.0;
             goal_pose.orientation.y = 0.0;
@@ -61,20 +61,21 @@ class NavigatorClient : public rclcpp::Node
         }
         else
         {
-            goal_pose.position.x = 1.0;
-            goal_pose.position.y = 0.5;
+            goal_pose.position.x = 0.5;
+            goal_pose.position.y = 3.0;
             goal_pose.position.z = 0.0;
             goal_pose.orientation.x = 0.0;
             goal_pose.orientation.y = 0.0;
-            goal_pose.orientation.z = 0.0;
-            goal_pose.orientation.w = 1.0;
+            goal_pose.orientation.z = 1.0;
+            goal_pose.orientation.w = 0.0;
         }
 
         goal_msg.pose.pose = goal_pose;
         goal_msg.pose.header.stamp = this->now();
         goal_msg.pose.header.frame_id = "map";
 
-        RCLCPP_INFO(this->get_logger(), "Sending target goal...");
+        RCLCPP_INFO(this->get_logger(), "\033[0;36mSENDING TARGET GOAL...\033[0m");
+
         this->nav_to_pose_client_->async_send_goal(goal_msg, send_goal_options);
     }
 
@@ -195,23 +196,23 @@ class NavigatorClient : public rclcpp::Node
         {
             RCLCPP_INFO(this->get_logger(), "\033[1;32mCONSTRUCTION ZONE REACHED\033[0m");
             this->enable_outtake();
-            RCLCPP_INFO(this->get_logger(), "lunabot_autonomous SUCCESS");
+            RCLCPP_INFO(this->get_logger(), "\033[1;32mAUTONOMOUS SUCCESS\033[0m");
         }
 
         else if ((navigate_to_excavation && goal_aborted) || goal_canceled)
         {
-            RCLCPP_INFO(this->get_logger(), "NAVIGATION TO EXCAVATION ZONE FAILED, ENABLING MANUAL CONTROL");
+            RCLCPP_INFO(this->get_logger(), "\033[1;31mNAVIGATION TO EXCAVATION ZONE FAILED, ENABLING MANUAL CONTROL\033[0m");
         }
 
         else if ((!navigate_to_excavation && goal_aborted) || goal_canceled)
         {
-            RCLCPP_ERROR(this->get_logger(), "NAVIGATION TO CONSTRUCTION ZONE FAILED, ENABLING MANUAL CONTROL");
+            RCLCPP_ERROR(this->get_logger(), "\033[1;31mNAVIGATION TO CONSTRUCTION ZONE FAILED, ENABLING MANUAL CONTROL\033[0m");
             this->enable_manual_drive();
         }
 
         else
         {
-            RCLCPP_ERROR(this->get_logger(), "UKNOWN RESULT CODE, ENABLING MANUAL CONTROL");
+            RCLCPP_ERROR(this->get_logger(), "\033[1;31mUKNOWN RESULT CODE, ENABLING MANUAL CONTROL\033[0m");
             this->enable_manual_drive();
         }
     }
