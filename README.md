@@ -135,13 +135,13 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
 #### (Optional) 7. Startup action client:
 
 ```bash
-ros2 run lunabot_autonomous navigation_client
+ros2 run lunabot_autonomous navigator_client
 ```
 
 The action client will send two goals, one for excavation zone and another for construction zone. After the goal has been reached, it will publish to /control topic and enable the specific
 motors for the mechanisms for the zone.
 
-![Demo](sample.png)
+<img src="sample.png"  width="120%" height="120%">
 
 ## Structure
 
