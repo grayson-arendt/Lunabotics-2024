@@ -153,6 +153,7 @@ motors for the mechanisms for the zone.
   - **phoenix_lib** (Contains shared object files for CTRE Phoenix C++ API)
   - **src**
     - hardware_monitor.cpp (Monitors liveliness of hardware topics)
+    - imu_rotator.cpp (Rotates IMU values to be in ENU coordinate frame)
     - motor_test.cpp (Simple node for testing motors)
     - navigator_client.cpp (Action client that sends goals and motor control commands)
     - robot_controller.cpp (Controller for both autonomous and manual control of robot)
@@ -167,8 +168,10 @@ motors for the mechanisms for the zone.
     - navigation_launch.py (Launches Navigation2)
   - **params**
     - default_view.rviz (RViz2 configuration file)
+    - ekf_params.yaml (Parameters for robot_localization ekf_node)
+    - lidar_params.yaml (Parameters for laser_filters)
     - nav2_params.yaml (Parameters for Navigation2)
-    - range_filter.yaml (Filter for lidar)
+    - tag_params.yaml (Parameters for apriltag_ros)
 
 **lunabot_description** 
   - **meshes** (Meshes for robot model in RViz2)
