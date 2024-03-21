@@ -685,6 +685,7 @@ def launch_setup(context, *args, **kwargs):
                             )
                         )._predicate_func(context),
                     ).perform(context),
+                    "map_always_update": True,
                 }
             ],
             remappings=[
@@ -711,6 +712,45 @@ def launch_setup(context, *args, **kwargs):
             ],
             prefix=LaunchConfiguration("launch_prefix"),
             namespace=LaunchConfiguration("namespace"),
+        ),
+        Node(
+            package='rtabmap_viz', executable='rtabmap_viz', name="rtabmap_viz", output='screen',
+            parameters=[{
+                "subscribe_depth": LaunchConfiguration('depth'),
+                "subscribe_rgbd": LaunchConfiguration('subscribe_rgbd'),
+                "subscribe_rgb": LaunchConfiguration('subscribe_rgb'),
+                "subscribe_stereo": LaunchConfiguration('stereo'),
+                "subscribe_scan": LaunchConfiguration('subscribe_scan'),
+                "subscribe_scan_cloud": LaunchConfiguration('subscribe_scan_cloud'),
+                "subscribe_user_data": LaunchConfiguration('subscribe_user_data'),
+                "subscribe_odom_info": ConditionalBool(True, False, IfCondition(PythonExpression(["'", LaunchConfiguration('icp_odometry'), "' == 'true' or '", LaunchConfiguration('visual_odometry'), "' == 'true'"]))._predicate_func(context)).perform(context),
+                "frame_id": LaunchConfiguration('frame_id'),
+                "odom_frame_id": LaunchConfiguration('odom_frame_id').perform(context),
+                "wait_for_transform": LaunchConfiguration('wait_for_transform'),
+                "approx_sync": LaunchConfiguration('approx_sync'),
+                "queue_size": LaunchConfiguration('queue_size'),
+                "qos_image": LaunchConfiguration('qos_image'),
+                "qos_scan": LaunchConfiguration('qos_scan'),
+                "qos_odom": LaunchConfiguration('qos_odom'),
+                "qos_camera_info": LaunchConfiguration('qos_camera_info'),
+                "qos_user_data": LaunchConfiguration('qos_user_data')
+            }],
+            remappings=[
+                ("rgb/image", LaunchConfiguration('rgb_topic_relay')),
+                ("depth/image", LaunchConfiguration('depth_topic_relay')),
+                ("rgb/camera_info", LaunchConfiguration('camera_info_topic')),
+                ("rgbd_image", LaunchConfiguration('rgbd_topic_relay')),
+                ("left/image_rect", LaunchConfiguration('left_image_topic_relay')),
+                ("right/image_rect", LaunchConfiguration('right_image_topic_relay')),
+                ("left/camera_info", LaunchConfiguration('left_camera_info_topic')),
+                ("right/camera_info", LaunchConfiguration('right_camera_info_topic')),
+                ("scan", LaunchConfiguration('scan_topic')),
+                ("scan_cloud", LaunchConfiguration('scan_cloud_topic')),
+                ("odom", LaunchConfiguration('odom_topic'))],
+            condition=IfCondition(LaunchConfiguration("rtabmap_viz")),
+            arguments=[LaunchConfiguration("gui_cfg")],
+            prefix=LaunchConfiguration('launch_prefix'),
+            namespace=LaunchConfiguration('namespace')
         ),
         Node(
             package="rtabmap_util",
@@ -808,7 +848,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "publish_tf_map",
-                default_value="true",
+                default_value="false",
                 description="Publish TF between map and odometry.",
             ),
             DeclareLaunchArgument("namespace", default_value="", description=""),
@@ -828,7 +868,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "rtabmap_args",
-                default_value="-d -Rtabmap/DetectionRate 20 -Optimizer/Robust true -Grid/MaxGroundAngle 20 -Grid/DepthRoiRatios 0.0 0.0 0.0 0.1 -Grid/Sensor 2 -Grid/RangeMin 0.5 -Reg/Force3DoF true -Reg/Strategy 1 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
+                default_value="-d -RGBD/NewMapOdomChangeDistance 0.2 -RGBD/ProximityPathMaxNeighbors 5-RGBD/StartAtOrigin true -RGBD/ProximityAngle 135 -RGBD/ProximityOdomGuess true -Vis/MaxFeatures 2000 Rtabmap/StartNewMapOnGoodSignature true -Rtabmap/DetectionRate 2 -RGBD/CreateOccupancyGrid true-Grid/MaxGroundAngle 20 -Grid/DepthRoiRatios 0.0 0.0 0.0 0.1 -Grid/Sensor 2 -Grid/RangeMin 0.5 -Reg/Force3DoF true -Reg/Strategy 2 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
                 description='Backward compatibility, use "args" instead.',
             ),
             DeclareLaunchArgument(
@@ -976,7 +1016,7 @@ def generate_launch_description():
                 description="Launch rtabmap icp odometry node.",
             ),
             DeclareLaunchArgument(
-                "odom_topic", default_value="odom", description="Odometry topic name."
+                "odom_topic", default_value="/odometry/filtered", description="Odometry topic name."
             ),
             DeclareLaunchArgument(
                 "vo_frame_id",

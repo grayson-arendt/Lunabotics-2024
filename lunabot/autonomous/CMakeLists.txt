@@ -30,12 +30,14 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 include_directories(include)
 
 add_executable(hardware_monitor src/hardware_monitor.cpp)
+add_executable(imu_rotator src/imu_rotator.cpp)
 add_executable(motor_test src/motor_test.cpp)
 add_executable(navigator_client src/navigator_client.cpp)
 add_executable(robot_controller src/robot_controller.cpp)
 
 
 ament_target_dependencies(hardware_monitor rclcpp sensor_msgs)
+ament_target_dependencies(imu_rotator rclcpp sensor_msgs)
 ament_target_dependencies(motor_test rclcpp sensor_msgs)
 ament_target_dependencies(navigator_client rclcpp rclcpp_action nav2_msgs geometry_msgs)
 ament_target_dependencies(robot_controller rclcpp sensor_msgs geometry_msgs)
@@ -50,6 +52,7 @@ install(
 
 install(TARGETS
   hardware_monitor
+  imu_rotator
   motor_test
   navigator_client
   robot_controller

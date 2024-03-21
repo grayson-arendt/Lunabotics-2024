@@ -48,7 +48,7 @@ def generate_launch_description():
             {
                 "channel_type": "serial",
                 "serial_port": "/dev/ttyUSB0",
-                "scan_frequency": 30.0,
+                "scan_frequency": 20.0,
                 "serial_baudrate": 256000,
                 "frame_id": "lidar2_link",
                 "inverted": False,
@@ -68,9 +68,10 @@ def generate_launch_description():
             "enable_gyro1": "true",
             "enable_accel1": "true",
             "unite_imu_method1": "2",
-            "depth_module.profile1": "848x480x30",
-            "rgb_camera.profile1": "848x480x30",
-            "json_file_path1": "/home/intel-nuc/high_density.json",
+            "depth_module.enable_auto_exposure1" : "true",
+            "rgb_camera.enable_auto_exposure1": "true", 
+            "depth_module.profile1": "640x360x90",
+            "rgb_camera.profile1": "640x360x90",
             "camera_name2": "t265",
             "camera_namespace2": "t265",
             "device_type2": "t265",
@@ -82,6 +83,24 @@ def generate_launch_description():
         }.items(),
     )
 
+    imu_rotator = Node(package="autonomous", executable="imu_rotator")
+
+    imu_filter = Node(
+                package='imu_complementary_filter',
+                executable='complementary_filter_node',
+                name='complementary_filter_gain_node',
+                output='screen',
+                parameters=[
+                    {'publish_tf': False},
+                    {'fixed_frame': "odom"},
+                    {'do_bias_estimation': True},
+                    {'do_adaptive_gain': True},
+                    {'use_mag': False},
+                    {'gain_acc': 0.01},
+                    {'gain_mag': 0.01},
+                ],        
+    )
+
     lidar1_filter = Node(
         package="laser_filters",
         executable="scan_to_scan_filter_chain",
@@ -90,7 +109,7 @@ def generate_launch_description():
                 [
                     get_package_share_directory("bringup"),
                     "params",
-                    "range_filter.yaml",
+                    "lidar_params.yaml",
                 ]
             )
         ],
@@ -109,7 +128,7 @@ def generate_launch_description():
                 "base_frame_id": "base_link",
                 "odom_frame_id": "odom",
                 "init_pose_from_topic": "",
-                "freq": 30.0,
+                "freq": 50.0,
             }
         ],
     )
@@ -119,7 +138,7 @@ def generate_launch_description():
         executable="robot_controller",
         parameters=[
             {
-                "switch_mode": True,
+                "ps4_mode": True,
                 "outdoor_mode": True,
             }
         ],
@@ -154,6 +173,14 @@ def generate_launch_description():
         ],
     )
 
+    map_to_odom_tf = Node(
+        package="tf2_ros",
+        executable="static_transform_publisher",
+        arguments=["0", "0", "0", "0", "0", "0", "map", "odom"],
+        output="screen",
+        name="static_transform_publisher",
+    )
+
     return LaunchDescription(
         [
             lidar1,
@@ -162,8 +189,11 @@ def generate_launch_description():
             lidar2_odom,
             apriltag,
             realsense,
+            imu_rotator,
+            imu_filter,
             ekf,
             robot_controller,
             hardware_monitor,
+            map_to_odom_tf,
         ]
     )

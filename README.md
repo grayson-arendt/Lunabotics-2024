@@ -24,6 +24,7 @@ This repository contains code made by the College of DuPage team for the NASA Lu
 - `navigation2`
 - `robot_localization`
 - `laser_filters`
+- `imu_complementary_filter`
 
 ## Installation
 

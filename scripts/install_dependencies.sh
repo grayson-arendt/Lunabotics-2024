@@ -8,6 +8,7 @@ ros_packages=(
     "ros-humble-navigation2"
     "ros-humble-laser-filters"
     "ros-humble-robot-localization"
+    "ros-humble-imu-complementary-filter"
     "ros-humble-rmw-cyclonedds-cpp"
 )
 

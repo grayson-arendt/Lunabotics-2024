@@ -165,7 +165,7 @@ class RobotController : public rclcpp::Node
             trencher_power_ = (d_pad_horizontal_ == 1.0) ? 0.5 : (d_pad_horizontal_ == -1.0) ? 0.0 : 0.0;
             bucket_power_ = (d_pad_horizontal_ == -1.0) ? 0.5 : (d_pad_horizontal_ == 1.0) ? 0.0 : 0.0;
 
-            speed_multiplier_ = b_button_ ? 1.0 : 0.2;
+            speed_multiplier_ = b_button_ ? 0.5 : 0.12;
             robot_disabled_ = home_button_;
 
             if (switch_mode_)
