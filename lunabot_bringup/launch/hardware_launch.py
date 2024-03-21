@@ -138,7 +138,7 @@ def generate_launch_description():
         executable="robot_controller",
         parameters=[
             {
-                "ps4_mode": True,
+                "xbox_mode": True,
                 "outdoor_mode": True,
             }
         ],

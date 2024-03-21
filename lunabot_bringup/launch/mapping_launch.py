@@ -804,7 +804,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "rtabmap_viz",
-                default_value="true",
+                default_value="false",
                 description="Launch RTAB-Map UI (optional).",
             ),
             DeclareLaunchArgument(
@@ -838,7 +838,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "odom_frame_id",
-                default_value="",
+                default_value="odom",
                 description="If set, TF is used to get odometry instead of the topic.",
             ),
             DeclareLaunchArgument(
@@ -1016,7 +1016,7 @@ def generate_launch_description():
                 description="Launch rtabmap icp odometry node.",
             ),
             DeclareLaunchArgument(
-                "odom_topic", default_value="/odometry/filtered", description="Odometry topic name."
+                "odom_topic", default_value="odom", description="Odometry topic name."
             ),
             DeclareLaunchArgument(
                 "vo_frame_id",
