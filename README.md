@@ -141,7 +141,9 @@ ros2 run lunabot_autonomous navigator_client
 The action client will send two goals, one for excavation zone and another for construction zone. After the goal has been reached, it will publish to /control topic and enable the specific
 motors for the mechanisms for the zone.
 
-<img src="sample.png"  width="120%" height="120%">
+<p align="center">
+  <img src="sample.png"  width="120%" height="120%">
+</p>
 
 ## Structure
 
