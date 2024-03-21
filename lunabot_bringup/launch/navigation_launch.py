@@ -12,7 +12,7 @@ from nav2_common.launch import RewrittenYaml
 
 def generate_launch_description():
 
-    bringup_dir = get_package_share_directory("bringup")
+    bringup_dir = get_package_share_directory("lunabot_bringup")
 
     namespace = LaunchConfiguration("namespace")
     use_sim_time = LaunchConfiguration("use_sim_time")
@@ -77,7 +77,7 @@ def generate_launch_description():
     declare_use_composition_cmd = DeclareLaunchArgument(
         "use_composition",
         default_value="False",
-        description="Use composed bringup if True",
+        description="Use composed lunabot_bringup if True",
     )
 
     declare_container_name_cmd = DeclareLaunchArgument(

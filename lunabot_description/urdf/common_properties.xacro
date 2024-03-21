@@ -17,4 +17,8 @@
         <color rgba="0.89 0.89 0.89 1.0" />
     </material>
 
+     <material name="green">
+        <color rgba="0.03529412 0.32156863 0.24313725 1.0" />
+    </material>
+
 </robot>

@@ -83,7 +83,7 @@ def generate_launch_description():
         }.items(),
     )
 
-    imu_rotator = Node(package="autonomous", executable="imu_rotator")
+    imu_rotator = Node(package="lunabot_autonomous", executable="imu_rotator")
 
     imu_filter = Node(
                 package='imu_complementary_filter',
@@ -107,7 +107,7 @@ def generate_launch_description():
         parameters=[
             PathJoinSubstitution(
                 [
-                    get_package_share_directory("bringup"),
+                    get_package_share_directory("lunabot_bringup"),
                     "params",
                     "lidar_params.yaml",
                 ]
@@ -134,7 +134,7 @@ def generate_launch_description():
     )
 
     robot_controller = Node(
-        package="autonomous",
+        package="lunabot_autonomous",
         executable="robot_controller",
         parameters=[
             {
@@ -145,14 +145,14 @@ def generate_launch_description():
         arguments=['--ros-args', '--log-level', 'INFO'],
     )
 
-    hardware_monitor = Node(package="autonomous", executable="hardware_monitor")
+    hardware_monitor = Node(package="lunabot_autonomous", executable="hardware_monitor")
 
     ekf = Node(
             package='robot_localization',
             executable='ekf_node',
             name='ekf_filter_node',
             output='screen',
-            parameters=[os.path.join(get_package_share_directory("bringup"), 'params', 'ekf_params.yaml')],
+            parameters=[os.path.join(get_package_share_directory("lunabot_bringup"), 'params', 'ekf_params.yaml')],
     )
 
     apriltag = Node(
@@ -161,7 +161,7 @@ def generate_launch_description():
         executable="apriltag_node",
         parameters=[
             os.path.join(
-                get_package_share_directory("bringup"),
+                get_package_share_directory("lunabot_bringup"),
                 "params",
                 "tag_params.yaml",
             )

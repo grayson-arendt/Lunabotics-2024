@@ -1,4 +1,4 @@
-#include "autonomous/msg/control.hpp"
+#include "lunabot_autonomous/msg/control.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/joy.hpp"
@@ -37,7 +37,7 @@ class RobotController : public rclcpp::Node
         velocity_subscriber_ = create_subscription<geometry_msgs::msg::Twist>(
             "cmd_vel", 10, std::bind(&RobotController::callback_velocity, this, std::placeholders::_1));
 
-        control_subscriber_ = create_subscription<autonomous::msg::Control>(
+        control_subscriber_ = create_subscription<lunabot_autonomous::msg::Control>(
             "control", 10, std::bind(&RobotController::callback_control, this, std::placeholders::_1));
 
         joystick_subscriber_ = create_subscription<sensor_msgs::msg::Joy>(
@@ -118,7 +118,7 @@ class RobotController : public rclcpp::Node
         {
             auto clock = rclcpp::Clock();
             RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000,
-                                 "\033[0;36mAUTONOMOUS CONTROL: \033[0m\033[1;31mDISABLED\033[0m");
+                                 "\033[0;36mlunabot_autonomous CONTROL: \033[0m\033[1;31mDISABLED\033[0m");
             RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000,
                                  "\033[0;33mMANUAL CONTROL: \033[0m\033[1;32mENABLED\033[0m");
             manual_enabled_ = true;
@@ -128,7 +128,7 @@ class RobotController : public rclcpp::Node
         {
             auto clock = rclcpp::Clock();
             RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000,
-                                 "\033[0;36mAUTONOMOUS CONTROL: \033[0m\033[1;32mENABLED\033[0m");
+                                 "\033[0;36mlunabot_autonomous CONTROL: \033[0m\033[1;32mENABLED\033[0m");
             RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000,
                                  "\033[0;33mMANUAL CONTROL: \033[0m\033[1;31mDISABLED\033[0m");
             manual_enabled_ = false;
@@ -251,10 +251,10 @@ class RobotController : public rclcpp::Node
     }
 
     /**
-     * @brief Callback function for processing autonomous control messages.
-     * @param control_msg The autonomous control message.
+     * @brief Callback function for processing lunabot_autonomous control messages.
+     * @param control_msg The lunabot_autonomous control message.
      */
-    void callback_control(const autonomous::msg::Control::SharedPtr control_msg)
+    void callback_control(const lunabot_autonomous::msg::Control::SharedPtr control_msg)
     {
         manual_enabled_ = control_msg->enable_manual_drive;
 
@@ -298,7 +298,7 @@ class RobotController : public rclcpp::Node
 
   private:
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr velocity_subscriber_;
-    rclcpp::Subscription<autonomous::msg::Control>::SharedPtr control_subscriber_;
+    rclcpp::Subscription<lunabot_autonomous::msg::Control>::SharedPtr control_subscriber_;
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joystick_subscriber_;
     double velocity_left_cmd_, velocity_right_cmd_;
     double left_power_, right_power_;

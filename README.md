@@ -55,10 +55,10 @@ git clone https://github.com/grayson-arendt/Lunabotics-2024.git
 #### 3. Run the install_dependencies script to install the required dependencies and build.
 
 ```bash
-cd lunabot_ws/src/Lunabotics-2024/scripts
+cd lunabot_ws/src/Lunabotics-2024/
 chmod +x install_dependencies.sh
 sudo ./install_dependencies.sh
-cd ../../..
+cd ../..
 colcon build
 sudo apt --fix-broken install
 ```
@@ -84,7 +84,7 @@ ls /dev/ttyUSB*
 The computer may not be able to find the shared object files for CTRE Phoenix library. An easy way to fix this is to directly copy them into /usr/lib/.
 
 ```bash
-cd lunabot_ws/src/Lunabotics-2024/lunabot/autonomous/phoenix_lib/x86-64/
+cd lunabot_ws/src/Lunabotics-2024/lunabot_autonomous/phoenix_lib/x86-64/
 sudo cp libCTRE_Phoenix.so libCTRE_PhoenixCCI.so libCTRE_PhoenixTools.so /usr/lib/
 ```
 
@@ -102,32 +102,32 @@ source install/setup.bash
 
 #### 2. Initialize SocketCAN communication (note: the canable_start.sh script will only need to be ran once each time the robot computer boots up).
 ```bash
-cd lunabot_ws/src/Lunabotics-2024/scripts
+cd lunabot_ws/src/Lunabotics-2024/
 chmod +x canable_start.sh 
 ./canable_start.sh
 ```
 
 #### 3. Visualize with RViz2 (host computer):
 ```bash
-ros2 launch bringup external_launch.py
+ros2 launch lunabot_bringup external_launch.py
 ```
 
 #### 4. Startup hardware:
 
 ```bash
-ros2 launch bringup hardware_launch.py
+ros2 launch lunabot_bringup hardware_launch.py
 ```
 
 #### 5. Startup RTAB-Map:
 
 ```bash
-ros2 launch bringup mapping_launch.py
+ros2 launch lunabot_bringup mapping_launch.py
 ```
 
 #### 6. Startup Navigation2:
 
 ```bash
-ros2 launch bringup navigation_launch.py
+ros2 launch lunabot_bringup navigation_launch.py
 ```
 
 In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in the GUI and have the robot navigate to that location. 
@@ -135,51 +135,52 @@ In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in t
 #### (Optional) 7. Startup action client:
 
 ```bash
-ros2 run autonomous navigation_client
+ros2 run lunabot_autonomous navigation_client
 ```
 
 The action client will send two goals, one for excavation zone and another for construction zone. After the goal has been reached, it will publish to /control topic and enable the specific
 motors for the mechanisms for the zone.
 
-![Demo](demo.png)
+![Demo](sample.png)
 
 ## Structure
 
-- **lunabot** (Contains code for Lunabotics robot)
-  - **autonomous**
-    - **include**
-      - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
-    - **phoenix_lib** (Contains shared object files for CTRE Phoenix C++ API)
-    - **src**
-      - hardware_monitor.cpp (Monitors liveliness of hardware topics)
-      - motor_test.cpp (Simple node for testing motors)
-      - navigator_client.cpp (Action client that sends goals and motor control commands)
-      - robot_controller.cpp (Controller for both autonomous and manual control of robot)
-  - **bringup** 
-    - **behavior_trees**
-      - navigate_to_pose_w_replanning_goal_patience_and_recovery.xml (Behavior tree for Navigation2)
-    - **launch**
-      - external_launch.py (Launches RViz2 and robot state/joint publisher nodes)
-      - hardware_launch.py (Launches lidars, cameras, and robot controller)
-      - mapping_launch.py (Launches RTAB-Map)
-      - navigation_launch.py (Launches Navigation2)
-    - **params**
-      - default_view.rviz (RViz2 configuration file)
-      - nav2_params.yaml (Parameters for Navigation2)
-      - range_filter.yaml (Filter for lidar)
-  - **description** 
-    - **meshes** (Meshes for robot model in RViz2)
-      - base_link.stl
-      - camera_link.stl
-      - ebox_link.stl
-      - lidar1_link.stl
-      - lidar2_link.stl
-      - nuc_link.stl
-      - wheel_link.stl
-    - **urdf**
-      - common_properties.xacro (Defines material colors)
-      - test_bot.xacro (Defines links and joints for test bot)
-  - **external** (Packages from external sources)
-    - realsense_ros (Version 4.51.1)
-    - rf2o_laser_odometry
+**lunabot_autonomous**
+  - **include**
+    - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
+  - **phoenix_lib** (Contains shared object files for CTRE Phoenix C++ API)
+  - **src**
+    - hardware_monitor.cpp (Monitors liveliness of hardware topics)
+    - motor_test.cpp (Simple node for testing motors)
+    - navigator_client.cpp (Action client that sends goals and motor control commands)
+    - robot_controller.cpp (Controller for both autonomous and manual control of robot)
 
+**lunabot_bringup** 
+  - **behavior_trees**
+    - navigate_to_pose_w_replanning_goal_patience_and_recovery.xml (Behavior tree for Navigation2)
+  - **launch**
+    - external_launch.py (Launches RViz2 and robot state/joint publisher nodes)
+    - hardware_launch.py (Launches lidars, cameras, and robot controller)
+    - mapping_launch.py (Launches RTAB-Map)
+    - navigation_launch.py (Launches Navigation2)
+  - **params**
+    - default_view.rviz (RViz2 configuration file)
+    - nav2_params.yaml (Parameters for Navigation2)
+    - range_filter.yaml (Filter for lidar)
+
+**lunabot_description** 
+  - **meshes** (Meshes for robot model in RViz2)
+    - base_link.stl
+    - camera_link.stl
+    - ebox_link.stl
+    - lidar1_link.stl
+    - lidar2_link.stl
+    - nuc_link.stl
+    - wheel_link.stl
+  - **urdf**
+    - common_properties.xacro (Defines material colors)
+    - test_bot.xacro (Defines links and joints for test bot)
+
+**lunabot_external** (Packages from external sources)
+  - realsense_ros (Version 4.51.1)
+  - rf2o_laser_odometry

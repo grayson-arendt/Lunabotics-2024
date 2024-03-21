@@ -1,4 +1,4 @@
-#include "autonomous/msg/control.hpp"
+#include "lunabot_autonomous/msg/control.hpp"
 #include "geometry_msgs/msg/pose.hpp"
 #include "nav2_msgs/action/navigate_to_pose.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -27,7 +27,7 @@ class NavigatorClient : public rclcpp::Node
         this->nav_to_pose_client_ = rclcpp_action::create_client<NavigateToPose>(this, "navigate_to_pose");
         this->timer_ =
             this->create_wall_timer(std::chrono::milliseconds(500), std::bind(&NavigatorClient::send_goal, this));
-        publisher_ = this->create_publisher<autonomous::msg::Control>("control", 10);
+        publisher_ = this->create_publisher<lunabot_autonomous::msg::Control>("control", 10);
     }
 
     /**
@@ -84,7 +84,7 @@ class NavigatorClient : public rclcpp::Node
      */
     void enable_intake()
     {
-        auto control_msg = autonomous::msg::Control();
+        auto control_msg = lunabot_autonomous::msg::Control();
         control_msg.enable_intake = true;
         control_msg.enable_outtake = false;
         control_msg.enable_autonomous_drive = false;
@@ -100,7 +100,7 @@ class NavigatorClient : public rclcpp::Node
      */
     void enable_outtake()
     {
-        auto control_msg = autonomous::msg::Control();
+        auto control_msg = lunabot_autonomous::msg::Control();
         control_msg.enable_intake = false;
         control_msg.enable_outtake = true;
         control_msg.enable_autonomous_drive = false;
@@ -116,7 +116,7 @@ class NavigatorClient : public rclcpp::Node
      */
     void actuator_up()
     {
-        auto control_msg = autonomous::msg::Control();
+        auto control_msg = lunabot_autonomous::msg::Control();
         control_msg.enable_intake = false;
         control_msg.enable_outtake = false;
         control_msg.enable_autonomous_drive = false;
@@ -132,7 +132,7 @@ class NavigatorClient : public rclcpp::Node
      */
     void actuator_down()
     {
-        auto control_msg = autonomous::msg::Control();
+        auto control_msg = lunabot_autonomous::msg::Control();
         control_msg.enable_intake = false;
         control_msg.enable_outtake = false;
         control_msg.enable_autonomous_drive = false;
@@ -148,7 +148,7 @@ class NavigatorClient : public rclcpp::Node
      */
     void enable_manual_drive()
     {
-        auto control_msg = autonomous::msg::Control();
+        auto control_msg = lunabot_autonomous::msg::Control();
         control_msg.enable_intake = false;
         control_msg.enable_outtake = false;
         control_msg.enable_autonomous_drive = false;
@@ -195,7 +195,7 @@ class NavigatorClient : public rclcpp::Node
         {
             RCLCPP_INFO(this->get_logger(), "\033[1;32mCONSTRUCTION ZONE REACHED\033[0m");
             this->enable_outtake();
-            RCLCPP_INFO(this->get_logger(), "AUTONOMOUS SUCCESS");
+            RCLCPP_INFO(this->get_logger(), "lunabot_autonomous SUCCESS");
         }
 
         else if ((navigate_to_excavation && goal_aborted) || goal_canceled)
@@ -217,7 +217,7 @@ class NavigatorClient : public rclcpp::Node
     }
 
     rclcpp_action::Client<NavigateToPose>::SharedPtr nav_to_pose_client_;
-    rclcpp::Publisher<autonomous::msg::Control>::SharedPtr publisher_;
+    rclcpp::Publisher<lunabot_autonomous::msg::Control>::SharedPtr publisher_;
     rclcpp::TimerBase::SharedPtr timer_;
     bool goal_reached, goal_aborted, goal_canceled;
     bool navigate_to_excavation;

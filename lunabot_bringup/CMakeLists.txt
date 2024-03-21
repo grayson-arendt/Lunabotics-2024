@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(description)
+project(lunabot_bringup)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -18,8 +18,9 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 
+
 install(
-  DIRECTORY urdf launch rviz_config meshes
+  DIRECTORY launch params behavior_trees
   DESTINATION share/${PROJECT_NAME}/
 )
 
