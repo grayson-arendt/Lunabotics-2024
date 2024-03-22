@@ -142,7 +142,7 @@ The action client will send two goals, one for excavation zone and another for c
 motors for the mechanisms for the zone.
 
 <p align="center">
-  <img src="sample.png"  width="120%" height="120%">
+  <img src="sample.png"  width="105%" height="105%">
 </p>
 
 ## Structure
