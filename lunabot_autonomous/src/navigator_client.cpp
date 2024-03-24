@@ -51,8 +51,8 @@ class NavigatorClient : public rclcpp::Node
  
         if (navigate_to_excavation)
         {
-            goal_pose.position.x = 4.38;
-            goal_pose.position.y = 3.0;
+            goal_pose.position.x = 2.0;
+            goal_pose.position.y = -2.8;
             goal_pose.position.z = 0.0;
             goal_pose.orientation.x = 0.0;
             goal_pose.orientation.y = 0.0;
@@ -61,8 +61,8 @@ class NavigatorClient : public rclcpp::Node
         }
         else
         {
-            goal_pose.position.x = 0.5;
-            goal_pose.position.y = 3.0;
+            goal_pose.position.x = -0.8;
+            goal_pose.position.y = -3.5;
             goal_pose.position.z = 0.0;
             goal_pose.orientation.x = 0.0;
             goal_pose.orientation.y = 0.0;

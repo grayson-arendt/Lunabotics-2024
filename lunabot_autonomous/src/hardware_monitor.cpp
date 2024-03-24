@@ -46,7 +46,8 @@ class HardwareMonitor : public rclcpp::Node
         all_sensors_timer_ = create_wall_timer(std::chrono::seconds(1), [this]() {
             if (d455_valid && t265_valid && lidar1_valid && lidar2_valid)
             {
-                RCLCPP_INFO(get_logger(), "\033[0;36mSENSOR CONDITION:\033[0m \033[1;32mGOOD\033[0m");
+                RCLCPP_INFO(get_logger(), "\033[38;5;208mSENSOR STATUS:\033[0m \033[1;32m\033[1mGOOD\033[0m");
+
             }
         });
 
@@ -77,7 +78,7 @@ class HardwareMonitor : public rclcpp::Node
     {
         if (!valid_flag)
         {
-            RCLCPP_WARN(get_logger(), "\033[0;36m%s:\033[0m \033[1;31mNO CONNECTION, CHECK CABLE\033[0m",
+            RCLCPP_WARN(get_logger(), "\033[0;36m%s:\033[0m \033[1;31m\033[1mNO CONNECTION, CHECK CABLE\033[0m",
                         sensor_name.c_str());
         }
         valid_flag = false;

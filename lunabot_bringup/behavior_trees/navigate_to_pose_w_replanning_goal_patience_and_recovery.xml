@@ -1,4 +1,3 @@
-
 <!--
   This BT has all the functionalities of navigate_to_pose_w_replanning_and_recovery.xml,
   with an additional feature to cancel the control closer to the goal proximity and 
@@ -7,7 +6,7 @@
 -->
 <root main_tree_to_execute="MainTree">
   <BehaviorTree ID="MainTree">
-    <RecoveryNode number_of_retries="10" name="NavigateRecovery">
+    <RecoveryNode number_of_retries="20" name="NavigateRecovery">
       <PipelineSequence name="NavigateWithReplanning">
         <RateController hz="1.0">
           <RecoveryNode number_of_retries="1" name="ComputePathToPose">
@@ -37,8 +36,8 @@
             <ClearEntireCostmap name="ClearLocalCostmap-Subtree" service_name="local_costmap/clear_entirely_local_costmap"/>
             <ClearEntireCostmap name="ClearGlobalCostmap-Subtree" service_name="global_costmap/clear_entirely_global_costmap"/>
           </Sequence>
-          <Wait wait_duration="3"/>
-          <Spin spin_dist="0.5"/>
+          <Wait wait_duration="5"/>
+          <BackUp backup_dist="0.20" backup_speed="0.13"/>
         </RoundRobin>
       </ReactiveFallback>
     </RecoveryNode>

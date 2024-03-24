@@ -42,7 +42,7 @@ cd ..
 sudo ./scripts/setup_udev_rules.sh # Make sure cameras are unplugged before running
 ```
 
-The flag -DFORCE_RSUSB_BACKEND=false is meant for kernel 5.15 and below, but the Intel NUC 13 Pro is currently on kernel 6.5 and it has been working well. Whenever I have set -DFORCE_RSUSB_BACKEND=true, librealsense performs poorly and the camera will sometimes fail to start with a "failed to set power state" error.
+The flag -DFORCE_RSUSB_BACKEND=false is meant for kernel 5.15 and below. However, the Intel NUC 13 Pro is currently on kernel 6.5.0.26 and setting it to true causes a "failed to set power state" error, so make sure it is set to false.
 
 #### 2. Next, make a workspace and clone the repository.
 
@@ -56,7 +56,6 @@ git clone https://github.com/grayson-arendt/Lunabotics-2024.git
 
 ```bash
 cd lunabot_ws/src/Lunabotics-2024/
-chmod +x install_dependencies.sh
 sudo ./install_dependencies.sh
 cd ../..
 colcon build
@@ -103,7 +102,6 @@ source install/setup.bash
 #### 2. Initialize SocketCAN communication (note: the canable_start.sh script will only need to be ran once each time the robot computer boots up).
 ```bash
 cd lunabot_ws/src/Lunabotics-2024/
-chmod +x canable_start.sh 
 ./canable_start.sh
 ```
 

@@ -22,12 +22,12 @@ def generate_launch_description():
                 name='rf2o_laser_odometry',
                 output='screen',
                 parameters=[{
-                    'laser_scan_topic' : '/scan1',
-                    'odom_topic' : '/odom_lidar1',
-                    'publish_tf' : False,
+                    'laser_scan_topic' : '/scan',
+                    'odom_topic' : '/odom_rf2o',
+                    'publish_tf' : True,
                     'base_frame_id' : 'base_link',
                     'odom_frame_id' : 'odom',
                     'init_pose_from_topic' : '',
-                    'freq' : 30.0}],
+                    'freq' : 20.0}],
             ),
     ])

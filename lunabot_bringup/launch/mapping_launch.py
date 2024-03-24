@@ -869,7 +869,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "rtabmap_args",
-                default_value="-d -RGBD/NewMapOdomChangeDistance 0.2 -RGBD/ProximityPathMaxNeighbors 5 -RGBD/StartAtOrigin true -RGBD/ProximityAngle 135 -RGBD/ProximityOdomGuess true -Vis/MaxFeatures 2000 -Rtabmap/StartNewMapOnGoodSignature true -Rtabmap/DetectionRate 2 -RGBD/CreateOccupancyGrid true -Grid/CellSize 0.01 -Grid/MaxGroundAngle 20 -Grid/DepthRoiRatios 0.0 0.0 0.0 0.1 -Grid/Sensor 2 -Grid/RangeMin 0.5 -Grid/RangeMax 0.0 Reg/Force3DoF true -Reg/Strategy 2 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
+                default_value="-d -RGBD/OptimizeFromGraphEnd true -RGBD/NewMapOdomChangeDistance 0.01 -RGBD/OptimizeMaxError 10 -RGBD/StartAtOrigin true -RGBD/ProximityAngle 60 -RGBD/ProximityOdomGuess true -Vis/MaxFeatures 2000 -Rtabmap/StartNewMapOnGoodSignature true -Rtabmap/DetectionRate 2 -RGBD/CreateOccupancyGrid true -Grid/CellSize 0.035 -Grid/MaxGroundAngle 20 -Grid/DepthRoiRatios 0.0 0.0 0.0 0.1 -Grid/Sensor 2 -Grid/RangeMin 0.5 -Grid/RangeMax 0.0 Reg/Force3DoF true -Reg/Strategy 2 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
                 description='Backward compatibility, use "args" instead.',
             ),
             DeclareLaunchArgument(
@@ -1017,7 +1017,7 @@ def generate_launch_description():
                 description="Launch rtabmap icp odometry node.",
             ),
             DeclareLaunchArgument(
-                "odom_topic", default_value="odom", description="Odometry topic name."
+                "odom_topic", default_value="/odometry/filtered", description="Odometry topic name."
             ),
             DeclareLaunchArgument(
                 "vo_frame_id",
@@ -1029,12 +1029,12 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "odom_tf_angular_variance",
-                default_value="0.01",
+                default_value="0.001",
                 description="If TF is used to get odometry, this is the default angular variance",
             ),
             DeclareLaunchArgument(
                 "odom_tf_linear_variance",
-                default_value="0.001",
+                default_value="0.0001",
                 description="If TF is used to get odometry, this is the default linear variance",
             ),
             DeclareLaunchArgument(
@@ -1046,7 +1046,7 @@ def generate_launch_description():
                 "odom_sensor_sync", default_value="false", description=""
             ),
             DeclareLaunchArgument(
-                "odom_guess_frame_id", default_value="", description=""
+                "odom_guess_frame_id", default_value="odom", description=""
             ),
             DeclareLaunchArgument(
                 "odom_guess_min_translation", default_value="0.0", description=""
@@ -1057,7 +1057,7 @@ def generate_launch_description():
             # imu
             DeclareLaunchArgument(
                 "imu_topic",
-                default_value="/imu/data",
+                default_value="imu",
                 description="Used with VIO approaches and for SLAM graph optimization (gravity constraints).",
             ),
             DeclareLaunchArgument(

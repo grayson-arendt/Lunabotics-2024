@@ -176,7 +176,7 @@ void CLaserOdometry2DNode::process()
   else
   {
     // This is a warning. We depend on laser scans, so no meaning running faster than scan freq.
-    //RCLCPP_WARN(get_logger(), "Waiting for laser_scans....");
+    RCLCPP_WARN(get_logger(), "Waiting for laser_scans....");
   }
 }
 
@@ -211,7 +211,7 @@ void CLaserOdometry2DNode::publish()
   
   // compose odom msg
   nav_msgs::msg::Odometry odom;
-  odom.header.stamp = get_clock()->now();   // the time of the last scan used!
+  odom.header.stamp = rf2o_ref.last_odom_time;    // the time of the last scan used!
   odom.header.frame_id = odom_frame_id;
   //set the position
   odom.pose.pose.position.x = rf2o_ref.robot_pose_.translation()(0);
@@ -231,7 +231,7 @@ void CLaserOdometry2DNode::publish()
   {
     RCLCPP_DEBUG(get_logger(), "Publishing TF: [base_link] to [odom]");
     geometry_msgs::msg::TransformStamped odom_trans;
-    odom_trans.header.stamp = get_clock()->now();   // the time of the last scan used!
+    odom_trans.header.stamp = rf2o_ref.last_odom_time;    // the time of the last scan used!
     odom_trans.header.frame_id = odom_frame_id;
     odom_trans.child_frame_id = base_frame_id;
     odom_trans.transform.translation.x = rf2o_ref.robot_pose_.translation()(0);
@@ -243,7 +243,7 @@ void CLaserOdometry2DNode::publish()
   }
 }
 
-}/* namespace rf2o */
+} /* namespace rf2o */
 
 
 //-----------------------------------------------------------------------------------

@@ -46,10 +46,11 @@ class RobotController : public rclcpp::Node
         declare_and_get_parameters();
         apply_controller_mode();
 
-        manual_enabled_ = true;
+        manual_enabled_ = false;
         robot_disabled_ = false;
 
-        RCLCPP_INFO(get_logger(), "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
+        //RCLCPP_INFO(get_logger(), "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
+        RCLCPP_INFO(get_logger(), "\033[0;33mAUTONOMOUS CONTROL:\033[0m \033[1;32mENABLED\033[0m");
     }
 
   private:
