@@ -46,11 +46,11 @@ class RobotController : public rclcpp::Node
         declare_and_get_parameters();
         apply_controller_mode();
 
-        manual_enabled_ = false;
+        manual_enabled_ = true;
         robot_disabled_ = false;
 
-        //RCLCPP_INFO(get_logger(), "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
-        RCLCPP_INFO(get_logger(), "\033[0;33mAUTONOMOUS CONTROL:\033[0m \033[1;32mENABLED\033[0m");
+        RCLCPP_INFO(get_logger(), "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
+        //RCLCPP_INFO(get_logger(), "\033[0;33mAUTONOMOUS CONTROL:\033[0m \033[1;32mENABLED\033[0m");
     }
 
   private:
@@ -105,6 +105,8 @@ class RobotController : public rclcpp::Node
      */
     void joy_callback(const sensor_msgs::msg::Joy::SharedPtr joy_msg)
     {
+
+	magnet_.Set(ControlMode::PercentOutput, 0.4);
         share_button_ = switch_mode_ ? joy_msg->buttons[9]
                         : ps4_mode_  ? joy_msg->buttons[8]
                         : xbox_mode_ ? joy_msg->buttons[6]
@@ -157,17 +159,37 @@ class RobotController : public rclcpp::Node
                               : xbox_mode_ ? joy_msg->axes[7]
                                            : 0.0;
 
-            b_button_ = switch_mode_ ? joy_msg->buttons[0]
+            a_button_ = switch_mode_ ? joy_msg->buttons[0]
+                        : ps4_mode_  ? joy_msg->buttons[0]
+                        : xbox_mode_ ? joy_msg->buttons[1]
+                                     : -1;
+            
+            b_button_ = switch_mode_ ? joy_msg->buttons[1]
+                        : ps4_mode_  ? joy_msg->buttons[1]
+                        : xbox_mode_ ? joy_msg->buttons[2]
+                                     : -1;
+
+            x_button_ = switch_mode_ ? joy_msg->buttons[0]
+                        : ps4_mode_  ? joy_msg->buttons[3]
+                        : xbox_mode_ ? joy_msg->buttons[1]
+                                     : -1;
+            
+            y_button_ = switch_mode_ ? joy_msg->buttons[0]
                         : ps4_mode_  ? joy_msg->buttons[2]
                         : xbox_mode_ ? joy_msg->buttons[1]
                                      : -1;
 
-            actuator_power_ = (d_pad_vertical_ == 1.0) ? 0.5 : (d_pad_vertical_ == -1.0) ? -0.5 : 0.0;
-            trencher_power_ = (d_pad_horizontal_ == 1.0) ? 0.5 : (d_pad_horizontal_ == -1.0) ? 0.0 : 0.0;
-            bucket_power_ = (d_pad_horizontal_ == -1.0) ? 0.5 : (d_pad_horizontal_ == 1.0) ? 0.0 : 0.0;
 
-            speed_multiplier_ = b_button_ ? 0.5 : 0.12;
-            robot_disabled_ = home_button_;
+            trencher_speed_multiplier_ = b_button_ ? 1.0 : 0.6;
+            trencher_power_ = a_button_ ? -1.0 * trencher_speed_multiplier_ : 0.0;
+            bucket_power_ = x_button_ ? 0.1 : y_button_ ? -0.1 : 0.0;
+            actuator_power_ = (d_pad_vertical_ == 1.0) ? -0.3 : (d_pad_vertical_ == -1.0) ? 0.3 : 0.0;
+            speed_multiplier_ = 0.45;
+
+            if (home_button_)
+            {
+                robot_disabled_ = true;
+            }
 
             if (switch_mode_)
             {
@@ -209,21 +231,12 @@ class RobotController : public rclcpp::Node
                 RCLCPP_ERROR(get_logger(), "\033[0;31mROBOT DISABLED\033[0m");
             }
 
-            RCLCPP_DEBUG(get_logger(), "ACTUATOR SPEED %f, BUCKET SPEED: %f, TRENCHER SPEED: %f", actuator_power_,
-                         bucket_power_, trencher_power_);
-
-            RCLCPP_DEBUG(get_logger(), "LEFT SPEED: %f, RIGHT SPEED: %f", left_power_ * speed_multiplier_,
-                        right_power_ * speed_multiplier_);
-
             left_wheel_motor_.Set(ControlMode::PercentOutput, left_power_ * speed_multiplier_);
             right_wheel_motor_.Set(ControlMode::PercentOutput, right_power_ * speed_multiplier_);
-
-            /* Currently not wired up on robot
-            trencher_motor_.Set(ControlMode::PercentOutput, trencher_power_);
-            bucket_motor_.Set(ControlMode::PercentOutput, bucket_power_);
             actuator_left_motor_.Set(ControlMode::PercentOutput, actuator_power_);
             actuator_right_motor_.Set(ControlMode::PercentOutput, actuator_power_);
-            */
+            trencher_motor_.Set(ControlMode::PercentOutput, trencher_power_);
+            bucket_motor_.Set(ControlMode::PercentOutput, bucket_power_);
         }
     }
 
@@ -265,7 +278,7 @@ class RobotController : public rclcpp::Node
         }
         else if (control_msg->enable_outtake)
         {
-            start_mechanism<TalonSRX>("BUCKET", bucket_motor_);
+            start_mechanism<TalonFX>("BUCKET", bucket_motor_);
         }
         else if (control_msg->actuator_up)
         {
@@ -305,16 +318,17 @@ class RobotController : public rclcpp::Node
     double left_power_, right_power_;
     double actuator_power_, trencher_power_, bucket_power_;
     double left_trigger_, right_trigger_, d_pad_vertical_, d_pad_horizontal_, left_joystick_x_, left_joystick_y_;
-    double turn_, drive_, drive_forward_, drive_backward_, speed_multiplier_;
+    double turn_, drive_, drive_forward_, drive_backward_, speed_multiplier_, trencher_speed_multiplier_;
     bool manual_enabled_, robot_disabled_, xbox_mode_, ps4_mode_, switch_mode_, outdoor_mode_;
-    bool home_button_, share_button_, menu_button_, b_button_;
+    bool home_button_, share_button_, menu_button_, a_button_, b_button_, x_button_, y_button_;
 
     TalonFX left_wheel_motor_{1};
     TalonFX right_wheel_motor_{2};
-    TalonFX trencher_motor_{3};
-    TalonSRX bucket_motor_{4};
-    TalonSRX actuator_left_motor_{5};
-    TalonSRX actuator_right_motor_{6};
+    TalonSRX actuator_left_motor_{3};
+    TalonSRX actuator_right_motor_{4};
+    TalonFX bucket_motor_{5};
+    TalonFX trencher_motor_{6};
+    TalonSRX magnet_{7};
 };
 
 /**

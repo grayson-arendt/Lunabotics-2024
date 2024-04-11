@@ -869,7 +869,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "rtabmap_args",
-                default_value="-d -RGBD/OptimizeFromGraphEnd true -RGBD/NewMapOdomChangeDistance 0.01 -RGBD/OptimizeMaxError 10 -RGBD/StartAtOrigin true -RGBD/ProximityAngle 60 -RGBD/ProximityOdomGuess true -Vis/MaxFeatures 2000 -Rtabmap/StartNewMapOnGoodSignature true -Rtabmap/DetectionRate 2 -RGBD/CreateOccupancyGrid true -Grid/CellSize 0.035 -Grid/MaxGroundAngle 20 -Grid/DepthRoiRatios 0.0 0.0 0.0 0.1 -Grid/Sensor 2 -Grid/RangeMin 0.5 -Grid/RangeMax 0.0 Reg/Force3DoF true -Reg/Strategy 2 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
+                default_value="-d -RGBD/OptimizeFromGraphEnd true -RGBD/NewMapOdomChangeDistance 0.01 -RGBD/OptimizeMaxError 10 -RGBD/StartAtOrigin true -RGBD/ProximityAngle 60 -RGBD/ProximityOdomGuess true -Vis/MaxFeatures 2000 -Rtabmap/StartNewMapOnGoodSignature true -Rtabmap/DetectionRate 2 -RGBD/CreateOccupancyGrid true -Grid/CellSize 0.035 -Grid/MaxGroundAngle 40 -Grid/DepthRoiRatios 0.0 0.0 0.0 0.1 -Grid/Sensor 2 -Grid/RangeMin 0.5 -Grid/RangeMax 0.0 Reg/Force3DoF true -Reg/Strategy 2 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
                 description='Backward compatibility, use "args" instead.',
             ),
             DeclareLaunchArgument(

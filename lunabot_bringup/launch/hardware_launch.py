@@ -49,7 +49,7 @@ def generate_launch_description():
                 "channel_type": "serial",
                 "serial_port": "/dev/ttyUSB1",
                 "serial_baudrate": 256000,
-                "scan_frequency": 30.0,
+                "scan_frequency": 25.0,
                 "frame_id": "lidar2_link",
                 "inverted": False,
                 "angle_compensate": True,
@@ -144,7 +144,7 @@ def generate_launch_description():
                 "base_frame_id": "base_link",
                 "odom_frame_id": "odom",
                 "init_pose_from_topic": "",
-                "freq": 20.0,
+                "freq": 35.0,
             }
         ],
         arguments=['--ros-args', '--disable-stdout-logs', '--disable-rosout-logs'],
@@ -155,7 +155,7 @@ def generate_launch_description():
         executable="robot_controller",
         parameters=[
             {
-                "xbox_mode": True,
+                "switch_mode": True,
                 "outdoor_mode": False,
             }
         ],

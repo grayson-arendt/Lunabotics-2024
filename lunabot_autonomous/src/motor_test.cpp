@@ -12,8 +12,6 @@ using namespace ctre::phoenix::platform;
 using namespace ctre::phoenix::motorcontrol;
 using namespace ctre::phoenix::motorcontrol::can;
 
-TalonSRX motor(4);
-
 /**
  * @brief Tests the motors.
  * @details Uses an Xbox One controller.
@@ -37,31 +35,39 @@ class MotorTest : public rclcpp::Node
     /**
      * @brief Callback function for processing controller input and controlling the motor.
      *
-     * @param controller_input The received Joy message containing controller input.
+     * @param joy_msg The received Joy message containing controller input.
      */
-    void callbackMotors(const sensor_msgs::msg::Joy::SharedPtr controller_input)
+    void callbackMotors(const sensor_msgs::msg::Joy::SharedPtr joy_msg)
     {
         ctre::phoenix::unmanaged::Unmanaged::FeedEnable(1000);
 
-        // Button A
-        if (controller_input->buttons[0])
-        {
-            motor.Set(ControlMode::PercentOutput, 0.8);
+
+        d_pad_vertical_ = joy_msg->axes[7];
+   
+
+        power = (d_pad_vertical_ == 1.0) ? -0.4 : (d_pad_vertical_ == -1.0) ? 0.4 : 0.0;
+
+   
+        left_motor.Set(ControlMode::PercentOutput, power);
+        right_motor.Set(ControlMode::PercentOutput, power);
+
+        if (joy_msg->buttons[2]){
+          trencher_motor.Set(ControlMode::PercentOutput, -1.0);
         }
 
-        // Button B
-        else if (controller_input->buttons[1])
-        {
-            motor.Set(ControlMode::PercentOutput, -0.8);
+        else {
+          trencher_motor.Set(ControlMode::PercentOutput, 0.0);
         }
-
-        else
-        {
-            motor.Set(ControlMode::PercentOutput, 0.0);
-        }
+        
     }
 
+
+    double d_pad_vertical_;
+    double power;
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr controller_subscriber;
+    TalonSRX left_motor{3};
+    TalonSRX right_motor{4};
+    TalonFX trencher_motor{6};
 };
 
 /**
