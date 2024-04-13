@@ -10,10 +10,10 @@
 #include "ctre/phoenix/unmanaged/Unmanaged.h"
 
 using namespace ctre::phoenix;
+using namespace ctre::phoenix::music;
 using namespace ctre::phoenix::platform;
 using namespace ctre::phoenix::motorcontrol;
 using namespace ctre::phoenix::motorcontrol::can;
-
 /**
  * @class RobotController
  * @brief A class for controlling the robot using a controller 
@@ -49,8 +49,24 @@ class RobotController : public rclcpp::Node
         manual_enabled_ = true;
         robot_disabled_ = false;
 
+        orchestra.AddInstrument(left_wheel_motor_);
+        orchestra.AddInstrument(right_wheel_motor_);
+        orchestra.AddInstrument(bucket_motor_);
+        orchestra.AddInstrument(trencher_motor_);
+
+        load_status = orchestra.LoadMusic("/home/intel-nuc/lunabot_ws/src/Lunabotics-2024/lunabot_autonomous/audio/startup.chrp");
+
+        if (load_status != 0) {
+            RCLCPP_INFO(get_logger(), "\033[0;31mCOULD NOT LOAD AUDIO\033[0m");
+        }
+
+        play_status = orchestra.Play();
+
+        if (play_status != 0) {
+            RCLCPP_INFO(get_logger(), "\033[0;31mCOULD NOT PLAY AUDIO\033[0m");
+        }
+
         RCLCPP_INFO(get_logger(), "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
-        //RCLCPP_INFO(get_logger(), "\033[0;33mAUTONOMOUS CONTROL:\033[0m \033[1;32mENABLED\033[0m");
     }
 
   private:
@@ -328,6 +344,9 @@ class RobotController : public rclcpp::Node
     TalonFX bucket_motor_{5};
     TalonFX trencher_motor_{6};
     TalonSRX magnet_{7};
+    Orchestra orchestra;
+    ErrorCode load_status;
+    ErrorCode play_status;
 };
 
 /**
