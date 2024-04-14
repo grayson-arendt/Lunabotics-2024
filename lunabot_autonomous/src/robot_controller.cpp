@@ -198,7 +198,7 @@ class RobotController : public rclcpp::Node
             bucket_power_ = x_button_ ? 0.1 : y_button_ ? -0.1 : 0.0;
             actuator_power_ = (d_pad_vertical_ == 1.0) ? -0.3 : (d_pad_vertical_ == -1.0) ? 0.3 : 0.0;
             speed_multiplier_ = 0.45;
-	    magnet_power_ = a_button_ ? 0.0 : 0.3;
+	        magnet_power_ = a_button_ ? 0.0 : 0.3;
 
             if (home_button_)
             {
@@ -245,13 +245,15 @@ class RobotController : public rclcpp::Node
                 RCLCPP_ERROR(get_logger(), "\033[0;31mROBOT DISABLED\033[0m");
             }
 
+            RCLCPP_INFO(get_logger(), "\033[0;35mMAGNET CURRENT: %f\033[0m", magnet_.GetOutputCurrent());
+
             left_wheel_motor_.Set(ControlMode::PercentOutput, left_power_ * speed_multiplier_);
             right_wheel_motor_.Set(ControlMode::PercentOutput, right_power_ * speed_multiplier_);
             actuator_left_motor_.Set(ControlMode::PercentOutput, actuator_power_);
             actuator_right_motor_.Set(ControlMode::PercentOutput, actuator_power_);
             trencher_motor_.Set(ControlMode::PercentOutput, trencher_power_);
             bucket_motor_.Set(ControlMode::PercentOutput, bucket_power_);
-	    magnet_.Set(ControlMode::PercentOutput, magnet_power_);
+	        magnet_.Set(ControlMode::PercentOutput, magnet_power_);
         }
     }
 
