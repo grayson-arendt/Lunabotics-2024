@@ -265,7 +265,7 @@ class RobotController : public rclcpp::Node
 
             actuator_left_motor_.Set(ControlMode::PercentOutput, actuator_power_);
             actuator_right_motor_.Set(ControlMode::PercentOutput, actuator_power_);
-	          magnet_.Set(ControlMode::PercentOutput, magnet_power_);
+            magnet_.Set(ControlMode::PercentOutput, magnet_power_);
         }
     }
 
@@ -347,7 +347,7 @@ class RobotController : public rclcpp::Node
     double turn_, drive_, drive_forward_, drive_backward_, speed_multiplier_, trencher_speed_multiplier_;
     bool manual_enabled_, robot_disabled_, xbox_mode_, ps4_mode_, switch_mode_, outdoor_mode_;
     bool home_button_, share_button_, menu_button_, a_button_, b_button_, x_button_, y_button_;
-    
+
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr velocity_subscriber_;
     rclcpp::Subscription<lunabot_autonomous::msg::Control>::SharedPtr control_subscriber_;
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joystick_subscriber_;
