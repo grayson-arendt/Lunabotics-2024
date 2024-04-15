@@ -22,6 +22,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+find_package(phoenix6 REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Control.msg"
@@ -40,7 +41,7 @@ ament_target_dependencies(hardware_monitor rclcpp sensor_msgs)
 ament_target_dependencies(imu_rotator rclcpp sensor_msgs)
 ament_target_dependencies(motor_test rclcpp sensor_msgs)
 ament_target_dependencies(navigator_client rclcpp rclcpp_action nav2_msgs geometry_msgs)
-ament_target_dependencies(robot_controller rclcpp sensor_msgs geometry_msgs)
+ament_target_dependencies(robot_controller rclcpp sensor_msgs geometry_msgs phoenix6)
 
 rosidl_target_interfaces(robot_controller ${PROJECT_NAME} "rosidl_typesupport_cpp")
 rosidl_target_interfaces(navigator_client ${PROJECT_NAME} "rosidl_typesupport_cpp")
@@ -67,9 +68,11 @@ else()
     set(PHOENIX_LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/phoenix_lib/x86-64)
 endif()
 
-target_link_libraries(robot_controller ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so)
-target_link_libraries(robot_controller ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so)
-target_link_libraries(robot_controller ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so)
+target_link_libraries(robot_controller
+  ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so
+  ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so
+  ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so
+)
 
 target_link_libraries(motor_test ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so)
 target_link_libraries(motor_test ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so)

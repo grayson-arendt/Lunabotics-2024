@@ -60,6 +60,7 @@ class MotorTest : public rclcpp::Node {
   double d_pad_vertical_;
   double current = 0.0;
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr controller_subscriber;
+
   TalonSRX magnet{7};
 };
 

@@ -9,11 +9,10 @@
 #include "ctre/phoenix/platform/Platform.hpp"
 #include "ctre/phoenix/unmanaged/Unmanaged.h"
 
-using namespace ctre::phoenix;
-using namespace ctre::phoenix::music;
-using namespace ctre::phoenix::platform;
-using namespace ctre::phoenix::motorcontrol;
-using namespace ctre::phoenix::motorcontrol::can;
+#include "ctre/phoenix6/TalonFX.hpp"
+#include "ctre/phoenix6/Orchestra.hpp"
+#include "ctre/phoenix6/unmanaged/Unmanaged.hpp"
+
 /**
  * @class RobotController
  * @brief A class for controlling the robot using a controller 
@@ -32,7 +31,11 @@ class RobotController : public rclcpp::Node
      */
     RobotController() : Node("motor_controller")
     {
-        right_wheel_motor_.SetInverted(true);
+        auto& talonFXConfigurator = right_wheel_motor_.GetConfigurator();
+        ctre::phoenix6::configs::MotorOutputConfigs motorConfigs{};
+
+        motorConfigs.Inverted = ctre::phoenix6::signals::InvertedValue::Clockwise_Positive;
+        talonFXConfigurator.Apply(motorConfigs);
 
         velocity_subscriber_ = create_subscription<geometry_msgs::msg::Twist>(
             "cmd_vel", 10, std::bind(&RobotController::callback_velocity, this, std::placeholders::_1));
@@ -54,17 +57,8 @@ class RobotController : public rclcpp::Node
         orchestra.AddInstrument(bucket_motor_);
         orchestra.AddInstrument(trencher_motor_);
 
-        load_status = orchestra.LoadMusic("/home/intel-nuc/lunabot_ws/src/Lunabotics-2024/lunabot_autonomous/audio/startup.chrp");
-
-        if (load_status != 0) {
-            RCLCPP_INFO(get_logger(), "\033[0;31mCOULD NOT LOAD AUDIO\033[0m");
-        }
-
-        play_status = orchestra.Play();
-
-        if (play_status != 0) {
-            RCLCPP_INFO(get_logger(), "\033[0;31mCOULD NOT PLAY AUDIO\033[0m");
-        }
+        orchestra.LoadMusic("/home/intel-nuc/lunabot_ws/src/Lunabotics-2024/lunabot_autonomous/audio/startup.chrp");
+        orchestra.Play();
 
         RCLCPP_INFO(get_logger(), "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
     }
@@ -238,7 +232,8 @@ class RobotController : public rclcpp::Node
 
             if (!robot_disabled_)
             {
-                ctre::phoenix::unmanaged::Unmanaged::FeedEnable(100);
+                ctre::phoenix::unmanaged::FeedEnable(100);
+
             }
             else
             {
@@ -247,12 +242,18 @@ class RobotController : public rclcpp::Node
 
             RCLCPP_INFO(get_logger(), "\033[0;35mMAGNET CURRENT: %f\033[0m", magnet_.GetOutputCurrent());
 
-            left_wheel_motor_.Set(ControlMode::PercentOutput, left_power_ * speed_multiplier_);
-            right_wheel_motor_.Set(ControlMode::PercentOutput, right_power_ * speed_multiplier_);
+            left_output_.Output = left_power_ * speed_multiplier_;
+            right_output_.Output = right_power_ * speed_multiplier_;
+            trencher_output_.Output = trencher_power_;
+            bucket_output_.Output = bucket_power_;
+
+            left_wheel_motor_.SetControl(left_output_);
+            right_wheel_motor_.SetControl(right_output_);
+            trencher_motor_.SetControl(trencher_output_);
+            bucket_motor_.SetControl(bucket_output_);
+
             actuator_left_motor_.Set(ControlMode::PercentOutput, actuator_power_);
             actuator_right_motor_.Set(ControlMode::PercentOutput, actuator_power_);
-            trencher_motor_.Set(ControlMode::PercentOutput, trencher_power_);
-            bucket_motor_.Set(ControlMode::PercentOutput, bucket_power_);
 	        magnet_.Set(ControlMode::PercentOutput, magnet_power_);
         }
     }
@@ -265,19 +266,22 @@ class RobotController : public rclcpp::Node
     {
         if (!manual_enabled_)
         {
-            ctre::phoenix::unmanaged::Unmanaged::FeedEnable(1000);
+            ctre::phoenix::unmanaged::FeedEnable(1000);
 
             double linear_velocity = velocity_msg->linear.x;
             double angular_velocity = velocity_msg->angular.z;
             double wheel_radius = outdoor_mode_ ? 0.2 : 0.1016;
             double wheel_distance = 0.5;
 
-            double velocity_left_cmd = 0.1 * (linear_velocity - angular_velocity * wheel_distance / 2.0) / wheel_radius;
-            double velocity_right_cmd =
+            velocity_left_cmd_ = 0.1 * (linear_velocity - angular_velocity * wheel_distance / 2.0) / wheel_radius;
+            velocity_right_cmd_ =
                 0.1 * (linear_velocity + angular_velocity * wheel_distance / 2.0) / wheel_radius;
 
-            left_wheel_motor_.Set(ControlMode::PercentOutput, velocity_left_cmd);
-            right_wheel_motor_.Set(ControlMode::PercentOutput, velocity_right_cmd);
+            velocity_left_output_.Output = velocity_left_cmd_;
+            velocity_right_output_.Output = velocity_right_cmd_;
+
+            left_wheel_motor_.SetControl(velocity_left_output_);
+            right_wheel_motor_.SetControl(velocity_right_output_);
         }
     }
 
@@ -291,21 +295,21 @@ class RobotController : public rclcpp::Node
 
         if (control_msg->enable_intake)
         {
-            start_mechanism<TalonFX>("TRENCHER", trencher_motor_);
+            start_mechanism<ctre::phoenix6::hardware::TalonFX>("TRENCHER", trencher_motor_);
         }
         else if (control_msg->enable_outtake)
         {
-            start_mechanism<TalonFX>("BUCKET", bucket_motor_);
+            start_mechanism<ctre::phoenix6::hardware::TalonFX>("BUCKET", bucket_motor_);
         }
         else if (control_msg->actuator_up)
         {
-            start_mechanism<TalonSRX>("ACTUATOR LEFT UP", actuator_left_motor_);
-            start_mechanism<TalonSRX>("ACTUATOR RIGHT UP", actuator_right_motor_);
+            start_mechanism<ctre::phoenix::motorcontrol::can::TalonSRX>("ACTUATOR LEFT UP", actuator_left_motor_);
+            start_mechanism<ctre::phoenix::motorcontrol::can::TalonSRX>("ACTUATOR RIGHT UP", actuator_right_motor_);
         }
         else if (control_msg->actuator_down)
         {
-            start_mechanism<TalonSRX>("ACTUATOR LEFT DOWN", actuator_left_motor_, -0.5);
-            start_mechanism<TalonSRX>("ACTUATOR RIGHT DOWN", actuator_right_motor_, -0.5);
+            start_mechanism<ctre::phoenix::motorcontrol::can::TalonSRX>("ACTUATOR LEFT DOWN", actuator_left_motor_);
+            start_mechanism<ctre::phoenix::motorcontrol::can::TalonSRX>("ACTUATOR RIGHT DOWN", actuator_right_motor_);
         }
         else
         {
@@ -322,7 +326,7 @@ class RobotController : public rclcpp::Node
      * @param percent_output The percentage output for the motor.
      */
     template <typename MotorType>
-    void start_mechanism(const std::string &name, MotorType &motor, double percent_output = 0.5)
+    void start_mechanism(const std::string &name, MotorType &motor)
     {
         RCLCPP_INFO(get_logger(), "\033[0;34m%s:\033[0m \033[1;32mSTARTED\033[0m", name.c_str());
     }
@@ -331,24 +335,28 @@ class RobotController : public rclcpp::Node
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr velocity_subscriber_;
     rclcpp::Subscription<lunabot_autonomous::msg::Control>::SharedPtr control_subscriber_;
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joystick_subscriber_;
-    double velocity_left_cmd_, velocity_right_cmd_;
-    double left_power_, right_power_;
-    double actuator_power_, trencher_power_, bucket_power_, magnet_power_;
+    ctre::phoenix6::controls::DutyCycleOut velocity_left_output_{0.0};
+    ctre::phoenix6::controls::DutyCycleOut velocity_right_output_{0.0};
+    ctre::phoenix6::controls::DutyCycleOut left_output_{0.0};
+    ctre::phoenix6::controls::DutyCycleOut right_output_{0.0};
+    ctre::phoenix6::controls::DutyCycleOut trencher_output_{0.0};
+    ctre::phoenix6::controls::DutyCycleOut bucket_output_{0.0};
+    double velocity_left_cmd_, velocity_right_cmd_, left_power_, right_power_, trencher_power_, bucket_power_;
+    double actuator_power_, magnet_power_;
     double left_trigger_, right_trigger_, d_pad_vertical_, d_pad_horizontal_, left_joystick_x_, left_joystick_y_;
     double turn_, drive_, drive_forward_, drive_backward_, speed_multiplier_, trencher_speed_multiplier_;
     bool manual_enabled_, robot_disabled_, xbox_mode_, ps4_mode_, switch_mode_, outdoor_mode_;
     bool home_button_, share_button_, menu_button_, a_button_, b_button_, x_button_, y_button_;
 
-    TalonFX left_wheel_motor_{1};
-    TalonFX right_wheel_motor_{2};
-    TalonSRX actuator_left_motor_{3};
-    TalonSRX actuator_right_motor_{4};
-    TalonFX bucket_motor_{5};
-    TalonFX trencher_motor_{6};
-    TalonSRX magnet_{7};
-    Orchestra orchestra;
-    ErrorCode load_status;
-    ErrorCode play_status;
+    // Kraken X60 using Phoenix 6, Talon SRX using Phoenix 5
+    ctre::phoenix6::hardware::TalonFX left_wheel_motor_{1};
+    ctre::phoenix6::hardware::TalonFX right_wheel_motor_{2};
+    ctre::phoenix6::hardware::TalonFX bucket_motor_{5};
+    ctre::phoenix6::hardware::TalonFX trencher_motor_{6};
+    ctre::phoenix::motorcontrol::can::TalonSRX actuator_left_motor_{3};
+    ctre::phoenix::motorcontrol::can::TalonSRX actuator_right_motor_{4};
+    ctre::phoenix::motorcontrol::can::TalonSRX magnet_{7};
+    ctre::phoenix6::Orchestra orchestra;
 };
 
 /**
