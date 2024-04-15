@@ -13,7 +13,11 @@
 #include "ctre/phoenix6/Orchestra.hpp"
 #include "ctre/phoenix6/unmanaged/Unmanaged.hpp"
 
-using namespace ctre;
+namespace phoenix6 = ctre::phoenix6;
+namespace phoenix5 = ctre::phoenix;
+
+using namespace phoenix6;
+using namespace phoenix5;
 
 /**
  * @class RobotController
@@ -268,7 +272,7 @@ class RobotController : public rclcpp::Node
     {
         if (!manual_enabled_)
         {
-            phoenix::unmanaged::FeedEnable(1000);
+            phoenix5::unmanaged::FeedEnable(1000);
 
             double linear_velocity = velocity_msg->linear.x;
             double angular_velocity = velocity_msg->angular.z;
@@ -304,13 +308,13 @@ class RobotController : public rclcpp::Node
         }
         else if (control_msg->actuator_up)
         {
-            start_mechanism<phoenix::motorcontrol::can::TalonSRX>("ACTUATOR LEFT UP", actuator_left_motor_);
-            start_mechanism<phoenix::motorcontrol::can::TalonSRX>("ACTUATOR RIGHT UP", actuator_right_motor_);
+            start_mechanism<phoenix5::motorcontrol::can::TalonSRX>("ACTUATOR LEFT UP", actuator_left_motor_);
+            start_mechanism<phoenix5::motorcontrol::can::TalonSRX>("ACTUATOR RIGHT UP", actuator_right_motor_);
         }
         else if (control_msg->actuator_down)
         {
-            start_mechanism<phoenix::motorcontrol::can::TalonSRX>("ACTUATOR LEFT DOWN", actuator_left_motor_);
-            start_mechanism<phoenix::motorcontrol::can::TalonSRX>("ACTUATOR RIGHT DOWN", actuator_right_motor_);
+            start_mechanism<phoenix5::motorcontrol::can::TalonSRX>("ACTUATOR LEFT DOWN", actuator_left_motor_);
+            start_mechanism<phoenix5::motorcontrol::can::TalonSRX>("ACTUATOR RIGHT DOWN", actuator_right_motor_);
         }
         else
         {
@@ -354,10 +358,10 @@ class RobotController : public rclcpp::Node
     phoenix6::hardware::TalonFX right_wheel_motor_{2};
     phoenix6::hardware::TalonFX bucket_motor_{5};
     phoenix6::hardware::TalonFX trencher_motor_{6};
-    phoenix::motorcontrol::can::TalonSRX actuator_left_motor_{3};
-    phoenix::motorcontrol::can::TalonSRX actuator_right_motor_{4};
-    phoenix::motorcontrol::can::TalonSRX magnet_{7};
-    phoenix::motorcontrol::can::TalonSRX vibrator_{8};
+    phoenix5::motorcontrol::can::TalonSRX actuator_left_motor_{3};
+    phoenix5::motorcontrol::can::TalonSRX actuator_right_motor_{4};
+    phoenix5::motorcontrol::can::TalonSRX magnet_{7};
+    phoenix5::motorcontrol::can::TalonSRX vibrator_{8};
 };
 
 /**
