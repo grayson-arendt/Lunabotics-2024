@@ -13,6 +13,8 @@
 #include "ctre/phoenix6/Orchestra.hpp"
 #include "ctre/phoenix6/unmanaged/Unmanaged.hpp"
 
+using namespace ctre;
+
 /**
  * @class RobotController
  * @brief A class for controlling the robot using a controller 
@@ -32,9 +34,9 @@ class RobotController : public rclcpp::Node
     RobotController() : Node("motor_controller")
     {
         auto& talonFXConfigurator = right_wheel_motor_.GetConfigurator();
-        ctre::phoenix6::configs::MotorOutputConfigs motorConfigs{};
+        phoenix6::configs::MotorOutputConfigs motorConfigs{};
 
-        motorConfigs.Inverted = ctre::phoenix6::signals::InvertedValue::Clockwise_Positive;
+        motorConfigs.Inverted = phoenix6::signals::InvertedValue::Clockwise_Positive;
         talonFXConfigurator.Apply(motorConfigs);
 
         velocity_subscriber_ = create_subscription<geometry_msgs::msg::Twist>(
@@ -232,7 +234,7 @@ class RobotController : public rclcpp::Node
 
             if (!robot_disabled_)
             {
-                ctre::phoenix::unmanaged::FeedEnable(100);
+                phoenix::unmanaged::FeedEnable(100);
 
             }
             else
@@ -266,7 +268,7 @@ class RobotController : public rclcpp::Node
     {
         if (!manual_enabled_)
         {
-            ctre::phoenix::unmanaged::FeedEnable(1000);
+            phoenix::unmanaged::FeedEnable(1000);
 
             double linear_velocity = velocity_msg->linear.x;
             double angular_velocity = velocity_msg->angular.z;
@@ -294,21 +296,21 @@ class RobotController : public rclcpp::Node
 
         if (control_msg->enable_intake)
         {
-            start_mechanism<ctre::phoenix6::hardware::TalonFX>("TRENCHER", trencher_motor_);
+            start_mechanism<phoenix6::hardware::TalonFX>("TRENCHER", trencher_motor_);
         }
         else if (control_msg->enable_outtake)
         {
-            start_mechanism<ctre::phoenix6::hardware::TalonFX>("BUCKET", bucket_motor_);
+            start_mechanism<phoenix6::hardware::TalonFX>("BUCKET", bucket_motor_);
         }
         else if (control_msg->actuator_up)
         {
-            start_mechanism<ctre::phoenix::motorcontrol::can::TalonSRX>("ACTUATOR LEFT UP", actuator_left_motor_);
-            start_mechanism<ctre::phoenix::motorcontrol::can::TalonSRX>("ACTUATOR RIGHT UP", actuator_right_motor_);
+            start_mechanism<phoenix::motorcontrol::can::TalonSRX>("ACTUATOR LEFT UP", actuator_left_motor_);
+            start_mechanism<phoenix::motorcontrol::can::TalonSRX>("ACTUATOR RIGHT UP", actuator_right_motor_);
         }
         else if (control_msg->actuator_down)
         {
-            start_mechanism<ctre::phoenix::motorcontrol::can::TalonSRX>("ACTUATOR LEFT DOWN", actuator_left_motor_);
-            start_mechanism<ctre::phoenix::motorcontrol::can::TalonSRX>("ACTUATOR RIGHT DOWN", actuator_right_motor_);
+            start_mechanism<phoenix::motorcontrol::can::TalonSRX>("ACTUATOR LEFT DOWN", actuator_left_motor_);
+            start_mechanism<phoenix::motorcontrol::can::TalonSRX>("ACTUATOR RIGHT DOWN", actuator_right_motor_);
         }
         else
         {
@@ -339,23 +341,23 @@ class RobotController : public rclcpp::Node
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr velocity_subscriber_;
     rclcpp::Subscription<lunabot_autonomous::msg::Control>::SharedPtr control_subscriber_;
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joystick_subscriber_;
-    ctre::phoenix6::controls::DutyCycleOut velocity_left_output_{0.0};
-    ctre::phoenix6::controls::DutyCycleOut velocity_right_output_{0.0};
-    ctre::phoenix6::controls::DutyCycleOut left_output_{0.0};
-    ctre::phoenix6::controls::DutyCycleOut right_output_{0.0};
-    ctre::phoenix6::controls::DutyCycleOut trencher_output_{0.0};
-    ctre::phoenix6::controls::DutyCycleOut bucket_output_{0.0};
+    phoenix6::controls::DutyCycleOut velocity_left_output_{0.0};
+    phoenix6::controls::DutyCycleOut velocity_right_output_{0.0};
+    phoenix6::controls::DutyCycleOut left_output_{0.0};
+    phoenix6::controls::DutyCycleOut right_output_{0.0};
+    phoenix6::controls::DutyCycleOut trencher_output_{0.0};
+    phoenix6::controls::DutyCycleOut bucket_output_{0.0};
 
     // Kraken X60 using Phoenix 6, Talon SRX using Phoenix 5
-    ctre::phoenix6::Orchestra orchestra;
-    ctre::phoenix6::hardware::TalonFX left_wheel_motor_{1};
-    ctre::phoenix6::hardware::TalonFX right_wheel_motor_{2};
-    ctre::phoenix6::hardware::TalonFX bucket_motor_{5};
-    ctre::phoenix6::hardware::TalonFX trencher_motor_{6};
-    ctre::phoenix::motorcontrol::can::TalonSRX actuator_left_motor_{3};
-    ctre::phoenix::motorcontrol::can::TalonSRX actuator_right_motor_{4};
-    ctre::phoenix::motorcontrol::can::TalonSRX magnet_{7};
-    ctre::phoenix::motorcontrol::can::TalonSRX vibrator_{8};
+    phoenix6::Orchestra orchestra;
+    phoenix6::hardware::TalonFX left_wheel_motor_{1};
+    phoenix6::hardware::TalonFX right_wheel_motor_{2};
+    phoenix6::hardware::TalonFX bucket_motor_{5};
+    phoenix6::hardware::TalonFX trencher_motor_{6};
+    phoenix::motorcontrol::can::TalonSRX actuator_left_motor_{3};
+    phoenix::motorcontrol::can::TalonSRX actuator_right_motor_{4};
+    phoenix::motorcontrol::can::TalonSRX magnet_{7};
+    phoenix::motorcontrol::can::TalonSRX vibrator_{8};
 };
 
 /**
