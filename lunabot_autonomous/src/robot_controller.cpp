@@ -27,6 +27,11 @@ using namespace phoenix5;
  * The Nintendo Switch controller triggers act as buttons instead 
  * of providing variable input, so the mode will drive the robot
  * based off of the left joystick instead.
+ * 
+ * Both Phoenix 6 and Phoenix 5 are used together in this code, since
+ * the motors have been upgraded to Kraken X60s which only support
+ * Phoenix 6, while also using Talon SRXs that only support Phoenix 5.
+ * 
  * @author Grayson Arendt
  */
 class RobotController : public rclcpp::Node
@@ -197,8 +202,8 @@ class RobotController : public rclcpp::Node
             trencher_power_ = a_button_ ? -0.6 : 0.0;
             bucket_power_ = x_button_ ? 0.1 : y_button_ ? -0.1 : 0.0;
             actuator_power_ = (d_pad_vertical_ == 1.0) ? -0.3 : (d_pad_vertical_ == -1.0) ? 0.3 : 0.0;
+	          magnet_power_ = b_button_ ? 0.0 : 0.3;
             speed_multiplier_ = 0.45;
-	        magnet_power_ = a_button_ ? 0.0 : 0.3;
 
             if (home_button_)
             {
@@ -238,7 +243,7 @@ class RobotController : public rclcpp::Node
 
             if (!robot_disabled_)
             {
-                phoenix::unmanaged::FeedEnable(100);
+                phoenix5::unmanaged::FeedEnable(100);
 
             }
             else
@@ -260,7 +265,7 @@ class RobotController : public rclcpp::Node
 
             actuator_left_motor_.Set(ControlMode::PercentOutput, actuator_power_);
             actuator_right_motor_.Set(ControlMode::PercentOutput, actuator_power_);
-	        magnet_.Set(ControlMode::PercentOutput, magnet_power_);
+	          magnet_.Set(ControlMode::PercentOutput, magnet_power_);
         }
     }
 
@@ -342,9 +347,11 @@ class RobotController : public rclcpp::Node
     double turn_, drive_, drive_forward_, drive_backward_, speed_multiplier_, trencher_speed_multiplier_;
     bool manual_enabled_, robot_disabled_, xbox_mode_, ps4_mode_, switch_mode_, outdoor_mode_;
     bool home_button_, share_button_, menu_button_, a_button_, b_button_, x_button_, y_button_;
+    
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr velocity_subscriber_;
     rclcpp::Subscription<lunabot_autonomous::msg::Control>::SharedPtr control_subscriber_;
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joystick_subscriber_;
+
     phoenix6::controls::DutyCycleOut velocity_left_output_{0.0};
     phoenix6::controls::DutyCycleOut velocity_right_output_{0.0};
     phoenix6::controls::DutyCycleOut left_output_{0.0};
