@@ -274,8 +274,7 @@ class RobotController : public rclcpp::Node
             double wheel_distance = 0.5;
 
             velocity_left_cmd_ = 0.1 * (linear_velocity - angular_velocity * wheel_distance / 2.0) / wheel_radius;
-            velocity_right_cmd_ =
-                0.1 * (linear_velocity + angular_velocity * wheel_distance / 2.0) / wheel_radius;
+            velocity_right_cmd_ = 0.1 * (linear_velocity + angular_velocity * wheel_distance / 2.0) / wheel_radius;
 
             velocity_left_output_.Output = velocity_left_cmd_;
             velocity_right_output_.Output = velocity_right_cmd_;
@@ -332,6 +331,11 @@ class RobotController : public rclcpp::Node
     }
 
   private:
+    double velocity_left_cmd_, velocity_right_cmd_, left_power_, right_power_, trencher_power_, bucket_power_, actuator_power_, magnet_power_;
+    double left_trigger_, right_trigger_, d_pad_vertical_, d_pad_horizontal_, left_joystick_x_, left_joystick_y_;
+    double turn_, drive_, drive_forward_, drive_backward_, speed_multiplier_, trencher_speed_multiplier_;
+    bool manual_enabled_, robot_disabled_, xbox_mode_, ps4_mode_, switch_mode_, outdoor_mode_;
+    bool home_button_, share_button_, menu_button_, a_button_, b_button_, x_button_, y_button_;
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr velocity_subscriber_;
     rclcpp::Subscription<lunabot_autonomous::msg::Control>::SharedPtr control_subscriber_;
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joystick_subscriber_;
@@ -341,14 +345,9 @@ class RobotController : public rclcpp::Node
     ctre::phoenix6::controls::DutyCycleOut right_output_{0.0};
     ctre::phoenix6::controls::DutyCycleOut trencher_output_{0.0};
     ctre::phoenix6::controls::DutyCycleOut bucket_output_{0.0};
-    double velocity_left_cmd_, velocity_right_cmd_, left_power_, right_power_, trencher_power_, bucket_power_;
-    double actuator_power_, magnet_power_;
-    double left_trigger_, right_trigger_, d_pad_vertical_, d_pad_horizontal_, left_joystick_x_, left_joystick_y_;
-    double turn_, drive_, drive_forward_, drive_backward_, speed_multiplier_, trencher_speed_multiplier_;
-    bool manual_enabled_, robot_disabled_, xbox_mode_, ps4_mode_, switch_mode_, outdoor_mode_;
-    bool home_button_, share_button_, menu_button_, a_button_, b_button_, x_button_, y_button_;
 
     // Kraken X60 using Phoenix 6, Talon SRX using Phoenix 5
+    ctre::phoenix6::Orchestra orchestra;
     ctre::phoenix6::hardware::TalonFX left_wheel_motor_{1};
     ctre::phoenix6::hardware::TalonFX right_wheel_motor_{2};
     ctre::phoenix6::hardware::TalonFX bucket_motor_{5};
@@ -356,7 +355,7 @@ class RobotController : public rclcpp::Node
     ctre::phoenix::motorcontrol::can::TalonSRX actuator_left_motor_{3};
     ctre::phoenix::motorcontrol::can::TalonSRX actuator_right_motor_{4};
     ctre::phoenix::motorcontrol::can::TalonSRX magnet_{7};
-    ctre::phoenix6::Orchestra orchestra;
+    ctre::phoenix::motorcontrol::can::TalonSRX vibrator_{8};
 };
 
 /**

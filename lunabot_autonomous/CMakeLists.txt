@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(lunabot_autonomous)
 
+add_definitions(-w)
+
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD 99)
@@ -35,7 +37,6 @@ add_executable(imu_rotator src/imu_rotator.cpp)
 add_executable(motor_test src/motor_test.cpp)
 add_executable(navigator_client src/navigator_client.cpp)
 add_executable(robot_controller src/robot_controller.cpp)
-
 
 ament_target_dependencies(hardware_monitor rclcpp sensor_msgs)
 ament_target_dependencies(imu_rotator rclcpp sensor_msgs)
@@ -74,8 +75,10 @@ target_link_libraries(robot_controller
   ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so
 )
 
-target_link_libraries(motor_test ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so)
-target_link_libraries(motor_test ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so)
-target_link_libraries(motor_test ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so)
+target_link_libraries(motor_test 
+  ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so
+  ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so
+  ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so
+)
 
 ament_package()
