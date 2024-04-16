@@ -161,6 +161,9 @@ def generate_launch_description():
         ],
         arguments=['--ros-args', '--log-level', 'INFO'],
     )
+    kraken_controller = Node(package="lunabot_kraken", executable="kraken_controller")
+
+    talon_srx_controller = Node(package="lunabot_talon_srx", executable="talon_srx_controller")
 
     hardware_monitor = Node(package="lunabot_autonomous", executable="hardware_monitor")
 

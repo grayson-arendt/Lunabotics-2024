@@ -23,19 +23,22 @@ remove_conflicting_ros_packages() {
     dpkg -r --force-depends "${remove_packages[@]}"
 }
 
-# Install Phoenix 6
-install_phoenix6() {
+# Install Phoenix 5 and Phoenix 6
+install_phoenix() {
     curl -s --compressed -o /usr/share/keyrings/ctr-pubkey.gpg "https://deb.ctr-electronics.com/ctr-pubkey.gpg"
-    curl -s --compressed -o /etc/apt/sources.list.d/ctr2024.list "https://deb.ctr-electronics.com/ctr$2024.list"
+    curl -s --compressed -o /etc/apt/sources.list.d/ctr2024.list "https://deb.ctr-electronics.com/ctr2024.list"
     apt update
     apt install phoenix6
+
+    cd "$(dirname "$0")"
+    mv phoenix /usr/lib/
 }
 
 # Main script
 main() {
     install_ros_packages
+    install_phoenix
     remove_conflicting_ros_packages
-    install_phoenix6
 }
 
 main

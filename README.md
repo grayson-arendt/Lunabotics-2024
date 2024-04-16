@@ -9,8 +9,9 @@ This repository contains code made by the College of DuPage team for the NASA Lu
 - `RPLidar A3`
 - `Intel RealSense D455 Depth Camera`
 - `Intel RealSense T265 Tracking Camera`
-- `CTRE Falcon 500 (x2)`
-- `RoyPow 12V 18Ah LiFePO4 Battery`
+- `CTRE Kraken X60 (x4)`
+- `CTRE Talon SRX (x4)`
+- `Turnigy 14.8V 8000mAh LiPo Battery`
 - `Turnigy 14.8V 12000mAh LiPo Battery`
 - `AndyMark Power Distribution Panel`
 - `MKS CANable Pro`
@@ -66,7 +67,7 @@ The install_dependencies.sh script will also remove librealsense2 and realsense2
 
 #### 4. Repeat the last two steps (excluding the last line) with the [external-dev](https://github.com/grayson-arendt/Lunabotics-2024/tree/external-dev?tab=readme-ov-file) branch on the host computer (not robot computer). This branch is for visualizing the robot in RViz2.
 
-## Setup Permissions and CTRE Phoenix Library
+## Setup Permissions
 
 The rplidar_ros package needs to access /dev/ttyUSB0 and /dev/ttyUSB1 (using both lidars). While you can run `sudo chmod +x 777 /dev/ttyUSB0` for example, it would need to be ran each time on startup. To fix this, run the command below and restart the computer.
 
@@ -80,16 +81,9 @@ If the lidars are not under /dev/ttyUSB0 and /dev/ttyUSB1 (which may happen when
 ls /dev/ttyUSB*
 ```
 
-The computer may not be able to find the shared object files for CTRE Phoenix library. An easy way to fix this is to directly copy them into /usr/lib/.
-
-```bash
-cd lunabot_ws/src/Lunabotics-2024/lunabot_autonomous/phoenix_lib/x86-64/
-sudo cp libCTRE_Phoenix.so libCTRE_PhoenixCCI.so libCTRE_PhoenixTools.so /usr/lib/
-```
-
 ## Running Robot
 
-Each launch file should be ran in a new terminal window. 
+Each launch/cpp file should be ran in a new terminal window. There are more steps now than before because of the upgrade to the Kraken X60s. The Kraken X60s use Phoenix 6, while Talon SRXs are stuck with Phoenix 5. Therefore, they cannot be ran together from a launch file because they need the libraries linked separately. It is inconvenient, but it is the only way to get them to work together.
 
 `Note: unplug and replug in the T265 after booting up the NUC, it will not detect it if it is not replugged in again.`
 
@@ -114,6 +108,20 @@ ros2 launch lunabot_bringup external_launch.py
 
 ```bash
 ros2 launch lunabot_bringup hardware_launch.py
+```
+
+#### 5. Startup Talon SRX controller:
+
+```bash
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/phoenix/
+ros2 run lunabot_autonomous talon_srx_controller
+```
+
+#### 6. Startup Kraken X60 controller:
+
+```bash
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/phoenix6/
+ros2 run lunabot_autonomous kraken_controller
 ```
 
 #### 5. Startup RTAB-Map:
@@ -148,13 +156,16 @@ motors for the mechanisms for the zone.
 **lunabot_autonomous**
   - **include**
     - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
-  - **phoenix_lib** (Contains shared object files for CTRE Phoenix C++ API)
   - **src**
-    - hardware_monitor.cpp (Monitors liveliness of hardware topics)
-    - imu_rotator.cpp (Rotates IMU values to be in ENU coordinate frame)
-    - motor_test.cpp (Simple node for testing motors)
-    - navigator_client.cpp (Action client that sends goals and motor control commands)
-    - robot_controller.cpp (Controller for both autonomous and manual control of robot)
+    - **control**
+      - kraken_controller.cpp (Controls the Kraken X60 motors)
+      - motor_test.cpp (Simple node for testing Phoenix 5 motors)
+      - robot_controller.cpp (Generates percent output/velocity commands for the robot)
+      - talon_srx_controller.cpp (Controls the motors with Talon SRX)
+    - **system**
+      - hardware_monitor.cpp (Monitors liveliness of hardware topics)
+      - imu_rotator.cpp (Rotates IMU values to be in ENU coordinate frame)
+      - navigator_client.cpp (Action client that sends goals and motor control commands)
 
 **lunabot_bringup** 
   - **behavior_trees**
