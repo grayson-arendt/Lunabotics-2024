@@ -168,7 +168,7 @@ class RobotController : public rclcpp::Node
             trencher_power_ = a_button_ ? -0.6 : 0.0;
             vibrator_power_ = x_button_ ? 0.1 : y_button_ ? -0.1 : 0.0;
             actuator_power_ = (d_pad_vertical_ == 1.0) ? -0.3 : (d_pad_vertical_ == -1.0) ? 0.3 : 0.0;
-	        magnet_power_ = b_button_ ? 0.0 : 0.3;
+	        magnet_current_ = b_button_ ? 0.0 : 0.5;
             speed_multiplier_ = 0.45;
 
             if (home_button_)
@@ -221,7 +221,7 @@ class RobotController : public rclcpp::Node
             motor_output_msg_.trencher_power = trencher_power_;
             motor_output_msg_.vibrator_power = vibrator_power_;
             motor_output_msg_.actuator_power = actuator_power_;
-            motor_output_msg_.magnet_power = magnet_power_;
+            motor_output_msg_.magnet_current = magnet_current_;
 
             motor_output_publisher_->publish(motor_output_msg_);
         }
@@ -252,7 +252,7 @@ class RobotController : public rclcpp::Node
     }
 
   private:
-    double velocity_left_cmd_, velocity_right_cmd_, left_power_, right_power_, trencher_power_, vibrator_power_, actuator_power_, magnet_power_;
+    double velocity_left_cmd_, velocity_right_cmd_, left_power_, right_power_, trencher_power_, vibrator_power_, actuator_power_, magnet_current_;
     double left_trigger_, right_trigger_, d_pad_vertical_, d_pad_horizontal_, left_joystick_x_, left_joystick_y_;
     double turn_, drive_, drive_forward_, drive_backward_, speed_multiplier_, trencher_speed_multiplier_;
     bool manual_enabled_, robot_disabled_, xbox_mode_, ps4_mode_, switch_mode_, outdoor_mode_;

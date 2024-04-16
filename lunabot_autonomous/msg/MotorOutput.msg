@@ -5,6 +5,6 @@ float64 right_power      # Right wheel power
 float64 trencher_power   # Trencher motor power
 float64 vibrator_power     # Vibrator motor power
 float64 actuator_power   # Actuator motor power
-float64 magnet_power     # Magnet motor power
+float64 magnet_current     # Magnet current
 bool is_enabled # Robot disabled state
 bool is_manual # Robot control state

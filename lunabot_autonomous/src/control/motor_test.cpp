@@ -48,10 +48,10 @@ class MotorTest : public rclcpp::Node {
 
     if (d_pad_vertical_ == 1.0)  // dpad_up
     {
-      current += 0.1;
+      current += 0.05;
     } else if (d_pad_vertical_ == -1.0)  // dpad_down
     {
-      current -= 0.1;
+      current -= 0.05;
     }
 
     RCLCPP_INFO(get_logger(), "\033[0;35mMEASURED CURRENT: %f SET CURRENT: %f\033[0m", magnet.GetOutputCurrent(), current);

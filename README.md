@@ -124,13 +124,13 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/phoenix6/
 ros2 run lunabot_autonomous kraken_controller
 ```
 
-#### 5. Startup RTAB-Map:
+#### 7. Startup RTAB-Map:
 
 ```bash
 ros2 launch lunabot_bringup mapping_launch.py
 ```
 
-#### 6. Startup Navigation2:
+#### 8. Startup Navigation2:
 
 ```bash
 ros2 launch lunabot_bringup navigation_launch.py
@@ -138,7 +138,7 @@ ros2 launch lunabot_bringup navigation_launch.py
 
 In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in the GUI and have the robot navigate to that location. 
 
-#### (Optional) 7. Startup action client:
+#### (Optional) 9. Startup action client:
 
 ```bash
 ros2 run lunabot_autonomous navigator_client
