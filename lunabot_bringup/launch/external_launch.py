@@ -32,7 +32,7 @@ def generate_launch_description():
     bringup_dir = get_package_share_directory('lunabot_bringup')
 
     urdf_path = os.path.join(
-        get_package_share_path("lunabot_description"), "urdf", "test_bot.xacro"
+        get_package_share_path("lunabot_description"), "urdf", "real_bot.xacro"
     )
 
     description = xacro.process_file(urdf_path).toxml()
