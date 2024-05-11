@@ -155,16 +155,15 @@
 		type="fixed">
 		<parent link="base_link" />
 		<child link="ebox_link" />
-		<origin xyz="0.04 0 0.21" rpy="0 0 0" />
+		<origin xyz="0.04 0.0 0.0" rpy="0.0 0.0 0.0" />
 	</joint>
 
 	<joint name="base_d455_joint"
 		type="fixed">
 		<parent link="base_link" />
 		<child link="d455_link" />
-		<origin xyz="0.4305 0.0 0.6096"
-			rpy="0 0 0" />
+		<origin xyz="0.4815 0.0508 0.59"
+			rpy="0.0 0.0 0.0" />
 	</joint>
-
 
 </robot>
