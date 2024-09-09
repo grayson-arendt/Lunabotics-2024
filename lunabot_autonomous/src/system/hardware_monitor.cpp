@@ -38,10 +38,10 @@ class HardwareMonitor : public rclcpp::Node
                                         [this]() { this->checkConnection(t265_timer_, t265_valid, "T265"); });
 
         lidar1_timer_ = create_wall_timer(
-            std::chrono::seconds(5), [this]() { this->checkConnection(lidar1_timer_, lidar1_valid, "LIDAR S2L"); });
+            std::chrono::seconds(5), [this]() { this->checkConnection(lidar1_timer_, lidar1_valid, "LIDAR A3"); });
 
         lidar2_timer_ = create_wall_timer(std::chrono::seconds(5),
-                                          [this]() { this->checkConnection(lidar2_timer_, lidar2_valid, "LIDAR A3"); });
+                                          [this]() { this->checkConnection(lidar2_timer_, lidar2_valid, "LIDAR S2L"); });
 
         all_sensors_timer_ = create_wall_timer(std::chrono::seconds(1), [this]() {
             if (d455_valid && t265_valid && lidar1_valid && lidar2_valid)

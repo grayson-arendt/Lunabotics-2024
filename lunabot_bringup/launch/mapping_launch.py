@@ -834,7 +834,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "frame_id",
-                default_value="base_link",
+                default_value="d455_link",
                 description='Fixed frame id of the robot (base frame), you may set "base_link" or "base_footprint" if they are published. For camera-only config, this could be "camera_link".',
             ),
             DeclareLaunchArgument(
@@ -869,7 +869,7 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "rtabmap_args",
-                default_value="-d -RGBD/OptimizeFromGraphEnd true -RGBD/NewMapOdomChangeDistance 0.01 -RGBD/OptimizeMaxError 10 -RGBD/StartAtOrigin true -RGBD/ProximityAngle 60 -RGBD/ProximityOdomGuess true -Vis/MaxFeatures 2000 -Rtabmap/StartNewMapOnGoodSignature true -Rtabmap/DetectionRate 2 -RGBD/CreateOccupancyGrid true -Grid/CellSize 0.035 -Grid/MaxGroundAngle 40 -Grid/DepthRoiRatios 0.0 0.0 0.0 0.1 -Grid/Sensor 2 -Grid/RangeMin 0.5 -Grid/RangeMax 0.0 Reg/Force3DoF true -Reg/Strategy 2 -Grid/MaxObstacleHeight 2.0 -Grid/RayTracing true",
+                default_value="-d -RGBD/OptimizeFromGraphEnd true -RGBD/NewMapOdomChangeDistance 0.1 -RGBD/OptimizeMaxError 10 -RGBD/StartAtOrigin true -RGBD/AngularUpdate 0.2 -RGBD/ProximityAngle 60 -RGBD/ProximityOdomGuess true -Vis/MaxFeatures 2000 -Rtabmap/StartNewMapOnGoodSignature true -Rtabmap/DetectionRate 2 -RGBD/CreateOccupancyGrid true -Grid/CellSize 0.035 -Grid/MaxGroundAngle 60 -Grid/DepthRoiRatios 0.0 0.0 0.0 0.1 -Grid/Sensor 2 -Grid/RangeMin 0.5 -Grid/RangeMax 0.0 Reg/Force3DoF true -Reg/Strategy 2 -Grid/MaxObstacleHeight 0.4 -Grid/RayTracing true",
                 description='Backward compatibility, use "args" instead.',
             ),
             DeclareLaunchArgument(
@@ -997,7 +997,7 @@ def generate_launch_description():
             DeclareLaunchArgument(
                 "subscribe_scan", default_value="true", description=""
             ),
-            DeclareLaunchArgument("scan_topic", default_value="/scan2", description=""),
+            DeclareLaunchArgument("scan_topic", default_value="/scan", description=""),
             DeclareLaunchArgument(
                 "subscribe_scan_cloud", default_value="false", description=""
             ),

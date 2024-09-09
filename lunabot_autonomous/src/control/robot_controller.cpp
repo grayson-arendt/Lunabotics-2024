@@ -1,9 +1,24 @@
+#include <unistd.h>    
+#include <iostream>
+#include <chrono>
+#include <iomanip> 
+#include <limits> 
 #include "lunabot_autonomous/msg/control.hpp"
-#include "lunabot_autonomous/msg/motor_output.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/joy.hpp"
 
+#define Phoenix_No_WPI
+#include "ctre/Phoenix.h"
+#include "ctre/phoenix/cci/Unmanaged_CCI.h"
+#include "ctre/phoenix/platform/Platform.hpp"
+#include "ctre/phoenix/unmanaged/Unmanaged.h"
+
+using namespace ctre::phoenix;
+using namespace ctre::phoenix::music;
+using namespace ctre::phoenix::platform;
+using namespace ctre::phoenix::motorcontrol;
+using namespace ctre::phoenix::motorcontrol::can;
 /**
  * @class RobotController
  * @brief A class for controlling the robot using a controller 
@@ -12,7 +27,6 @@
  * The Nintendo Switch controller triggers act as buttons instead 
  * of providing variable input, so the mode will drive the robot
  * based off of the left joystick instead.
- * 
  * @author Grayson Arendt
  */
 class RobotController : public rclcpp::Node
@@ -26,10 +40,11 @@ class RobotController : public rclcpp::Node
         velocity_subscriber_ = create_subscription<geometry_msgs::msg::Twist>(
             "cmd_vel", 10, std::bind(&RobotController::callback_velocity, this, std::placeholders::_1));
 
+        control_subscriber_ = create_subscription<lunabot_autonomous::msg::Control>(
+            "control", 10, std::bind(&RobotController::callback_control, this, std::placeholders::_1));
+
         joystick_subscriber_ = create_subscription<sensor_msgs::msg::Joy>(
             "joy", 10, std::bind(&RobotController::joy_callback, this, std::placeholders::_1));
-
-        motor_output_publisher_ = this->create_publisher<lunabot_autonomous::msg::MotorOutput>("motor_output", 10);
 
         declare_and_get_parameters();
         apply_controller_mode();
@@ -37,10 +52,19 @@ class RobotController : public rclcpp::Node
         manual_enabled_ = true;
         robot_disabled_ = false;
 
+        right_wheel_motor_.SetInverted(true);
+
         RCLCPP_INFO(get_logger(), "\033[0;33mMANUAL CONTROL:\033[0m \033[1;32mENABLED\033[0m");
     }
 
   private:
+
+    double meters_to_encoder(double distance_in_meters) {
+        return (distance_in_meters * 91500.0) / (wheel_diameter * 3.14159);
+    }
+    double encoder_to_meters(double encoder_ticks) {
+        return (encoder_ticks * (3.14159 * wheel_diameter)) / 91500.0;
+    }
     /**
      * @brief Declares and gets parameters from the parameter server.
      */
@@ -147,29 +171,45 @@ class RobotController : public rclcpp::Node
 
             a_button_ = switch_mode_ ? joy_msg->buttons[1]
                         : ps4_mode_  ? joy_msg->buttons[0]
-                        : xbox_mode_ ? joy_msg->buttons[1]
+                        : xbox_mode_ ? joy_msg->buttons[0]
                                      : -1;
             
             b_button_ = switch_mode_ ? joy_msg->buttons[0]
-                        : ps4_mode_  ? joy_msg->buttons[1]
-                        : xbox_mode_ ? joy_msg->buttons[2]
-                                     : -1;
-
-            x_button_ = switch_mode_ ? joy_msg->buttons[2]
-                        : ps4_mode_  ? joy_msg->buttons[3]
-                        : xbox_mode_ ? joy_msg->buttons[1]
-                                     : -1;
-            
-            y_button_ = switch_mode_ ? joy_msg->buttons[3]
                         : ps4_mode_  ? joy_msg->buttons[2]
                         : xbox_mode_ ? joy_msg->buttons[1]
                                      : -1;
 
-            trencher_power_ = a_button_ ? -0.6 : 0.0;
-            vibrator_power_ = x_button_ ? 0.1 : y_button_ ? -0.1 : 0.0;
+            x_button_ = switch_mode_ ? joy_msg->buttons[2]
+                        : ps4_mode_  ? joy_msg->buttons[3]
+                        : xbox_mode_ ? joy_msg->buttons[2]
+                                     : -1;
+            
+            y_button_ = switch_mode_ ? joy_msg->buttons[3]
+                        : ps4_mode_  ? joy_msg->buttons[2]
+                        : xbox_mode_ ? joy_msg->buttons[3]
+                                     : -1;
+            left_bumper_ = switch_mode_ ? joy_msg->buttons[4]
+                        : ps4_mode_  ? joy_msg->buttons[4]
+                        : xbox_mode_ ? joy_msg->buttons[4]
+                                     : -1;
+            right_bumper_ = switch_mode_ ? joy_msg->buttons[5]
+                        : ps4_mode_  ? joy_msg->buttons[5]
+                        : xbox_mode_ ? joy_msg->buttons[5]
+                                     : -1;
+
+            vibrator_power_ = a_button_ ? 0.8 : 0.0;
+            door_power_ = left_bumper_ ? -0.5 : right_bumper_ ? 0.5 : 0.0;
             actuator_power_ = (d_pad_vertical_ == 1.0) ? -0.3 : (d_pad_vertical_ == -1.0) ? 0.3 : 0.0;
-	        magnet_current_ = b_button_ ? 0.0 : 0.5;
-            speed_multiplier_ = 0.45;
+    
+            if (x_button_) {
+                speed_multiplier_ = y_button_ ? 0.3 : 0.1;
+                trencher_power_ = -0.6;
+            }
+
+            else {
+                trencher_power_ = 0.0;
+                speed_multiplier_ = 0.6;
+            }
 
             if (home_button_)
             {
@@ -207,26 +247,31 @@ class RobotController : public rclcpp::Node
                 }
             }
 
-            if (robot_disabled_) {
-                motor_output_msg_.is_enabled = false;
+            if (!robot_disabled_)
+            {
+                ctre::phoenix::unmanaged::Unmanaged::FeedEnable(100);
+            }
+            else
+            {
+                RCLCPP_ERROR(get_logger(), "\033[0;31mROBOT DISABLED\033[0m");
             }
 
-            else {
-                motor_output_msg_.is_enabled = true;
-            }
+            /*
+            RCLCPP_INFO(get_logger(), "LEFT CURRENT: %f", left_wheel_motor_.GetOutputCurrent() * 10.0);
+            RCLCPP_INFO(get_logger(), "RIGHT CURRENT: %f", right_wheel_motor_.GetOutputCurrent() * 10.0);
+            RCLCPP_INFO(get_logger(), "\033[0;31mTRENCHER CURRENT %f\033[0m", trencher_motor_.GetOutputCurrent() * 10.0);
+            */
 
-            motor_output_msg_.is_manual = true;
-            motor_output_msg_.left_power = left_power_ * speed_multiplier_;
-            motor_output_msg_.right_power = right_power_ * speed_multiplier_;
-            motor_output_msg_.trencher_power = trencher_power_;
-            motor_output_msg_.vibrator_power = vibrator_power_;
-            motor_output_msg_.actuator_power = actuator_power_;
-            motor_output_msg_.magnet_current = magnet_current_;
-
-            motor_output_publisher_->publish(motor_output_msg_);
+            left_wheel_motor_.Set(ControlMode::PercentOutput, left_power_ * speed_multiplier_);
+            right_wheel_motor_.Set(ControlMode::PercentOutput, right_power_ * speed_multiplier_);
+            actuator_left_motor_.Set(ControlMode::PercentOutput, actuator_power_);
+            actuator_right_motor_.Set(ControlMode::PercentOutput, actuator_power_);
+            trencher_motor_.Set(ControlMode::PercentOutput, trencher_power_);
+            door_motor_.Set(ControlMode::PercentOutput, door_power_);
+            vibrator_motor_.Set(ControlMode::PercentOutput, vibrator_power_);
         }
     }
-
+    
     /**
      * @brief Callback function for processing velocity messages.
      * @param velocity_msg The velocity message.
@@ -235,34 +280,74 @@ class RobotController : public rclcpp::Node
     {
         if (!manual_enabled_)
         {
+            ctre::phoenix::unmanaged::Unmanaged::FeedEnable(1000);
+
             double linear_velocity = velocity_msg->linear.x;
             double angular_velocity = velocity_msg->angular.z;
             double wheel_radius = outdoor_mode_ ? 0.2 : 0.1016;
             double wheel_distance = 0.5;
 
-            velocity_left_cmd_ = 0.1 * (linear_velocity - angular_velocity * wheel_distance / 2.0) / wheel_radius;
-            velocity_right_cmd_ = 0.1 * (linear_velocity + angular_velocity * wheel_distance / 2.0) / wheel_radius;
+            double velocity_left_cmd = 0.1 * (linear_velocity - angular_velocity * wheel_distance / 2.0) / wheel_radius;
+            double velocity_right_cmd =
+                0.1 * (linear_velocity + angular_velocity * wheel_distance / 2.0) / wheel_radius;
 
-            motor_output_msg_.is_manual = false;
-            motor_output_msg_.left_velocity = velocity_left_cmd_;
-            motor_output_msg_.right_velocity = velocity_right_cmd_;
-
-            motor_output_publisher_->publish(motor_output_msg_);
+            left_wheel_motor_.Set(ControlMode::PercentOutput, velocity_left_cmd);
+            right_wheel_motor_.Set(ControlMode::PercentOutput, velocity_right_cmd);
         }
     }
 
-  private:
-    double velocity_left_cmd_, velocity_right_cmd_, left_power_, right_power_, trencher_power_, vibrator_power_, actuator_power_, magnet_current_;
-    double left_trigger_, right_trigger_, d_pad_vertical_, d_pad_horizontal_, left_joystick_x_, left_joystick_y_;
-    double turn_, drive_, drive_forward_, drive_backward_, speed_multiplier_, trencher_speed_multiplier_;
-    bool manual_enabled_, robot_disabled_, xbox_mode_, ps4_mode_, switch_mode_, outdoor_mode_;
-    bool home_button_, share_button_, menu_button_, a_button_, b_button_, x_button_, y_button_;
+    /**
+     * @brief Callback function for processing lunabot_autonomous control messages.
+     * @param control_msg The lunabot_autonomous control message.
+     */
+    void callback_control(const lunabot_autonomous::msg::Control::SharedPtr control_msg)
+    {
+        manual_enabled_ = control_msg->enable_manual_drive;
+
+        if (control_msg->enable_intake)
+        {
+            // TODO: Make intake mechanismtrencher_motor
+        }
+
+        else if (control_msg->enable_outtake)
+        {
+            // TODO: Make outtake mechanism
+        }
+
+        else
+        {
+            auto clock = rclcpp::Clock();
+            RCLCPP_INFO_THROTTLE(get_logger(), clock, 1000, "\033[0;33mNO MECHANISM ENABLED\033[0m");
+        }
+
+    }
+    
+private:
 
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr velocity_subscriber_;
     rclcpp::Subscription<lunabot_autonomous::msg::Control>::SharedPtr control_subscriber_;
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joystick_subscriber_;
-    rclcpp::Publisher<lunabot_autonomous::msg::MotorOutput>::SharedPtr motor_output_publisher_;
-    lunabot_autonomous::msg::MotorOutput motor_output_msg_;
+    double velocity_left_cmd_, velocity_right_cmd_;
+    double left_power_, right_power_;
+    double actuator_power_, trencher_power_, bucket_power_, door_power_, vibrator_power_;
+    double left_trigger_, right_trigger_, left_bumper_, right_bumper_, d_pad_vertical_, d_pad_horizontal_, left_joystick_x_, left_joystick_y_;
+    double turn_, drive_, drive_forward_, drive_backward_, speed_multiplier_, trencher_speed_multiplier_, door_direction_, trencher_current_;
+    bool manual_enabled_, robot_disabled_, xbox_mode_, ps4_mode_, switch_mode_, outdoor_mode_, start_digging_, start_depositing_;
+    bool home_button_, share_button_, menu_button_, a_button_, b_button_, x_button_, y_button_;
+    double left_encoder = 0.0;
+    double right_encoder = 0.0;
+    double wheel_diameter = 0.2921;
+
+    TalonFX left_wheel_motor_{1};
+    TalonFX right_wheel_motor_{2};
+    TalonSRX actuator_left_motor_{3};
+    TalonSRX actuator_right_motor_{4};
+    TalonSRX vibrator_motor_{7};
+    TalonFX door_motor_{5};
+    TalonFX trencher_motor_{6};
+    Orchestra orchestra;
+    ErrorCode load_status;
+    ErrorCode play_status;
 };
 
 /**

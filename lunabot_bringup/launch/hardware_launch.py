@@ -19,26 +19,28 @@ def generate_launch_description():
         "rs_multi_camera_launch.py",
     )
 
-    # RPLidar S2L
+    # RPLidar A3
     lidar1 = Node(
         package="rplidar_ros",
         executable="rplidar_node",
         name="rplidar_node",
+        remappings=[("/scan", "/scan")],
         parameters=[
             {
                 "channel_type": "serial",
                 "serial_port": "/dev/ttyUSB0",
-                "serial_baudrate": 1000000,
+                "serial_baudrate": 256000,
+                "scan_frequency": 25.0,
                 "frame_id": "lidar1_link",
                 "inverted": False,
                 "angle_compensate": True,
-                "scan_mode": "DenseBoost",
+                "scan_mode": "Sensitivity",
             }
         ],
         output="screen",
     )
 
-    # RPLidar A3
+    # RPLidar S2L
     lidar2 = Node(
         package="rplidar_ros",
         executable="rplidar_node",
@@ -48,12 +50,11 @@ def generate_launch_description():
             {
                 "channel_type": "serial",
                 "serial_port": "/dev/ttyUSB1",
-                "serial_baudrate": 256000,
-                "scan_frequency": 25.0,
+                "serial_baudrate": 1000000,
                 "frame_id": "lidar2_link",
                 "inverted": False,
                 "angle_compensate": True,
-                "scan_mode": "Sensitivity",
+                "scan_mode": "DenseBoost",
             }
         ],
         output="screen",
@@ -120,31 +121,47 @@ def generate_launch_description():
     lidar1_filter = Node(
         package="laser_filters",
         executable="scan_to_scan_filter_chain",
+        remappings=[("/scan", "/scan_raw")],
         parameters=[
             PathJoinSubstitution(
                 [
                     get_package_share_directory("lunabot_bringup"),
                     "params",
-                    "lidar_params.yaml",
+                    "a3_lidar_params.yaml",
                 ]
             )
         ],
     )
 
-    lidar2_odom = Node(
+    lidar2_filter = Node(
+        package="laser_filters",
+        executable="scan_to_scan_filter_chain",
+        remappings=[("/scan", "/scan2_raw"), ("/scan_filtered", "/scan2_filtered")],
+        parameters=[
+            PathJoinSubstitution(
+                [
+                    get_package_share_directory("lunabot_bringup"),
+                    "params",
+                    "s2_lidar_params.yaml",
+                ]
+            )
+        ],
+    )
+
+    lidar1_odom = Node(
         package="rf2o_laser_odometry",
         executable="rf2o_laser_odometry_node",
         name="rf2o_laser_odometry",
         output="screen",
         parameters=[
             {
-                "laser_scan_topic": "/scan2",
+                "laser_scan_topic": "/scan",
                 "odom_topic": "/odom_lidar",
                 "publish_tf": False,
                 "base_frame_id": "base_link",
                 "odom_frame_id": "odom",
                 "init_pose_from_topic": "",
-                "freq": 35.0,
+                "freq": 30.0,
             }
         ],
         arguments=['--ros-args', '--disable-stdout-logs', '--disable-rosout-logs'],
@@ -155,15 +172,12 @@ def generate_launch_description():
         executable="robot_controller",
         parameters=[
             {
-                "switch_mode": True,
+                "xbox_mode": True,
                 "outdoor_mode": False,
             }
         ],
         arguments=['--ros-args', '--log-level', 'INFO'],
     )
-    kraken_controller = Node(package="lunabot_kraken", executable="kraken_controller")
-
-    talon_srx_controller = Node(package="lunabot_talon_srx", executable="talon_srx_controller")
 
     hardware_monitor = Node(package="lunabot_autonomous", executable="hardware_monitor")
 
@@ -201,12 +215,19 @@ def generate_launch_description():
         name="static_transform_publisher",
     )
 
+    base_link_to_d455_tf = Node(
+        package="tf2_ros",
+        executable="static_transform_publisher",
+        arguments=["0.4305", "0", "0.6096", "0", "-0.5236", "0", "base_link", "d455_link"],
+        output="screen",
+        name="static_transform_publisher",
+    )
+
     return LaunchDescription(
         [
             lidar1,
-            lidar1_filter,
+            lidar1_odom,
             lidar2,
-            lidar2_odom,
             apriltag,
             realsense,
             imu_rotator,
@@ -215,6 +236,7 @@ def generate_launch_description():
             ekf,
             robot_controller,
             hardware_monitor,
+            base_link_to_d455_tf,
             map_to_odom_tf,
         ]
     )

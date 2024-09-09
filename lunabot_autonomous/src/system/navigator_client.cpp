@@ -84,15 +84,13 @@ class NavigatorClient : public rclcpp::Node
     /**
      * @brief Enables the intake process.
      */
-    void enable_intake()
+    void enable_intake_process()
     {
         auto control_msg = lunabot_autonomous::msg::Control();
         control_msg.enable_intake = true;
         control_msg.enable_outtake = false;
         control_msg.enable_autonomous_drive = false;
         control_msg.enable_manual_drive = false;
-        control_msg.actuator_up = false;
-        control_msg.actuator_down = false;
 
         publisher_->publish(control_msg);
     }
@@ -100,47 +98,27 @@ class NavigatorClient : public rclcpp::Node
     /**
      * @brief Enables the outtake process.
      */
-    void enable_outtake()
+    void enable_outtake_process()
     {
         auto control_msg = lunabot_autonomous::msg::Control();
         control_msg.enable_intake = false;
         control_msg.enable_outtake = true;
         control_msg.enable_autonomous_drive = false;
         control_msg.enable_manual_drive = false;
-        control_msg.actuator_up = false;
-        control_msg.actuator_down = false;
 
         publisher_->publish(control_msg);
     }
 
-    /**
-     * @brief Moves the actuator up.
+      /**
+     * @brief Disables the all processes.
      */
-    void actuator_up()
+    void disable_process()
     {
         auto control_msg = lunabot_autonomous::msg::Control();
         control_msg.enable_intake = false;
         control_msg.enable_outtake = false;
         control_msg.enable_autonomous_drive = false;
         control_msg.enable_manual_drive = false;
-        control_msg.actuator_up = true;
-        control_msg.actuator_down = false;
-
-        publisher_->publish(control_msg);
-    }
-
-    /**
-     * @brief Moves the actuator down.
-     */
-    void actuator_down()
-    {
-        auto control_msg = lunabot_autonomous::msg::Control();
-        control_msg.enable_intake = false;
-        control_msg.enable_outtake = false;
-        control_msg.enable_autonomous_drive = false;
-        control_msg.enable_manual_drive = false;
-        control_msg.actuator_up = false;
-        control_msg.actuator_down = true;
 
         publisher_->publish(control_msg);
     }
@@ -155,8 +133,6 @@ class NavigatorClient : public rclcpp::Node
         control_msg.enable_outtake = false;
         control_msg.enable_autonomous_drive = false;
         control_msg.enable_manual_drive = true;
-        control_msg.actuator_up = false;
-        control_msg.actuator_down = false;
 
         publisher_->publish(control_msg);
     }
@@ -185,9 +161,8 @@ class NavigatorClient : public rclcpp::Node
         if (navigate_to_excavation && goal_reached)
         {
             RCLCPP_INFO(this->get_logger(), "\033[1;32mEXCAVATION ZONE REACHED\033[0m");
-            this->actuator_down();
-            this->enable_intake();
-            this->actuator_up();
+            this->enable_intake_process();
+            this->disable_process();
             navigate_to_excavation = false;
             goal_reached = false;
             send_goal();
@@ -196,7 +171,8 @@ class NavigatorClient : public rclcpp::Node
         else if (!navigate_to_excavation && goal_reached)
         {
             RCLCPP_INFO(this->get_logger(), "\033[1;32mCONSTRUCTION ZONE REACHED\033[0m");
-            this->enable_outtake();
+            this->enable_outtake_process();
+            this->disable_process();
             RCLCPP_INFO(this->get_logger(), "\033[1;32mAUTONOMOUS SUCCESS\033[0m");
         }
 

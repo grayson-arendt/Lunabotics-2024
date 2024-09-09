@@ -162,6 +162,8 @@ motors for the mechanisms for the zone.
       - motor_test.cpp (Simple node for testing Phoenix 5 motors)
       - robot_controller.cpp (Generates percent output/velocity commands for the robot)
       - talon_srx_controller.cpp (Controls the motors with Talon SRX)
+    - **scripts**
+      - digging_script (Digging autonomous script)
     - **system**
       - hardware_monitor.cpp (Monitors liveliness of hardware topics)
       - imu_rotator.cpp (Rotates IMU values to be in ENU coordinate frame)
