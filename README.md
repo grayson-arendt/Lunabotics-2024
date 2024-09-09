@@ -1,6 +1,6 @@
 ## Overview
 
-This repository contains code made by the College of DuPage team for the NASA Lunabotics competition. It is made for ROS 2 Humble on Ubuntu 22.04.
+This repository contains code made by the College of DuPage team for the 2023-2024 NASA Lunabotics competition. It is made for ROS 2 Humble on Ubuntu 22.04.
 
 ## Hardware
 
@@ -9,7 +9,7 @@ This repository contains code made by the College of DuPage team for the NASA Lu
 - `RPLidar A3`
 - `Intel RealSense D455 Depth Camera`
 - `Intel RealSense T265 Tracking Camera`
-- `CTRE Kraken X60 (x4)`
+- `CTRE Falcon 500 (x4)`
 - `CTRE Talon SRX (x4)`
 - `Turnigy 14.8V 8000mAh LiPo Battery`
 - `Turnigy 14.8V 12000mAh LiPo Battery`
@@ -83,7 +83,7 @@ ls /dev/ttyUSB*
 
 ## Running Robot
 
-Each launch/cpp file should be ran in a new terminal window. There are more steps now than before because of the upgrade to the Kraken X60s. The Kraken X60s use Phoenix 6, while Talon SRXs are stuck with Phoenix 5. Therefore, they cannot be ran together from a launch file because they need the libraries linked separately. It is inconvenient, but it is the only way to get them to work together.
+Each launch/cpp file should be ran in a new terminal window.
 
 `Note: unplug and replug in the T265 after booting up the NUC, it will not detect it if it is not replugged in again.`
 
@@ -110,27 +110,13 @@ ros2 launch lunabot_bringup external_launch.py
 ros2 launch lunabot_bringup hardware_launch.py
 ```
 
-#### 5. Startup Talon SRX controller:
-
-```bash
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/phoenix/
-ros2 run lunabot_autonomous talon_srx_controller
-```
-
-#### 6. Startup Kraken X60 controller:
-
-```bash
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/phoenix6/
-ros2 run lunabot_autonomous kraken_controller
-```
-
-#### 7. Startup RTAB-Map:
+#### 5. Startup RTAB-Map:
 
 ```bash
 ros2 launch lunabot_bringup mapping_launch.py
 ```
 
-#### 8. Startup Navigation2:
+#### 6. Startup Navigation2:
 
 ```bash
 ros2 launch lunabot_bringup navigation_launch.py
@@ -138,7 +124,7 @@ ros2 launch lunabot_bringup navigation_launch.py
 
 In RViz2 on the host computer, you will now be able to select a "Nav2 Goal" in the GUI and have the robot navigate to that location. 
 
-#### (Optional) 9. Startup action client:
+#### (Optional) 7. Startup action client:
 
 ```bash
 ros2 run lunabot_autonomous navigator_client
@@ -158,10 +144,8 @@ motors for the mechanisms for the zone.
     - **ctre** (CTRE Phoenix C++ API for using Falcon 500 motors)
   - **src**
     - **control**
-      - kraken_controller.cpp (Controls the Kraken X60 motors)
       - motor_test.cpp (Simple node for testing Phoenix 5 motors)
       - robot_controller.cpp (Generates percent output/velocity commands for the robot)
-      - talon_srx_controller.cpp (Controls the motors with Talon SRX)
     - **scripts**
       - digging_script (Digging autonomous script)
     - **system**
